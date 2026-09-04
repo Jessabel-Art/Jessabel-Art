@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Jessabel OS — a fictional operating system portfolio experience for Jessabel Santos."
+    />
+    <meta name="theme-color" content="#111417" />
+    <title>Jessabel OS</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+    <link rel="manifest" href="site.webmanifest" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="boot-screen" id="bootScreen" aria-live="polite" aria-atomic="true">
+      <div class="boot-content">
+        <img class="boot-logo-image" src="jessabel-art-logo.png" alt="Jessabel OS logo" />
+        <div class="boot-lines" aria-label="System startup status">
+          <span>Initializing workspace...</span>
+          <span>Loading projects...</span>
+          <span>Connecting creative systems...</span>
+          <span>Ready.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="desktop-shell" id="desktopShell">
+      <div class="wallpaper" aria-hidden="true"></div>
+
+      <header class="system-bar" aria-label="System status bar">
+        <div class="system-left">
+          <button class="home-button os-brand-button" id="desktopHomeButton" type="button" aria-label="Open desktop home">
+            <img src="jessabel-art-logo.png" alt="Jessabel OS" />
+          </button>
+        </div>
+        <div class="system-right">
+          <span class="system-discovery-chip" id="systemDiscovery" aria-live="polite"></span>
+          <span class="status-pill status-online" aria-label="System status online">online</span>
+          <span class="system-time" id="systemTime" aria-live="polite">--:--</span>
+        </div>
+      </header>
+
+      <main class="desktop" id="desktop" aria-label="Jessabel OS desktop workspace">
+        <aside class="desktop-icons" id="desktopIcons" aria-label="desktop applications"></aside>
+
+        <div class="desktop-center-logo" aria-label="Jessabel logo">
+          <img src="jessabel-art-logo.png" alt="Jessabel logo" />
+        </div>
+      </main>
+
+      <div class="window-layer" id="windowLayer" aria-live="polite"></div>
+
+      <div class="home-menu hidden" id="homeMenu" aria-label="Jessabel OS system menu">
+        <button type="button" data-home-action="system">Jessabel OS</button>
+        <button type="button" data-home-action="discovery">System Discovery</button>
+        <button type="button" data-home-action="achievements">Achievements</button>
+        <button type="button" data-home-action="palette">Command Palette</button>
+        <button type="button" data-home-action="about">About System</button>
+      </div>
+
+      <div class="command-palette hidden" id="commandPalette" role="dialog" aria-modal="true" aria-label="Command palette">
+        <div class="command-shell">
+          <div class="command-header">
+            <span>JESSABEL OS // COMMAND</span>
+          </div>
+          <label class="command-input-wrap" for="commandInput">
+            <span class="command-prompt">&gt;_</span>
+            <input id="commandInput" type="text" autocomplete="off" spellcheck="false" placeholder="Enter command" />
+          </label>
+          <div id="commandSuggestions" class="command-suggestions" aria-live="polite"></div>
+        </div>
+      </div>
+
+      <div class="toast-container" id="toastContainer" aria-live="polite" aria-atomic="true"></div>
+
+      <nav class="dock" id="dock" aria-label="Application dock"></nav>
+    </div>
+
+    <template id="windowTemplate">
+      <section class="window" tabindex="0">
+        <header class="window-header">
+          <div class="window-title-group">
+            <span class="window-status-dot" aria-hidden="true"></span>
+            <span class="window-title-text"></span>
+          </div>
+          <div class="window-actions" aria-label="Window actions">
+            <button class="window-action minimize" type="button" aria-label="Minimize window">–</button>
+            <button class="window-action maximize" type="button" aria-label="Maximize window">□</button>
+            <button class="window-action close" type="button" aria-label="Close window">×</button>
+          </div>
+        </header>
+        <div class="window-body"></div>
+      </section>
+    </template>
+
+    <template id="iconTemplate">
+      <button class="desktop-icon" type="button">
+        <span class="icon-graphic" aria-hidden="true"></span>
+        <span class="icon-label"></span>
+      </button>
+    </template>
+
+    <script src="script.js"></script>
+  </body>
+</html>
