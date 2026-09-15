@@ -1,62 +1,56 @@
 const SHOW_BOOT_EVERY_LOAD = true;
-const BOOT_DURATION_MS = 2800;
+const BOOT_DURATION_MS = 2400;
 
 const APP_CONFIG = {
   home: {
     id: 'home',
     name: 'Jessabel Home',
-    icon: 'home',
+    icon: 'jessabel-os-logo.png',
     kind: 'desktop',
-    accent: 'blue',
     defaultWindow: false,
   },
   projects: {
     id: 'projects',
     name: 'Projects',
-    icon: 'projects',
+    icon: 'projects-icon.png',
     kind: 'workspace',
-    accent: 'blue',
     defaultWindow: true,
   },
   lab: {
     id: 'lab',
     name: 'Lab',
-    icon: 'lab',
+    icon: 'lab-icon.png',
     kind: 'workspace',
-    accent: 'green',
     defaultWindow: true,
   },
   about: {
     id: 'about',
     name: 'About Me',
-    icon: 'about',
+    icon: 'jessabel-art-portrait.PNG',
+    iconRound: true,
     kind: 'workspace',
-    accent: 'yellow',
     defaultWindow: true,
   },
   resume: {
     id: 'resume',
     name: 'Resume',
-    icon: 'resume',
+    icon: 'resume-icon.png',
     kind: 'workspace',
-    accent: 'blue',
     defaultWindow: true,
   },
   github: {
     id: 'github',
     name: 'GitHub',
-    icon: 'github',
+    icon: 'github-icon.png',
     kind: 'external',
-    accent: 'green',
     defaultWindow: false,
     url: 'https://github.com/Jessabel-Art',
   },
   contact: {
     id: 'contact',
     name: 'Contact',
-    icon: 'contact',
+    icon: 'contact-icon.png',
     kind: 'workspace',
-    accent: 'red',
     defaultWindow: true,
   },
 };
@@ -65,72 +59,84 @@ const PROJECTS = [
   {
     id: 'alchemize',
     name: 'Alchemize',
-    category: 'Agency / Business Website',
+    category: 'Business',
     type: 'Agency / Business Website',
     description: 'Jessabel’s broader business and agency presence, representing services and digital strategy work.',
     role: 'Brand and digital presence',
     tools: ['Branding', 'Web Design', 'Business Systems'],
     url: 'https://getalchemize.com/',
-    accent: 'yellow',
     logo: 'alchemize-emblem-light.png',
-    preview: 'Alchemize',
+    logoDark: true,
+    previewImage: 'alchemize-vup.png',
+    featured: true,
   },
   {
     id: 'cavalry-green',
     name: 'Cavalry Green LLC',
-    category: 'Client Website',
+    category: 'Business',
     type: 'Client Website',
     description: 'A branded client experience blending heritage, identity, and a digital-first service presence.',
     role: 'Design systems and front-end implementation',
     tools: ['Branding', 'Web Design', 'Front-End'],
     url: 'https://cavalry-green.jessabel.art/',
-    accent: 'green',
     logo: 'cavalry-green-logo.png',
-    preview: 'Cavalry Green',
   },
   {
     id: 'cleaning-service-demo',
     name: 'Cleaning Service Demo',
-    category: 'Demo Website',
+    category: 'Web Design',
     type: 'Demo Website',
     description: 'A clean service-site concept focused on clarity, trust, and conversion-focused layout structure.',
     role: 'Landing page concept and UI direction',
     tools: ['UI', 'Front-End', 'Marketing'],
     url: 'https://cleaning-service-demo.jessabel.art/',
-    accent: 'yellow',
-    logo: '',
-    preview: 'Cleaning Service Demo',
+    logo: 'cleaning-demo-icon.png',
   },
   {
     id: 'fmblifestyle',
     name: 'FMBLifestyle',
-    category: 'Portfolio',
+    category: 'Development',
     type: 'Portfolio',
     description: 'An external portfolio project highlighting personal creative work and selected visual storytelling.',
     role: 'Creative portfolio frontend',
     tools: ['Portfolio Design', 'Front-End'],
     url: 'https://fmbl.jessabel.art/',
-    accent: 'blue',
-    logo: '',
-    preview: 'FMBLifestyle',
+    logo: 'FMBLifestyle.png',
   },
 ];
+
+const PROJECT_FILTERS = ['All', 'Web Design', 'Business', 'Development'];
 
 const LAB_PROJECT = {
   id: 'pinkladyz-oled',
   name: 'PinkLadyZ OLED',
-  category: 'Experimental Hardware / UI',
-  type: 'Experimental System',
+  category: 'Experimental Hardware Project',
   description: 'Creative exploration around an OLED display interface, embedded experimentation, and playful technical identity.',
   role: 'Experimental concepting and front-end tinkering',
-  tools: ['OLED', 'Embedded', 'UI Exploration'],
+  tools: ['OLED', 'Microcontroller', 'Interface', 'Debug'],
   url: 'https://pinkladyz-oled.jessabel.art/',
-  accent: 'pink',
+  image: 'pinkladyz-icon.png',
 };
+
+const LAB_ACTIVITY = [
+  { label: 'OLED display test', status: 'OK' },
+  { label: 'UI prototype', status: 'OK' },
+  { label: 'Power optimization', status: 'In Progress' },
+  { label: 'Next', status: 'Interface refinement', isNote: true },
+];
 
 const PRIMARY_APP_IDS = ['projects', 'lab', 'about', 'resume', 'contact'];
 const DISCOVERY_KEY = 'jessabel-os-discovery';
 const ACHIEVEMENTS_KEY = 'jessabel-os-achievements';
+const POT_IMAGES = ['pot-1.png', 'pot-2.png', 'pot-3.png', 'pot-4.png', 'pot-5.png', 'pot-6.png'];
+const POT_LABELS = [
+  'A seed just planted',
+  'First sprout breaking through',
+  'Young leaves unfurling',
+  'Steady, healthy growth',
+  'Nearly in full bloom',
+  'Fully grown — fully explored',
+];
 
 const state = {
   windows: new Map(),
@@ -143,12 +149,12 @@ const state = {
   achievements: {},
   homeMenuOpen: false,
   commandPaletteOpen: false,
+  projectFilter: 'All',
 };
 
 const desktopIcons = document.getElementById('desktopIcons');
 const dock = document.getElementById('dock');
 const windowLayer = document.getElementById('windowLayer');
-const windowTemplate = document.getElementById('windowTemplate');
 const bootScreen = document.getElementById('bootScreen');
 const systemTime = document.getElementById('systemTime');
 const desktopHomeButton = document.getElementById('desktopHomeButton');
@@ -158,6 +164,9 @@ const commandInput = document.getElementById('commandInput');
 const commandSuggestions = document.getElementById('commandSuggestions');
 const discoveryChip = document.getElementById('systemDiscovery');
 const toastContainer = document.getElementById('toastContainer');
+const discoveryPlantImage = document.getElementById('discoveryPlantImage');
+const discoveryPlantLabel = document.getElementById('discoveryPlantLabel');
+const searchTrigger = document.getElementById('searchTrigger');
 
 function formatTime(date) {
   const hours = date.getHours().toString().padStart(2, '0');
@@ -165,21 +174,26 @@ function formatTime(date) {
   return `${hours}:${minutes}`;
 }
 
-function loadSessionState() {
+function loadPersistedState() {
   try {
-    const savedDiscovery = JSON.parse(sessionStorage.getItem(DISCOVERY_KEY) || '{}');
-    const savedAchievements = JSON.parse(sessionStorage.getItem(ACHIEVEMENTS_KEY) || '{}');
-    state.discovery = { ...savedDiscovery };
-    state.achievements = { ...savedAchievements };
+    state.discovery = JSON.parse(localStorage.getItem(DISCOVERY_KEY) || '{}');
   } catch (error) {
     state.discovery = {};
+  }
+  try {
+    state.achievements = JSON.parse(localStorage.getItem(ACHIEVEMENTS_KEY) || '{}');
+  } catch (error) {
     state.achievements = {};
   }
 }
 
-function saveSessionState() {
-  sessionStorage.setItem(DISCOVERY_KEY, JSON.stringify(state.discovery));
-  sessionStorage.setItem(ACHIEVEMENTS_KEY, JSON.stringify(state.achievements));
+function savePersistedState() {
+  try {
+    localStorage.setItem(DISCOVERY_KEY, JSON.stringify(state.discovery));
+    localStorage.setItem(ACHIEVEMENTS_KEY, JSON.stringify(state.achievements));
+  } catch (error) {
+    /* localStorage unavailable — progress just won't persist */
+  }
 }
 
 function getDiscoveryCount() {
@@ -187,13 +201,32 @@ function getDiscoveryCount() {
 }
 
 function updateDiscoveryIndicator() {
-  if (!discoveryChip) return;
   const count = getDiscoveryCount();
-  discoveryChip.innerHTML = `
-    <span class="system-discovery-label">System Discovery</span>
-    <strong>${count} / ${PRIMARY_APP_IDS.length}</strong>
-  `;
-  discoveryChip.classList.toggle('is-complete', count === PRIMARY_APP_IDS.length);
+
+  if (discoveryChip) {
+    discoveryChip.innerHTML = `
+      <span>System Discovery</span>
+      <strong>${count} / ${PRIMARY_APP_IDS.length}</strong>
+    `;
+    discoveryChip.classList.toggle('is-complete', count === PRIMARY_APP_IDS.length);
+  }
+
+  if (discoveryPlantImage) {
+    const stageIndex = Math.min(count, POT_IMAGES.length - 1);
+    const nextSrc = POT_IMAGES[stageIndex];
+    if (!discoveryPlantImage.src.endsWith(nextSrc)) {
+      discoveryPlantImage.style.opacity = '0';
+      setTimeout(() => {
+        discoveryPlantImage.src = nextSrc;
+        discoveryPlantImage.alt = POT_LABELS[stageIndex];
+        discoveryPlantImage.style.opacity = '1';
+      }, 160);
+    }
+  }
+
+  if (discoveryPlantLabel) {
+    discoveryPlantLabel.textContent = `System Discovery ${count}/${PRIMARY_APP_IDS.length}`;
+  }
 }
 
 function markDiscovered(appId) {
@@ -202,7 +235,7 @@ function markDiscovered(appId) {
   }
 
   state.discovery[appId] = true;
-  saveSessionState();
+  savePersistedState();
   updateDiscoveryIndicator();
 
   if (getDiscoveryCount() === PRIMARY_APP_IDS.length) {
@@ -216,19 +249,24 @@ function unlockAchievement(id, label, body) {
   if (state.achievements[id]) return false;
 
   state.achievements[id] = true;
-  saveSessionState();
-  showToast(label, body, 'green');
+  savePersistedState();
+  showToast(label, body, 'green', true);
   return true;
 }
 
-function showToast(title, detail, accent = 'blue') {
+function showToast(title, detail, accent = 'blue', isAchievement = false) {
   if (!toastContainer) return;
 
   const toast = document.createElement('div');
   toast.className = `toast toast-${accent}`;
   toast.setAttribute('role', 'status');
+
+  const indicator = isAchievement
+    ? `<img class="toast-badge" src="achievement-badge.png" alt="" aria-hidden="true" />`
+    : `<div class="toast-indicator" aria-hidden="true"></div>`;
+
   toast.innerHTML = `
-    <div class="toast-indicator" aria-hidden="true"></div>
+    ${indicator}
     <div>
       <strong>${title}</strong>
       <span>${detail}</span>
@@ -243,12 +281,14 @@ function showToast(title, detail, accent = 'blue') {
 
   setTimeout(() => {
     toast.classList.remove('is-visible');
-    setTimeout(() => toast.remove(), 220);
-  }, 2400);
+    setTimeout(() => toast.remove(), 240);
+  }, 2600);
 }
 
 function updateTime() {
-  systemTime.textContent = formatTime(new Date());
+  const now = new Date();
+  const day = now.toLocaleDateString(undefined, { weekday: 'short' });
+  systemTime.textContent = `${day} ${formatTime(now)}`;
 }
 
 function getReducedMotion() {
@@ -287,11 +327,21 @@ function createDesktopIcon(appId) {
   button.dataset.app = appId;
   button.setAttribute('aria-label', app.name);
   button.querySelector('.icon-label').textContent = app.name;
-  button.querySelector('.icon-graphic').setAttribute('data-icon', app.icon);
+
+  const graphic = button.querySelector('.icon-graphic');
+  if (app.iconRound) graphic.classList.add('is-round');
+  const img = document.createElement('img');
+  img.src = app.icon;
+  img.alt = '';
+  img.loading = 'eager';
+  img.decoding = 'async';
+  graphic.appendChild(img);
 
   if (PRIMARY_APP_IDS.includes(appId) && state.discovery[appId]) {
     button.classList.add('is-discovered');
   }
+
+  const isTouchDevice = window.matchMedia('(pointer: coarse)').matches;
 
   button.addEventListener('click', () => {
     if (app.kind === 'external') {
@@ -299,6 +349,17 @@ function createDesktopIcon(appId) {
       return;
     }
 
+    if (isTouchDevice || button.classList.contains('is-selected')) {
+      openAppWindow(appId);
+      return;
+    }
+
+    document.querySelectorAll('.desktop-icon.is-selected').forEach((el) => el.classList.remove('is-selected'));
+    button.classList.add('is-selected');
+  });
+
+  button.addEventListener('dblclick', () => {
+    if (app.kind === 'external') return;
     openAppWindow(appId);
   });
 
@@ -306,7 +367,7 @@ function createDesktopIcon(appId) {
 }
 
 function renderDesktopIcons() {
-  const appOrder = ['projects', 'lab', 'about', 'resume', 'github', 'contact'];
+  const appOrder = ['projects', 'lab', 'about', 'resume', 'contact', 'github'];
   desktopIcons.innerHTML = '';
 
   appOrder.forEach((appId) => {
@@ -321,11 +382,11 @@ function getDefaultWindowLayout(appId) {
   if (window.innerWidth < 1100) return null;
 
   const layout = {
-    projects: { x: 54, y: 58, width: 760, height: 520 },
-    lab: { x: window.innerWidth - 500, y: 58, width: 460, height: 420 },
-    about: { x: 86, y: 390, width: 520, height: 410 },
-    contact: { x: window.innerWidth / 2 - 210, y: 392, width: 420, height: 300 },
-    resume: { x: window.innerWidth - 420, y: 392, width: 360, height: 290 },
+    projects: { x: 150, y: 66, width: 700, height: 520 },
+    lab: { x: window.innerWidth - 620, y: 76, width: 560, height: 430 },
+    about: { x: 150, y: 420, width: 640, height: 420 },
+    contact: { x: window.innerWidth - 620, y: 430, width: 420, height: 400 },
+    resume: { x: window.innerWidth - 560, y: 130, width: 400, height: 300 },
   };
 
   return layout[appId] || null;
@@ -335,10 +396,11 @@ function registerAppOpen(appId) {
   if (PRIMARY_APP_IDS.includes(appId)) {
     const discovered = markDiscovered(appId);
     if (discovered) {
-      if (appId === 'projects') unlockAchievement('portfolioAccess', 'PORTFOLIO ACCESS', 'Projects unlocked.');
-      if (appId === 'lab') unlockAchievement('hardwareDetected', 'HARDWARE DETECTED', 'PinkLadyZ OLED detected.');
+      if (appId === 'projects') unlockAchievement('portfolioAccess', 'PORTFOLIO ACCESS', 'You opened the Projects app.');
+      if (appId === 'lab') unlockAchievement('hardwareDetected', 'HARDWARE DETECTED', 'PinkLadyZ OLED signal found.');
       if (appId === 'about') unlockAchievement('systemArchitect', 'SYSTEM ARCHITECT', 'About Me unlocked.');
-      if (appId === 'resume') unlockAchievement('systemArchitect', 'SYSTEM ARCHITECT', 'Resume unlocked.');
+      if (appId === 'resume') unlockAchievement('paperTrail', 'PAPER TRAIL', 'Resume unlocked.');
+      if (appId === 'contact') unlockAchievement('openLine', 'OPEN LINE', 'Contact channels unlocked.');
     }
   }
 
@@ -416,17 +478,14 @@ function showAboutSystem() {
   const panel = document.createElement('div');
   panel.className = 'app-shell app-content';
   panel.innerHTML = `
-    <div class="system-panel">
+    <div class="window-copy-block">
       <span class="section-kicker">Jessabel OS</span>
       <h3>Version 1.0</h3>
-      <p>Portfolio environment by Jessabel Santos</p>
+      <p>A nature-inspired operating workspace by Jessabel Santos.</p>
       <div class="profile-skills compact-system-details">
         <span>Design</span>
         <span>Development</span>
         <span>Business Technology</span>
-      </div>
-      <div class="system-status-row">
-        <span class="status-pill status-online">online</span>
       </div>
     </div>
   `;
@@ -466,10 +525,11 @@ function createDockApp(appId) {
   button.dataset.app = appId;
   button.setAttribute('aria-label', app.name);
 
-  const mark = document.createElement('span');
-  mark.className = 'dock-app-mark';
-  mark.setAttribute('aria-hidden', 'true');
-  button.appendChild(mark);
+  const img = document.createElement('img');
+  img.src = app.icon;
+  img.alt = '';
+  img.loading = 'lazy';
+  button.appendChild(img);
 
   button.addEventListener('click', () => {
     if (appId === 'home') {
@@ -508,10 +568,12 @@ function renderDock() {
   const homeButton = createDockApp('home');
   if (homeButton) dock.appendChild(homeButton);
 
-  const openWindowIds = Array.from(state.windows.keys()).filter((windowId) => windowId !== 'home');
+  const openWindowIds = Array.from(state.windows.keys()).filter((windowId) => windowId !== 'home' && APP_CONFIG[state.windows.get(windowId)?.appId]);
+  const seenApps = new Set();
   openWindowIds.forEach((windowId) => {
     const appId = state.windows.get(windowId)?.appId;
-    if (!appId) return;
+    if (!appId || seenApps.has(appId)) return;
+    seenApps.add(appId);
     const item = createDockApp(appId);
     if (item) dock.appendChild(item);
   });
@@ -538,16 +600,11 @@ function openExternalApp(appId) {
 
   if (appId === 'github') {
     if (!app.url) {
-      alert('GitHub profile URL is not configured yet. Add the profile URL to APP_CONFIG.github.url.');
+      showToast('SYSTEM', 'GitHub profile URL is not configured yet.');
       return;
     }
     unlockAchievement('sourceUnlocked', 'SOURCE UNLOCKED', 'GitHub opened.');
     window.open(app.url, '_blank', 'noopener,noreferrer');
-    return;
-  }
-
-  if (appId === 'projects' || appId === 'contact') {
-    openAppWindow(appId);
     return;
   }
 }
@@ -588,40 +645,93 @@ function renderHomeWindow() {
   return panel;
 }
 
+function getProjectPrimaryLabel(project) {
+  if (project.id === 'alchemize') return 'Visit GetAlchemize.com';
+  if (project.id === 'cavalry-green') return 'Launch Site';
+  return 'Launch Demo';
+}
+
+function renderProjectBadge(project, isFeatured) {
+  if (project.logo) {
+    return `<img src="${project.logo}" alt="${project.name} logo" loading="lazy" />`;
+  }
+  return `<span class="project-initials">${project.name.slice(0, 2).toUpperCase()}</span>`;
+}
+
 function renderProjectsWindow() {
   const shell = document.createElement('div');
   shell.className = 'app-shell app-content';
   shell.innerHTML = `
     <div class="window-copy-block">
       <span class="section-kicker">Projects</span>
+      <div class="projects-toolbar" id="projectsToolbar" role="tablist" aria-label="Filter projects by category"></div>
       <div class="projects-grid" id="projectListContainer"></div>
+      <div class="projects-footer">
+        <span id="projectsCount">${PROJECTS.length} Projects</span>
+        <span>Build · Design · Solve · Grow</span>
+      </div>
     </div>
   `;
 
+  const toolbar = shell.querySelector('#projectsToolbar');
+  PROJECT_FILTERS.forEach((filter) => {
+    const count = filter === 'All' ? PROJECTS.length : PROJECTS.filter((p) => p.category === filter).length;
+    const tab = document.createElement('button');
+    tab.type = 'button';
+    tab.className = 'filter-tab';
+    tab.dataset.filter = filter;
+    tab.setAttribute('role', 'tab');
+    tab.textContent = filter === 'All' ? `All (${count})` : filter;
+    tab.classList.toggle('is-active', state.projectFilter === filter);
+    tab.addEventListener('click', () => {
+      state.projectFilter = filter;
+      renderProjectList(shell);
+    });
+    toolbar.appendChild(tab);
+  });
+
+  renderProjectList(shell);
+  return shell;
+}
+
+function renderProjectList(shell) {
   const listContainer = shell.querySelector('#projectListContainer');
-  listContainer.innerHTML = PROJECTS.map((project) => {
-    const projectLogo = project.logo ? `<img src="${project.logo}" alt="${project.name} logo" />` : `<span class="project-initials">${project.name.slice(0, 2).toUpperCase()}</span>`;
-    const primaryAction = project.id === 'cavalry-green' ? 'Launch Site' : project.id === 'alchemize' ? 'Visit GetAlchemize.com' : 'Launch Demo';
-    const featuredBadge = project.id === 'alchemize' ? '<span class="featured-badge">Featured System</span>' : '';
+  const countLabel = shell.querySelector('#projectsCount');
+  const toolbar = shell.querySelector('#projectsToolbar');
+
+  toolbar.querySelectorAll('.filter-tab').forEach((tab) => {
+    tab.classList.toggle('is-active', tab.dataset.filter === state.projectFilter);
+  });
+
+  const visible = state.projectFilter === 'All'
+    ? PROJECTS
+    : PROJECTS.filter((project) => project.category === state.projectFilter);
+
+  countLabel.textContent = `${visible.length} Project${visible.length === 1 ? '' : 's'}`;
+
+  listContainer.innerHTML = visible.map((project) => {
+    const isFeatured = Boolean(project.featured);
+    const primaryAction = getProjectPrimaryLabel(project);
+    const featuredBadge = isFeatured ? '<span class="featured-badge">Featured Project</span>' : '';
     return `
-      <article class="project-list-item ${project.id === 'alchemize' ? 'is-featured' : ''}" tabindex="0" data-project-id="${project.id}">
-        <div class="project-list-main">
-          <div class="project-badge">${projectLogo}</div>
+      <article class="project-card ${isFeatured ? 'is-featured' : ''}" tabindex="0" data-project-id="${project.id}">
+        ${featuredBadge}
+        <div class="project-card-main">
+          <div class="project-badge">${renderProjectBadge(project, isFeatured)}</div>
           <div class="project-meta">
-            ${featuredBadge}
             <span class="project-name">${project.name}</span>
-            <span class="project-type">${project.category}</span>
+            <span class="project-type">${project.type}</span>
           </div>
         </div>
-        <div class="project-actions">
+        <div class="project-card-actions">
           <button class="os-button project-open" type="button" data-project-id="${project.id}">Details</button>
           <a class="primary-button" href="${project.url}" target="_blank" rel="noopener noreferrer">${primaryAction}</a>
         </div>
       </article>
     `;
-  }).join('');
+  }).join('') || '<p style="color:var(--text-muted); grid-column:1/-1;">No projects in this category yet.</p>';
 
-  shell.querySelectorAll('.project-open').forEach((button) => {
+  listContainer.querySelectorAll('.project-open').forEach((button) => {
     button.addEventListener('click', () => {
       const projectId = button.dataset.projectId;
       const detailWindow = createProjectDetailWindow(projectId);
@@ -629,7 +739,7 @@ function renderProjectsWindow() {
     });
   });
 
-  shell.querySelectorAll('.project-list-item').forEach((card) => {
+  listContainer.querySelectorAll('.project-card').forEach((card) => {
     card.addEventListener('keydown', (event) => {
       if (event.key === 'Enter' || event.key === ' ') {
         event.preventDefault();
@@ -639,8 +749,6 @@ function renderProjectsWindow() {
       }
     });
   });
-
-  return shell;
 }
 
 function createProjectDetailWindow(projectId) {
@@ -657,10 +765,17 @@ function createProjectDetailWindow(projectId) {
   const content = document.createElement('div');
   content.className = 'app-shell app-content';
 
-  const primaryButtonLabel = project.id === 'cavalry-green' ? 'Launch Site' : project.id === 'alchemize' ? 'Visit GetAlchemize.com' : 'Launch Demo';
+  const primaryButtonLabel = getProjectPrimaryLabel(project);
+  const plateClass = project.logoDark ? 'project-plate is-dark' : 'project-plate';
   const displayBadge = project.logo
-    ? `<div class="project-plate"><img src="${project.logo}" alt="${project.name} logo" /></div>`
-    : `<div class="project-plate"><div class="pinkladyz-wordmark" style="font-size: 2.2rem; letter-spacing: -0.05em;">${project.name}</div></div>`;
+    ? `<div class="${plateClass}"><img src="${project.logo}" alt="${project.name} logo" /></div>`
+    : `<div class="project-plate"><div class="pinkladyz-wordmark" style="font-size: 2.2rem; letter-spacing: -0.03em; color: var(--text-dark);">${project.name}</div></div>`;
+
+  const previewMarkup = project.previewImage
+    ? `<img src="${project.previewImage}" alt="${project.name} preview" loading="lazy" />`
+    : project.logo
+      ? `<img src="${project.logo}" alt="${project.name} preview" loading="lazy" />`
+      : `<span>${project.name}</span>`;
 
   content.innerHTML = `
     <div class="project-detail">
@@ -669,16 +784,15 @@ function createProjectDetailWindow(projectId) {
         <div class="project-summary">
           <h3>${project.name}</h3>
           <p>${project.description}</p>
-          <div class="project-actions">
+          <div class="project-card-actions">
             <a class="primary-button" href="${project.url}" target="_blank" rel="noopener noreferrer">${primaryButtonLabel}</a>
           </div>
         </div>
       </div>
       <div class="project-summary">
-        <div class="project-plate"><div class="preview-box ${project.logo ? 'preview-image' : ''}">
-          ${project.logo ? `<img src="${project.logo}" alt="${project.name} preview" />` : `<span>${project.preview}</span>`}
-        </div></div>
+        <div class="preview-box preview-image">${previewMarkup}</div>
         <ul class="meta-list">
+          <li><strong>Category:</strong> ${project.category}</li>
           <li><strong>Project type:</strong> ${project.type}</li>
           <li><strong>Role:</strong> ${project.role}</li>
           <li><strong>Tools:</strong> ${project.tools.join(', ')}</li>
@@ -692,10 +806,10 @@ function createProjectDetailWindow(projectId) {
     id: windowId,
     appId: 'projects',
     title: project.name,
-    width: projectPreset?.width || 760,
+    width: projectPreset?.width || 720,
     height: projectPreset?.height || 560,
-    x: projectPreset?.x || 140,
-    y: projectPreset?.y || 90,
+    x: (projectPreset?.x || 140) + 30,
+    y: (projectPreset?.y || 90) + 20,
     content,
     type: 'project',
   };
@@ -711,21 +825,37 @@ function renderLabWindow() {
   const shell = document.createElement('div');
   shell.className = 'app-shell app-content';
   shell.innerHTML = `
-    <div class="lab-layout">
-      <div class="lab-copy">
-        <span class="section-kicker">Experimental Hardware Project</span>
-        <div class="pinkladyz-wordmark">PINKLADYZ<span class="oled">OLED</span></div>
-        <div class="lab-specs">
-          <span>OLED</span>
-          <span>Microcontroller</span>
-          <span>Interface</span>
-          <span>Debug</span>
+    <div class="lab-shell">
+      <div class="lab-layout">
+        <div class="lab-copy">
+          <span class="section-kicker">Experimental Hardware Project</span>
+          <div class="pinkladyz-wordmark">PINKLADYZ<span class="oled">OLED</span></div>
+          <p>${LAB_PROJECT.description}</p>
+          <div class="lab-specs">
+            ${LAB_PROJECT.tools.map((tool) => `<span>${tool}</span>`).join('')}
+          </div>
+          <div class="project-card-actions lab-actions">
+            <a class="primary-button" href="${LAB_PROJECT.url}" target="_blank" rel="noopener noreferrer">Open Project</a>
+          </div>
         </div>
-        <div class="project-actions lab-actions">
-          <a class="primary-button" href="${LAB_PROJECT.url}" target="_blank" rel="noopener noreferrer">Open Project</a>
+        <div class="lab-visual">
+          <img src="${LAB_PROJECT.image}" alt="PinkLadyZ OLED hardware, a custom circuit board with a pink pixel-heart display" />
         </div>
       </div>
-      <div class="lab-visual" aria-label="PinkLadyZ OLED hardware illustration"></div>
+      <div class="lab-log">
+        <div>
+          <div class="lab-log-title">Lab // Latest Activity</div>
+          <ul class="lab-log-list">
+            ${LAB_ACTIVITY.map((entry) => `
+              <li>
+                <span>${entry.label}</span>
+                <span class="lab-log-status ${entry.status === 'In Progress' ? 'is-progress' : ''}">${entry.status}</span>
+              </li>
+            `).join('')}
+          </ul>
+        </div>
+        <div class="lab-quote">"Technology with intention."</div>
+      </div>
     </div>
   `;
 
@@ -739,7 +869,7 @@ function renderAboutWindow() {
     <div class="profile-layout">
       <div class="portrait-column">
         <div class="portrait-frame">
-          <img src="jessabel-art-portrait.PNG" alt="Jessabel portrait" />
+          <img src="jessabel-art-portrait.PNG" alt="Portrait of Jessabel Santos" />
         </div>
       </div>
       <div class="profile-copy">
@@ -781,9 +911,18 @@ function renderResumeWindow() {
   shell.className = 'app-shell app-content';
   shell.innerHTML = `
     <div class="resume-block">
-      <span class="section-kicker">Resume</span>
-      <h3>Resume file pending</h3>
-      <p>A resume document can be added here later for viewing and download support.</p>
+      <div class="resume-header">
+        <img src="resume-icon.png" alt="" aria-hidden="true" />
+        <div>
+          <span class="section-kicker">Resume</span>
+          <h3>Resume</h3>
+        </div>
+      </div>
+      <p>A downloadable resume isn't attached to this workspace yet. Reach out directly and a current copy will be sent over.</p>
+      <div class="resume-actions">
+        <a class="primary-button" href="mailto:jessabel.santos@outlook.com?subject=Resume%20Request">Request a Copy</a>
+      </div>
+      <p class="resume-note">Looking for experience, skills, and recent work — the Contact and About Me apps cover the highlights in the meantime.</p>
     </div>
   `;
   return shell;
@@ -794,20 +933,42 @@ function renderContactWindow() {
   shell.className = 'app-shell app-content';
   shell.innerHTML = `
     <div class="contact-layout">
-      <span class="section-kicker">Contact</span>
-      <h3>Jessabel Santos</h3>
+      <div class="contact-header">
+        <div>
+          <span class="section-kicker">Contact</span>
+          <h3>Let's Build Something Meaningful</h3>
+          <p>Have a project, idea, or just want to connect? I'd love to hear from you.</p>
+        </div>
+        <img src="contact-icon.png" alt="" aria-hidden="true" />
+      </div>
       <div class="contact-list">
         <div class="contact-item">
-          <span>Email</span>
-          <a href="mailto:jessabel.santos@outlook.com">jessabel.santos@outlook.com</a>
+          <div class="contact-item-label">
+            <span>Email</span>
+            <strong>jessabel.santos@outlook.com</strong>
+          </div>
+          <a class="link-button" href="mailto:jessabel.santos@outlook.com">Send</a>
         </div>
         <div class="contact-item">
-          <span>Phone</span>
-          <a href="tel:+14013161522">401-316-1522</a>
+          <div class="contact-item-label">
+            <span>Let's Talk</span>
+            <strong>401-316-1522</strong>
+          </div>
+          <a class="link-button" href="tel:+14013161522">Call</a>
         </div>
         <div class="contact-item">
-          <span>Agency</span>
-          <a href="https://getalchemize.com/" target="_blank" rel="noopener noreferrer">GetAlchemize.com</a>
+          <div class="contact-item-label">
+            <span>Follow</span>
+            <strong>GitHub</strong>
+          </div>
+          <a class="link-button" href="${APP_CONFIG.github.url}" target="_blank" rel="noopener noreferrer">Visit</a>
+        </div>
+        <div class="contact-item">
+          <div class="contact-item-label">
+            <span>Agency</span>
+            <strong>GetAlchemize.com</strong>
+          </div>
+          <a class="link-button" href="https://getalchemize.com/" target="_blank" rel="noopener noreferrer">Visit</a>
         </div>
       </div>
     </div>
@@ -830,7 +991,7 @@ function openAppWindow(appId) {
     appId,
     title: APP_CONFIG[appId].name,
     width: defaultLayout?.width || (appId === 'contact' ? 480 : 720),
-    height: defaultLayout?.height || (appId === 'projects' ? 500 : appId === 'about' ? 430 : appId === 'lab' ? 420 : appId === 'contact' ? 340 : 360),
+    height: defaultLayout?.height || (appId === 'projects' ? 520 : appId === 'about' ? 430 : appId === 'lab' ? 460 : appId === 'contact' ? 400 : 360),
     x: defaultLayout?.x || (160 + state.windows.size * 12),
     y: defaultLayout?.y || (90 + state.windows.size * 12),
     content: buildAppContent(appId),
@@ -862,12 +1023,21 @@ function openWindow(windowData) {
   const template = document.getElementById('windowTemplate');
   const element = template.content.firstElementChild.cloneNode(true);
   const body = element.querySelector('.window-body');
-  const position = calculateWindowPosition(windowData);
+  const rawPosition = calculateWindowPosition(windowData);
+
+  const maxWidth = window.innerWidth - 32;
+  const maxHeight = window.innerHeight - 96;
+  const safeWidth = Math.min(windowData.width, maxWidth);
+  const safeHeight = Math.min(windowData.height, maxHeight);
+  const position = {
+    x: Math.min(Math.max(rawPosition.x, 16), Math.max(16, window.innerWidth - safeWidth - 16)),
+    y: Math.min(Math.max(rawPosition.y, 46), Math.max(46, window.innerHeight - safeHeight - 16)),
+  };
 
   element.dataset.windowId = windowData.id;
   element.classList.add('is-active');
-  element.style.width = `${windowData.width}px`;
-  element.style.height = `${windowData.height}px`;
+  element.style.width = `${safeWidth}px`;
+  element.style.height = `${safeHeight}px`;
   element.style.left = `${position.x}px`;
   element.style.top = `${position.y}px`;
   element.querySelector('.window-title-text').textContent = windowData.title;
@@ -877,17 +1047,19 @@ function openWindow(windowData) {
   const closeButton = element.querySelector('.window-action.close');
   const minimizeButton = element.querySelector('.window-action.minimize');
   const maximizeButton = element.querySelector('.window-action.maximize');
+  const menuButton = element.querySelector('.window-menu-btn');
 
   closeButton.addEventListener('click', () => closeWindow(windowData.id));
   minimizeButton.addEventListener('click', () => minimizeWindow(windowData.id));
   maximizeButton.addEventListener('click', () => toggleMaximizeWindow(windowData.id));
+  menuButton.addEventListener('click', () => toggleMaximizeWindow(windowData.id));
 
   element.addEventListener('pointerdown', () => focusWindow(windowData.id));
 
   setupWindowDrag(element, windowData.id);
   windowLayer.appendChild(element);
 
-  state.windows.set(windowData.id, { ...windowData, windowElement: element, x: position.x, y: position.y });
+  state.windows.set(windowData.id, { ...windowData, windowElement: element, x: position.x, y: position.y, width: safeWidth, height: safeHeight });
   state.minimized.delete(windowData.id);
   renderDock();
   focusWindow(windowData.id);
@@ -963,10 +1135,6 @@ function toggleMaximizeWindow(windowId) {
   };
 
   element.classList.add('is-maximized');
-  element.style.width = 'calc(100vw - 1.1rem)';
-  element.style.height = 'calc(100vh - 5.8rem)';
-  element.style.left = '0.55rem';
-  element.style.top = '3.5rem';
   focusWindow(windowId);
 }
 
@@ -991,7 +1159,7 @@ function setupWindowDrag(windowEl, windowId) {
   let dragInfo = null;
 
   header.addEventListener('pointerdown', (event) => {
-    if (event.target.closest('.window-action')) return;
+    if (event.target.closest('.window-action') || event.target.closest('.window-menu-btn')) return;
     if (windowEl.classList.contains('is-maximized')) return;
 
     const rect = windowEl.getBoundingClientRect();
@@ -1012,7 +1180,7 @@ function setupWindowDrag(windowEl, windowId) {
     const deltaX = event.clientX - dragInfo.pointerStartX;
     const deltaY = event.clientY - dragInfo.pointerStartY;
     const nextLeft = Math.min(Math.max(dragInfo.startLeft + deltaX, 16), window.innerWidth - 180);
-    const nextTop = Math.min(Math.max(dragInfo.startTop + deltaY, 60), window.innerHeight - 160);
+    const nextTop = Math.min(Math.max(dragInfo.startTop + deltaY, 46), window.innerHeight - 160);
     windowEl.style.left = `${nextLeft}px`;
     windowEl.style.top = `${nextTop}px`;
   });
@@ -1058,6 +1226,33 @@ homeMenu?.querySelectorAll('[data-home-action]').forEach((button) => {
   });
 });
 
+document.querySelectorAll('.system-menu-item').forEach((button) => {
+  button.addEventListener('click', () => {
+    const menu = button.dataset.menu;
+    if (menu === 'file') {
+      state.homeMenuOpen = !state.homeMenuOpen;
+      homeMenu.classList.toggle('hidden', !state.homeMenuOpen);
+    } else if (menu === 'edit') {
+      showToast('EDIT', 'Nothing to edit here — this is a living portfolio.');
+    } else if (menu === 'view') {
+      showToast('VIEW', 'Try Ctrl/Cmd + K for the command palette.');
+    } else if (menu === 'window') {
+      const openCount = state.windows.size;
+      showToast('WINDOW', openCount ? `${openCount} window${openCount === 1 ? '' : 's'} open.` : 'No windows open yet.');
+    } else if (menu === 'help') {
+      openCommandPalette();
+    }
+  });
+});
+
+searchTrigger?.addEventListener('click', () => {
+  if (state.commandPaletteOpen) {
+    closeCommandPalette();
+  } else {
+    openCommandPalette();
+  }
+});
+
 commandInput?.addEventListener('input', (event) => updateCommandSuggestions(event.target.value));
 commandInput?.addEventListener('keydown', (event) => {
   if (event.key === 'Enter') {
@@ -1082,6 +1277,11 @@ document.addEventListener('keydown', (event) => {
   if (event.key === 'Escape' && state.commandPaletteOpen) {
     closeCommandPalette();
   }
+
+  if (event.key === 'Escape' && state.homeMenuOpen) {
+    homeMenu.classList.add('hidden');
+    state.homeMenuOpen = false;
+  }
 });
 
 if (commandPalette) {
@@ -1090,10 +1290,22 @@ if (commandPalette) {
   });
 }
 
-loadSessionState();
+document.addEventListener('click', (event) => {
+  if (!state.homeMenuOpen) return;
+  if (event.target.closest('#homeMenu') || event.target.closest('#desktopHomeButton')) return;
+  homeMenu.classList.add('hidden');
+  state.homeMenuOpen = false;
+});
+
+document.addEventListener('click', (event) => {
+  if (event.target.closest('.desktop-icon')) return;
+  document.querySelectorAll('.desktop-icon.is-selected').forEach((el) => el.classList.remove('is-selected'));
+});
+
+loadPersistedState();
 renderDesktopIcons();
 renderDock();
 updateTime();
 updateDiscoveryIndicator();
-setInterval(updateTime, 30000);
+setInterval(updateTime, 15000);
 bootSequence();
