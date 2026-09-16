@@ -36,13 +36,15 @@
             <img src="jessabel-os-logo.png" alt="Jessabel OS" />
           </button>
           <ul class="system-menu" role="menubar" aria-label="System menu">
-            <li role="none"><button role="menuitem" class="system-menu-item" data-menu="file" type="button">File</button></li>
-            <li role="none"><button role="menuitem" class="system-menu-item" data-menu="edit" type="button">Edit</button></li>
-            <li role="none"><button role="menuitem" class="system-menu-item" data-menu="view" type="button">View</button></li>
-            <li role="none"><button role="menuitem" class="system-menu-item" data-menu="window" type="button">Window</button></li>
+            <li role="none"><button role="menuitem" aria-haspopup="true" aria-expanded="false" class="system-menu-item" data-menu="file" type="button">File</button></li>
+            <li role="none"><button role="menuitem" aria-haspopup="true" aria-expanded="false" class="system-menu-item" data-menu="edit" type="button">Edit</button></li>
+            <li role="none"><button role="menuitem" aria-haspopup="true" aria-expanded="false" class="system-menu-item" data-menu="view" type="button">View</button></li>
+            <li role="none"><button role="menuitem" aria-haspopup="true" aria-expanded="false" class="system-menu-item" data-menu="window" type="button">Window</button></li>
             <li role="none"><button role="menuitem" class="system-menu-item" data-menu="help" type="button">Help</button></li>
           </ul>
         </div>
+
+        <div class="system-dropdown hidden" id="systemDropdown" role="menu"></div>
         <div class="system-right">
           <span class="system-discovery-chip" id="systemDiscovery" aria-live="polite"></span>
           <span class="system-indicator" aria-label="Weather">
@@ -55,7 +57,7 @@
           <span class="system-indicator" aria-label="Battery 100%">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="7" width="18" height="10" rx="2"/><path d="M22 10v4" stroke-linecap="round"/><rect x="4.5" y="9.5" width="13" height="5" fill="currentColor" stroke="none"/></svg>
           </span>
-          <button class="system-search-btn" id="searchTrigger" type="button" aria-label="Open command palette (Ctrl+K)">
+          <button class="system-search-btn" id="searchTrigger" type="button" aria-label="Open command palette (Ctrl+K or Cmd+K)">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3" stroke-linecap="round"/></svg>
           </button>
           <span class="system-datetime" id="systemTime" aria-live="polite">--:--</span>
@@ -90,6 +92,7 @@
             <span class="command-prompt">&gt;_</span>
             <input id="commandInput" type="text" autocomplete="off" spellcheck="false" placeholder="Enter command" />
           </label>
+          <div id="commandOutput" class="command-output hidden" aria-live="polite"></div>
           <div id="commandSuggestions" class="command-suggestions" aria-live="polite"></div>
         </div>
       </div>
