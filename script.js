@@ -290,6 +290,45 @@ const PROJECTS = [
     url: 'https://fmbl.jessabel.art/',
     logo: 'FMBLifestyle.png',
   },
+  {
+    id: 'santos-formworks',
+    name: 'Santos FormWorks',
+    category: 'Business',
+    cardClassification: '3D-Printing Storefront',
+    classification: '3D-Printing Storefront & Custom Order Platform',
+    template: 'santos',
+    status: 'in-development',
+    statusLabel: 'In Development · Early Stage',
+    statusNote: 'Santos FormWorks is an active product build currently in the early stages of development. This portfolio entry documents the system as it exists today — implemented functionality, emerging structure, and the direction of the product as development continues.',
+    overview: [
+      'Santos FormWorks is a responsive storefront concept for a 3D-printing business — a catalog of ready-made printed products alongside a structured path for customers to request a custom print.',
+      'The build is exploring how a small print shop can present its work, let customers browse and filter a catalog, and turn a custom idea into an organized request, ahead of the ordering, payment, and production workflow planned for a later stage.',
+    ],
+    role: 'Product concept · Product architecture · UI/UX · Frontend development · System design',
+    currentBuild: [
+      { title: 'Product Catalog', status: 'Implemented', body: 'Browsable catalog with category, color, material, and price-range filters, plus favorites — all running client-side against a typed product dataset.' },
+      { title: 'Cart & Favorites', status: 'Implemented', body: 'In-memory cart and favorites state shared across pages for the current session.' },
+      { title: 'Custom Order Request', status: 'Implemented', body: 'A multi-step request form — project details, reference file upload, print preferences — that validates input and produces a local request preview.' },
+      { title: 'File Upload & Validation', status: 'Implemented', body: 'Drag-and-drop upload accepting 3D-model and reference formats, with client-side size, count, and type validation.' },
+      { title: 'Core Site Pages', status: 'Implemented', body: 'Home, Shop, Custom Orders, About, FAQ, and Contact, sharing a common layout, navigation, and footer.' },
+      { title: 'Ordering, Accounts & Payments', status: 'Planned', body: 'Real inventory, customer accounts, checkout with Stripe/PayPal, shipping and pickup scheduling, and order tracking are the next-phase scope — not part of the current build.' },
+    ],
+    structureNodes: ['Storefront Pages', 'Shared Components & Catalog Data', 'Custom Order Form + Local Preview'],
+    structureNote: 'Today the product is a single Next.js front end: the storefront pages, a shared catalog/cart layer, and the custom-order form all run client-side against a typed local dataset — there is no live backend or database yet.',
+    techGroups: [
+      { label: 'Front End', items: ['Next.js 16 (App Router)', 'React 19', 'TypeScript'] },
+      { label: 'Styling', items: ['Tailwind CSS 4', 'Custom design tokens', 'Responsive breakpoints'] },
+      { label: 'Data (Current)', items: ['Typed local product catalog', 'In-memory cart / favorites state', 'Client-side form + file validation'] },
+      { label: 'Deployment', items: ['GitHub Actions CI (lint, typecheck, build)', 'Node.js runtime target', 'Live staging build on Hostinger'] },
+    ],
+    activeFocus: ['Rounding out the storefront UI and custom-order flow', 'Refining the live staging build'],
+    nextStage: ['Real product inventory & checkout', 'Customer accounts', 'Payments (Stripe / PayPal)', 'Shipping & pickup scheduling', 'Order tracking & email', 'Secure file storage for production files'],
+    url: 'https://linen-buffalo-819897.hostingersite.com/',
+    githubUrl: 'https://github.com/Jessabel-Art/Santos-FormWorks',
+    logo: 'santos-formworks-logo.png',
+    logoDark: true,
+    logoWide: true,
+  },
 ];
 
 const PROJECT_FILTERS = ['All', 'Web Design', 'Business', 'Development'];
@@ -377,6 +416,10 @@ const PROJECT_ALIASES = {
   'cleaningservicedemo': 'cleaning-service-demo',
   'fmblifestyle': 'fmblifestyle',
   'fmb': 'fmblifestyle',
+  'santos': 'santos-formworks',
+  'santosformworks': 'santos-formworks',
+  'santos-formworks': 'santos-formworks',
+  'formworks': 'santos-formworks',
   'pinkladyz': LAB_ALIAS,
   'pinkladyzoled': LAB_ALIAS,
   'oled': LAB_ALIAS,
@@ -967,7 +1010,7 @@ function executeCommand(rawValue) {
     const resolved = resolveProjectAlias(target);
 
     if (!target) {
-      appendCommandLog(value, ['Usage: open [project]', 'Try: open alchemize, open cavalry, open cleaning, open fmblifestyle, open pinkladyz'], true);
+      appendCommandLog(value, ['Usage: open [project]', 'Try: open alchemize, open cavalry, open cleaning, open fmblifestyle, open santos, open pinkladyz'], true);
     } else if (!resolved) {
       appendCommandLog(value, [`No project found matching "${target}".`, 'Type "help" to view available commands.'], true);
     } else if (resolved === LAB_ALIAS) {
@@ -1140,6 +1183,7 @@ function renderHomeWindow() {
 function getProjectPrimaryLabel(project) {
   if (project.id === 'alchemize') return 'Visit GetAlchemize.com';
   if (project.id === 'cavalry-green') return 'Launch Site';
+  if (project.id === 'santos-formworks') return 'Launch Demo';
   return 'Launch Demo';
 }
 
@@ -1205,14 +1249,19 @@ function renderProjectList(shell) {
     const isFeatured = Boolean(project.featured);
     const primaryAction = getProjectPrimaryLabel(project);
     const featuredBadge = isFeatured ? '<span class="featured-badge">Featured Project</span>' : '';
+    const badgeClass = `project-badge${project.logoDark ? ' is-dark' : ''}`;
+    const statusPill = project.status === 'in-development'
+      ? '<span class="status-pill is-development"><span class="status-dot" aria-hidden="true"></span>In Development · Early Stage</span>'
+      : '';
     return `
       <article class="project-card ${isFeatured ? 'is-featured' : ''}" tabindex="0" data-project-id="${project.id}">
         ${featuredBadge}
         <div class="project-card-main">
-          <div class="project-badge">${renderProjectBadge(project, isFeatured)}</div>
+          <div class="${badgeClass}">${renderProjectBadge(project, isFeatured)}</div>
           <div class="project-meta">
             <span class="project-name">${project.name}</span>
             <span class="project-type">${project.cardClassification}</span>
+            ${statusPill}
           </div>
         </div>
         <div class="project-card-actions">
@@ -1987,6 +2036,113 @@ function renderFMBDetail(project, displayBadge) {
   `;
 }
 
+// Santos FormWorks — extended case-study template for an early-stage,
+// actively-developed project. Deliberately lighter-weight than the completed
+// case studies: it documents current build state rather than a finished
+// system, and closes without claiming a resolved outcome.
+function renderSantosDetail(project, displayBadge) {
+  const overviewMarkup = project.overview.map((paragraph) => `<p>${paragraph}</p>`).join('');
+
+  const statusSlug = (label) => `is-${label.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')}`;
+
+  const currentBuildMarkup = project.currentBuild.map((item) => `
+    <div class="admin-module-card">
+      <div class="module-card-head">
+        <strong>${item.title}</strong>
+        <span class="status-pill ${statusSlug(item.status)}">${item.status}</span>
+      </div>
+      <p>${item.body}</p>
+    </div>
+  `).join('');
+
+  const structureMarkup = project.structureNodes.map((node, index, arr) => `
+    <span class="flow-chain-node">${node}</span>
+    ${index < arr.length - 1 ? '<span class="flow-chain-arrow" aria-hidden="true">&rarr;</span>' : ''}
+  `).join('');
+
+  const techGroupsMarkup = project.techGroups.map((group) => `
+    <div class="detail-capability-group">
+      <span class="detail-capability-label">${group.label}</span>
+      <div class="chip-row">${group.items.map((item) => `<span class="chip tech-chip">${item}</span>`).join('')}</div>
+    </div>
+  `).join('');
+
+  const activeFocusMarkup = project.activeFocus.map((item) => `<span class="chip">${item}</span>`).join('');
+  const nextStageMarkup = project.nextStage.map((item) => `<span class="chip chip-future">${item}</span>`).join('');
+
+  return `
+    <div class="case-study-wrap santos-case-study">
+    <div class="project-detail-grid">
+      <div class="project-detail-left has-identity-group">
+        <div class="project-identity-group">
+          ${displayBadge}
+          <h3>${project.name}</h3>
+          <span class="project-classification">${project.classification}</span>
+        </div>
+        <div class="project-overview">${overviewMarkup}</div>
+        <div class="project-card-actions">
+          <a class="primary-button" href="${project.url}" target="_blank" rel="noopener noreferrer">Launch Demo</a>
+          <a class="os-button" href="${project.githubUrl}" target="_blank" rel="noopener noreferrer">View Code on GitHub</a>
+        </div>
+      </div>
+      <div class="project-detail-right">
+        <div class="detail-section editorial-block">
+          <span class="section-kicker">Status</span>
+          <span class="status-pill is-development">
+            <span class="status-dot" aria-hidden="true"></span>${project.statusLabel}
+          </span>
+          <p class="detail-role-text">${project.statusNote}</p>
+        </div>
+        <div class="detail-section editorial-block">
+          <span class="section-kicker">My Role</span>
+          <p class="detail-role-text">${project.role}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="detail-full-section">
+      <span class="section-kicker">Current Build</span>
+      <div class="admin-module-grid">${currentBuildMarkup}</div>
+    </div>
+
+    <div class="detail-full-section section-tone-warm">
+      <span class="section-kicker">Current Product Structure</span>
+      <p class="detail-role-text">${project.structureNote}</p>
+      <div class="flow-chain">${structureMarkup}</div>
+    </div>
+
+    <div class="detail-full-section">
+      <span class="section-kicker">Tech / Implementation</span>
+      <div class="tech-groups-grid">${techGroupsMarkup}</div>
+    </div>
+
+    <div class="detail-full-section section-tone-panel">
+      <div class="dual-module-grid">
+        <div class="module-card">
+          <span class="section-kicker">Active Development — Current Focus</span>
+          <div class="chip-row">${activeFocusMarkup}</div>
+        </div>
+        <div class="module-card">
+          <span class="section-kicker">Next-Stage Architecture</span>
+          <div class="chip-row">${nextStageMarkup}</div>
+        </div>
+      </div>
+    </div>
+    </div>
+
+    <div class="outcome-panel">
+      <div class="outcome-panel-inner">
+        <span class="section-kicker">Follow the Build</span>
+        <p class="outcome-statement">Santos FormWorks is being developed in the open. A live staging build is available to explore while development continues, alongside the public source.</p>
+        <div class="project-card-actions">
+          <a class="primary-button" href="${project.url}" target="_blank" rel="noopener noreferrer">Launch Demo &rarr;</a>
+          <a class="os-button" href="${project.githubUrl}" target="_blank" rel="noopener noreferrer">View Code on GitHub</a>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
 function createProjectDetailWindow(projectId) {
   const project = PROJECTS.find((entry) => entry.id === projectId);
   if (!project) return null;
@@ -2002,7 +2158,7 @@ function createProjectDetailWindow(projectId) {
   content.className = 'app-shell app-content';
 
   const primaryButtonLabel = getProjectPrimaryLabel(project);
-  const plateClass = project.logoDark ? 'project-plate is-dark' : 'project-plate';
+  const plateClass = ['project-plate', project.logoDark && 'is-dark', project.logoWide && 'is-wide'].filter(Boolean).join(' ');
   const displayBadge = project.logo
     ? `<div class="${plateClass}"><img src="${project.logo}" alt="${project.name} logo" /></div>`
     : `<div class="project-plate"><div class="pinkladyz-wordmark" style="font-size: 2.2rem; letter-spacing: -0.03em; color: var(--text-dark);">${project.name}</div></div>`;
@@ -2012,6 +2168,7 @@ function createProjectDetailWindow(projectId) {
     cleaning: () => renderCleaningServiceDetail(project, displayBadge, primaryButtonLabel),
     cavalry: () => renderCavalryDetail(project),
     fmb: () => renderFMBDetail(project, displayBadge),
+    santos: () => renderSantosDetail(project, displayBadge),
   };
   content.innerHTML = renderers[project.template]
     ? renderers[project.template]()
