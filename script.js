@@ -920,7 +920,7 @@ function renderResumeWindow() {
       </div>
       <p>A downloadable resume isn't attached to this workspace yet. Reach out directly and a current copy will be sent over.</p>
       <div class="resume-actions">
-        <a class="primary-button" href="mailto:jessabel.santos@outlook.com?subject=Resume%20Request">Request a Copy</a>
+        <a class="primary-button" href="mailto:hello@getalchemize.com?subject=Resume%20Request">Request a Copy</a>
       </div>
       <p class="resume-note">Looking for experience, skills, and recent work — the Contact and About Me apps cover the highlights in the meantime.</p>
     </div>
@@ -945,9 +945,9 @@ function renderContactWindow() {
         <div class="contact-item">
           <div class="contact-item-label">
             <span>Email</span>
-            <strong>jessabel.santos@outlook.com</strong>
+            <strong>hello@getalchemize.com</strong>
           </div>
-          <a class="link-button" href="mailto:jessabel.santos@outlook.com">Send</a>
+          <a class="link-button" href="mailto:hello@getalchemize.com">Send</a>
         </div>
         <div class="contact-item">
           <div class="contact-item-label">
