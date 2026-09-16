@@ -1762,6 +1762,95 @@ img {
   color: var(--brass);
 }
 
+.outcome-panel .os-button {
+  background: rgba(246, 240, 225, 0.12);
+  border-color: rgba(246, 240, 225, 0.32);
+  color: var(--cream);
+}
+
+.outcome-panel .os-button:hover,
+.outcome-panel .os-button:focus-visible {
+  background: rgba(246, 240, 225, 0.2);
+}
+
+/* ============ CAVALRY GREEN LLC (case study) ============ */
+/* Signature visual: horizontal customer-acquisition / quote-intake pipeline. */
+
+.pipeline-steps {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.pipeline-step {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.3rem 0.75rem 0.3rem 0.35rem;
+  border-radius: 999px;
+  background: rgba(43, 58, 41, 0.05);
+  border: 1px solid var(--border-muted);
+}
+
+.pipeline-step-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.3rem;
+  height: 1.3rem;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--forest);
+  color: var(--cream);
+  font-size: 0.62rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.pipeline-step-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-dark);
+  white-space: nowrap;
+}
+
+.pipeline-step-arrow {
+  color: var(--brass);
+  font-size: 0.8rem;
+}
+
+.pipeline-step.is-final {
+  background: var(--forest);
+  border-color: var(--forest);
+}
+
+.pipeline-step.is-final .pipeline-step-label {
+  color: var(--cream);
+}
+
+.pipeline-step.is-final .pipeline-step-number {
+  background: var(--cream);
+  color: var(--deep-forest);
+}
+
+/* ============ FMBLIFESTYLE (case study) ============ */
+/* Signature visual: financial information architecture — connected product
+   modules feeding a consolidated dashboard. */
+
+.pipeline-branch-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.7rem;
+}
+
+.pipeline-branch-grid .pipeline-node {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 /* ============ LAB WINDOW ============ */
 
 .lab-shell {
@@ -3083,7 +3172,8 @@ body.pref-dock-off .dock {
   .compare-block,
   .journey-grid,
   .admin-module-grid,
-  .pricing-inputs-grid {
+  .pricing-inputs-grid,
+  .pipeline-branch-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
@@ -3153,7 +3243,8 @@ body.pref-dock-off .dock {
   .compare-block,
   .journey-grid,
   .admin-module-grid,
-  .pricing-inputs-grid {
+  .pricing-inputs-grid,
+  .pipeline-branch-grid {
     grid-template-columns: 1fr;
   }
 
@@ -3163,6 +3254,10 @@ body.pref-dock-off .dock {
 
   .pipeline-split {
     flex-direction: column;
+  }
+
+  .pipeline-step-label {
+    white-space: normal;
   }
 
   .desktop-icons {

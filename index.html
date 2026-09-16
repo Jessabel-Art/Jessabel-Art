@@ -12,7 +12,15 @@
     <link rel="icon" type="image/svg+xml" href="favicon.svg" />
     <link rel="apple-touch-icon" href="apple-touch-icon.png" />
     <link rel="manifest" href="site.webmanifest" />
-    <link rel="stylesheet" href="styles.css" />
+    <!--
+      Cache-busting: Hostinger serves static assets with a 7-day
+      Cache-Control max-age, so a returning browser can keep an old
+      script.js/styles.css after a new deploy. Bump the "?v=" query string
+      on BOTH tags below (e.g. to today's date, YYYYMMDD) with every deploy
+      that changes script.js or styles.css, so the changed URL forces
+      browsers to fetch the new files instead of serving the cached ones.
+    -->
+    <link rel="stylesheet" href="styles.css?v=20260916" />
   </head>
   <body>
     <div class="boot-screen" id="bootScreen" aria-live="polite" aria-atomic="true">
@@ -128,6 +136,6 @@
       </button>
     </template>
 
-    <script src="script.js"></script>
+    <script src="script.js?v=20260916"></script>
   </body>
 </html>

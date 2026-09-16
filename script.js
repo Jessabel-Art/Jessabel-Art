@@ -132,18 +132,45 @@ const PROJECTS = [
     category: 'Business',
     cardClassification: 'Client Website + Lead Intake',
     classification: 'Client Website + Lead Intake System',
-    ownership: 'Client-supplied branding and logo, implemented within the digital experience.',
+    template: 'cavalry',
+    ownership: 'Client branding and logo were supplied. My responsibility was translating that existing identity into the digital experience and designing and implementing the website and supporting business workflow.',
     overview: [
       'Cavalry Green LLC is a production website and digital quote-intake system for a veteran-owned lawn care and property-services company serving communities in North Carolina.',
-      'The implementation combines the public-facing service experience with a structured backend workflow for capturing and managing prospective customer quote requests.',
+      'The business needed more than an online service brochure. The website needed to establish a professional web presence while giving prospective customers a structured way to explain a job, identify the services they need, provide contact preferences, and submit photos before the business follows up.',
     ],
-    role: 'Website strategy, UI/UX, frontend implementation, backend quote workflow, database integration, deployment, and technical SEO. Existing client-provided branding and logo were implemented within the digital experience.',
-    capabilityGroups: [
-      { label: 'Customer Experience', items: ['Service presentation', 'Service-area presentation', 'Structured quote requests', 'Preferred contact method'] },
-      { label: 'Quote Intake System', items: ['Multi-image job photo uploads', 'Server-side upload validation', 'Database-backed quote storage', 'Email notifications'] },
-      { label: 'Technical / SEO', items: ['Responsive interface', 'Production deployment', 'Sitemap & robots.txt', 'Structured data for Google indexing'] },
+    role: 'Website strategy, UI/UX, frontend development, quote-workflow architecture, backend implementation, database integration, deployment, and technical SEO.',
+    roleItems: ['Website Strategy', 'UI/UX', 'Frontend Development', 'Quote Workflow Architecture', 'Backend Implementation', 'Database Integration', 'Deployment', 'Technical SEO'],
+    problem: 'A generic contact form cannot adequately capture what a property-service business needs in order to evaluate a job. Lawn care, cleanup, landscaping, hauling, and storm-cleanup requests all carry different details, so the system was designed to turn an unstructured inquiry into an organized, actionable quote request.',
+    problemServices: ['Lawn Care', 'Landscaping', 'Property Cleanups', 'Hauling & Debris Removal', 'Storm Cleanup', 'Recurring Maintenance'],
+    journey: ['Discover Services', 'Understand Service Area', 'Request Quote', 'Select Services', 'Describe Job', 'Upload Photos', 'Choose Contact Method', 'Business Notification'],
+    architectureFlow: ['Customer', 'Quote Request Form', 'PHP Endpoint', 'Server Validation', 'MariaDB'],
+    architectureBranches: ['Quote Request Record', 'Job Photo Records', 'Email Notification'],
+    architectureNote: 'The public quote form is connected to a server-side workflow. Submissions are validated, stored as structured quote-request records, associated job photos are processed separately, and the business receives a notification containing the information needed to follow up.',
+    photoFormats: ['JPEG', 'PNG', 'WebP', 'HEIC', 'HEIF'],
+    photoLimits: [
+      { label: 'Max Photos', value: '5 per request' },
+      { label: 'Max File Size', value: '10 MB per photo' },
+      { label: 'Max Request Size', value: '25 MB total' },
     ],
-    tech: ['Static/Next export', 'PHP backend endpoint', 'MariaDB', 'PHPMailer / SMTP', 'Hostinger deployment', 'Server-side MIME validation'],
+    photoSafeguards: ['Server-side MIME detection', 'Extension assigned from validated MIME — not client input', 'Safe, randomly generated filenames', 'Directory-traversal protection', 'Photos recorded separately from the quote request', 'Quote + photo records written in a single database transaction'],
+    photoNote: 'Customers can provide useful visual context while the server retains full control over what files are accepted and how they are stored.',
+    notificationNote: 'A successful submission generates a business notification containing the information needed to follow up quickly.',
+    notificationFields: ['Request ID', 'Customer Name', 'Phone', 'Email', 'Address', 'Requested Services', 'Preferred Contact Method', 'Job Details', 'Submission Timestamp', 'Photo Count'],
+    notificationTech: ['PHPMailer', 'SMTP'],
+    seoGroups: [
+      { label: 'Deployment', items: ['Responsive interface', 'Production deployment', 'Custom production domain', 'Hostinger deployment'] },
+      { label: 'Search & Discoverability', items: ['Sitemap', 'robots.txt', 'Canonical metadata', 'Open Graph metadata', 'Structured data', 'Search Console / indexing prep'] },
+    ],
+    techGroups: [
+      { label: 'Frontend / Delivery', items: ['Responsive public website', 'Static / Next.js export'] },
+      { label: 'Backend', items: ['PHP endpoint', 'Server-side validation'] },
+      { label: 'Data', items: ['MariaDB', 'quote_requests', 'quote_request_photos'] },
+      { label: 'Notifications', items: ['PHPMailer', 'SMTP'] },
+      { label: 'Infrastructure', items: ['Hostinger', 'Production domain'] },
+    ],
+    outcomeStatement: 'A production business website that functions as both a public presence and the first stage of Cavalry Green’s customer-acquisition workflow — turning an unstructured “contact us” interaction into organized, actionable quote requests.',
+    outcomeRelation: ['Public Website', 'Quote Requests', 'Business Follow-Up'],
+    liveUrl: 'https://cavalrygreenllc.com/',
     url: 'https://cavalry-green.jessabel.art/',
     logo: 'cavalry-green-logo.png',
   },
@@ -229,19 +256,37 @@ const PROJECTS = [
     name: 'FMBLifestyle',
     category: 'Development',
     cardClassification: 'Personal Finance App',
-    classification: 'Personal Finance Application',
-    ownership: 'Independent personal project.',
+    classification: 'Personal Finance Application — Interactive Demo',
+    template: 'fmb',
     overview: [
-      'FMBLifestyle (Finance My Best Lifestyle) is a personal finance and budgeting dashboard covering net worth tracking, account management, monthly budgeting, debt tracking, and mortgage-readiness planning.',
-      'It runs fully client-side and offline-capable, currently shown with sample data to demonstrate the experience rather than a connected live account.',
+      'FMBLifestyle — Finance My Best Lifestyle — explores how multiple parts of personal financial planning can be brought into one coherent interface.',
+      'Instead of treating budgeting, assets, debt, savings goals, and mortgage readiness as separate tools, the application organizes them around a consolidated view of financial position and progress.',
     ],
-    role: 'Independent personal project — product design and front-end implementation.',
-    capabilityGroups: [
-      { label: 'Track', items: ['Net worth over time', 'Multi-account balances (checking, savings, investment, vehicle, real estate)', 'Debt tracking with APR & payoff progress'] },
-      { label: 'Plan', items: ['Monthly category budgeting', 'Envelopes & savings buckets', 'Mortgage-readiness planning'] },
-      { label: 'Overview', items: ['Consolidated dashboard (income, expenses, savings rate)', 'Recent transactions'] },
+    role: 'Product concept · Information architecture · UI/UX · Frontend implementation · Financial dashboard design',
+    problem: 'Personal financial information is often fragmented across bank accounts, budgeting tools, debt statements, investment accounts, savings goals, and long-term planning tools. FMBLifestyle explores a unified interface where those areas can be understood as parts of one financial picture.',
+    architectureInputs: ['Income', 'Spending', 'Assets', 'Liabilities'],
+    architectureHub: 'Financial Dashboard',
+    architectureModules: ['Net Worth', 'Accounts', 'Budget', 'Debt', 'Savings', 'Mortgage Readiness'],
+    coreExperiences: [
+      { title: 'Dashboard', body: 'Consolidated overview of income, expenses, savings rate, balances, and recent transactions.' },
+      { title: 'Net Worth & Accounts', body: 'Checking, savings, investment, vehicle, and real-estate balances alongside liabilities in one net-worth view.' },
+      { title: 'Budgeting', body: 'Monthly category budgeting with spending visibility.' },
+      { title: 'Savings / Envelopes', body: 'Goal-oriented savings buckets that separate financial objectives from general account balances.' },
+      { title: 'Debt', body: 'Outstanding balances, APR, and payoff progress — including snowball/avalanche payoff planning — made visible alongside the rest of the financial picture.' },
+      { title: 'Mortgage Readiness', body: 'A planning workspace for a future home purchase — readiness scoring, debt-to-income modeling, and loan-program comparisons. Not a lending qualification or approval tool.' },
     ],
-    tech: ['React (Vite) single-page application', 'Local, offline-first data model — no backend detected'],
+    demoNote: 'The portfolio version uses sample financial data and a local/offline-first data model. It demonstrates the product experience without connecting to real financial accounts or exposing personal financial information.',
+    techGroups: [
+      { label: 'Front End', items: ['React 19', 'TypeScript', 'Vite', 'React Router'] },
+      { label: 'UI & Visualization', items: ['Component-based UI', 'Recharts data visualization', 'lucide-react icons', 'Responsive dashboard layout'] },
+      { label: 'Data', items: ['Local data service (localStorage)', 'Offline-first, sample dataset', 'Single-page application'] },
+      { label: 'Forward Path', items: ['Desktop-packaging groundwork (Tauri) present in the repository — not active in the web demo'] },
+    ],
+    flowSteps: ['Financial Data', 'Local Data Service', 'Dashboard + Planning Views'],
+    flowModules: ['Accounts', 'Budget', 'Debt', 'Savings', 'Net Worth', 'Mortgage Readiness'],
+    outcomeStatement: 'A unified financial-planning interface demonstrating how budgeting, net worth, debt, savings, and long-term financial goals can be presented as one connected financial picture.',
+    outcomeRelation: ['Net Worth', 'Accounts', 'Budget', 'Debt', 'Savings', 'Mortgage Readiness'],
+    tech: ['React 19', 'TypeScript', 'Vite', 'React Router', 'Recharts', 'Local Data Service'],
     url: 'https://fmbl.jessabel.art/',
     logo: 'FMBLifestyle.png',
   },
@@ -1671,6 +1716,277 @@ function renderCleaningServiceDetail(project, displayBadge, primaryButtonLabel) 
   `;
 }
 
+// Cavalry Green LLC — extended case-study template. Signature visual is the
+// customer-acquisition / quote-intake pipeline (workflow + transactions +
+// backend processing), distinct from Alchemize's system architecture and
+// Cleaning Service Demo's lifecycle/booking framing.
+function renderCavalryDetail(project) {
+  const overviewMarkup = project.overview.map((paragraph) => `<p>${paragraph}</p>`).join('');
+  const roleItemsMarkup = project.roleItems.map((item) => `<span class="chip">${item}</span>`).join('');
+  const problemServicesMarkup = project.problemServices.map((item) => `<span class="chip">${item}</span>`).join('');
+
+  const journeyMarkup = project.journey.map((step, index, arr) => {
+    const isFinal = index === arr.length - 1;
+    return `
+      <span class="pipeline-step ${isFinal ? 'is-final' : ''}">
+        <span class="pipeline-step-number">${index + 1}</span>
+        <span class="pipeline-step-label">${step}</span>
+      </span>
+      ${index < arr.length - 1 ? '<span class="pipeline-step-arrow" aria-hidden="true">&rarr;</span>' : ''}
+    `;
+  }).join('');
+
+  const architectureFlowMarkup = project.architectureFlow.map((step, index, arr) => `
+    <div class="pipeline-node">${step}</div>
+    ${index < arr.length - 1 ? '<div class="arch-arrow" aria-hidden="true">&darr;</div>' : ''}
+  `).join('');
+
+  const architectureBranchesMarkup = project.architectureBranches.map((branch) => `<div class="pipeline-node">${branch}</div>`).join('');
+
+  const photoFormatsMarkup = project.photoFormats.map((item) => `<span class="chip">${item}</span>`).join('');
+  const photoLimitsMarkup = project.photoLimits.map((item) => `
+    <div class="meta-strip-item"><span>${item.label}</span><strong>${item.value}</strong></div>
+  `).join('');
+  const photoSafeguardsMarkup = project.photoSafeguards.map((item) => `<span class="chip">${item}</span>`).join('');
+
+  const notificationFieldsMarkup = project.notificationFields.map((item) => `<span class="chip">${item}</span>`).join('');
+  const notificationTechMarkup = project.notificationTech.map((item) => `<span class="chip tech-chip">${item}</span>`).join('');
+
+  const seoGroupsMarkup = project.seoGroups.map((group) => `
+    <div class="detail-capability-group">
+      <span class="detail-capability-label">${group.label}</span>
+      <div class="chip-row">${group.items.map((item) => `<span class="chip">${item}</span>`).join('')}</div>
+    </div>
+  `).join('');
+
+  const techGroupsMarkup = project.techGroups.map((group) => `
+    <div class="detail-capability-group">
+      <span class="detail-capability-label">${group.label}</span>
+      <div class="chip-row">${group.items.map((item) => `<span class="chip tech-chip">${item}</span>`).join('')}</div>
+    </div>
+  `).join('');
+
+  const outcomeRelationMarkup = project.outcomeRelation.map((node, index, arr) => `
+    <span class="flow-chain-node">${node}</span>
+    ${index < arr.length - 1 ? '<span class="flow-chain-arrow" aria-hidden="true">&rarr;</span>' : ''}
+  `).join('');
+
+  const plateClass = project.logoDark ? 'project-plate is-dark' : 'project-plate';
+  const displayBadge = `<div class="${plateClass}"><img src="${project.logo}" alt="${project.name} logo" /></div>`;
+
+  return `
+    <div class="case-study-wrap cavalry-case-study">
+    <div class="project-detail-grid">
+      <div class="project-detail-left has-identity-group">
+        <div class="project-identity-group">
+          ${displayBadge}
+          <h3>${project.name}</h3>
+          <span class="project-classification">${project.classification}</span>
+        </div>
+        <div class="project-overview">${overviewMarkup}</div>
+        ${project.ownership ? `<p class="project-ownership-note">${project.ownership}</p>` : ''}
+        <div class="project-card-actions">
+          <a class="primary-button" href="${project.url}" target="_blank" rel="noopener noreferrer">View Portfolio Demo</a>
+          <a class="os-button" href="${project.liveUrl}" target="_blank" rel="noopener noreferrer">Visit Live Site</a>
+        </div>
+      </div>
+      <div class="project-detail-right">
+        <div class="detail-section editorial-block">
+          <span class="section-kicker">My Role</span>
+          <p class="detail-role-text">${project.role}</p>
+          <div class="chip-row">${roleItemsMarkup}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="detail-full-section section-tone-warm">
+      <span class="section-kicker">The Need</span>
+      <p class="detail-role-text">${project.problem}</p>
+      <div class="chip-row">${problemServicesMarkup}</div>
+    </div>
+
+    <div class="detail-full-section">
+      <span class="section-kicker">Customer Journey</span>
+      <div class="pipeline-steps">${journeyMarkup}</div>
+    </div>
+
+    <div class="detail-full-section">
+      <span class="section-kicker">Quote Intake Architecture</span>
+      <p class="detail-role-text">${project.architectureNote}</p>
+      <div class="pipeline-flow">
+        ${architectureFlowMarkup}
+        <div class="arch-arrow" aria-hidden="true">&darr;</div>
+        <div class="pipeline-split">${architectureBranchesMarkup}</div>
+      </div>
+    </div>
+
+    <div class="detail-full-section section-tone-panel">
+      <div class="dual-module-grid">
+        <div class="module-card">
+          <span class="section-kicker">Photo Upload Pipeline</span>
+          <p class="detail-role-text">${project.photoNote}</p>
+          <div class="meta-strip">${photoLimitsMarkup}</div>
+          <div class="detail-capability-group">
+            <span class="detail-capability-label">Accepted Formats</span>
+            <div class="chip-row">${photoFormatsMarkup}</div>
+          </div>
+          <div class="detail-capability-group">
+            <span class="detail-capability-label">Server-Side Safeguards</span>
+            <div class="chip-row">${photoSafeguardsMarkup}</div>
+          </div>
+        </div>
+        <div class="module-card">
+          <span class="section-kicker">Business Notification</span>
+          <p class="detail-role-text">${project.notificationNote}</p>
+          <div class="chip-row">${notificationFieldsMarkup}</div>
+          <div class="detail-capability-group">
+            <span class="detail-capability-label">Technology</span>
+            <div class="chip-row">${notificationTechMarkup}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="detail-full-section section-tone-warm">
+      <div class="dual-module-grid">
+        <div class="module-card">
+          <span class="section-kicker">Production &amp; Search</span>
+          ${seoGroupsMarkup}
+        </div>
+        <div class="module-card">
+          <span class="section-kicker">Technology</span>
+          ${techGroupsMarkup}
+        </div>
+      </div>
+    </div>
+    </div>
+
+    <div class="outcome-panel">
+      <div class="outcome-panel-inner">
+        <span class="section-kicker">System Outcome</span>
+        <p class="outcome-statement">${project.outcomeStatement}</p>
+        <div class="flow-chain">${outcomeRelationMarkup}</div>
+        <div class="project-card-actions">
+          <a class="primary-button" href="${project.url}" target="_blank" rel="noopener noreferrer">View Portfolio Demo</a>
+          <a class="os-button" href="${project.liveUrl}" target="_blank" rel="noopener noreferrer">Visit Live Site &rarr;</a>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// FMBLifestyle — extended case-study template. Signature visual is the
+// financial information architecture (connected product modules feeding a
+// consolidated dashboard), distinct from Cavalry's transaction pipeline.
+function renderFMBDetail(project, displayBadge) {
+  const overviewMarkup = project.overview.map((paragraph) => `<p>${paragraph}</p>`).join('');
+
+  const architectureInputsMarkup = project.architectureInputs.map((item, index, arr) => `
+    <span class="chip">${item}</span>
+    ${index < arr.length - 1 ? '<span class="mini-flow-plus" aria-hidden="true">+</span>' : ''}
+  `).join('');
+
+  const architectureModulesMarkup = project.architectureModules.map((item) => `<div class="pipeline-node">${item}</div>`).join('');
+
+  const coreExperiencesMarkup = project.coreExperiences.map((card) => `
+    <div class="admin-module-card">
+      <strong>${card.title}</strong>
+      <p>${card.body}</p>
+    </div>
+  `).join('');
+
+  const techGroupsMarkup = project.techGroups.map((group) => `
+    <div class="detail-capability-group">
+      <span class="detail-capability-label">${group.label}</span>
+      <div class="chip-row">${group.items.map((item) => `<span class="chip tech-chip">${item}</span>`).join('')}</div>
+    </div>
+  `).join('');
+
+  const flowStepsMarkup = project.flowSteps.map((step, index, arr) => `
+    <div class="pipeline-node ${index === arr.length - 1 ? 'is-final' : ''}">${step}</div>
+    ${index < arr.length - 1 ? '<div class="arch-arrow" aria-hidden="true">&darr;</div>' : ''}
+  `).join('');
+
+  const flowModulesMarkup = project.flowModules.map((item) => `<span class="chip">${item}</span>`).join('');
+
+  const outcomeRelationMarkup = project.outcomeRelation.map((node, index, arr) => `
+    <span class="flow-chain-node">${node}</span>
+    ${index < arr.length - 1 ? '<span class="flow-chain-arrow" aria-hidden="true">&rarr;</span>' : ''}
+  `).join('');
+
+  return `
+    <div class="case-study-wrap fmb-case-study">
+    <div class="project-detail-grid">
+      <div class="project-detail-left has-identity-group">
+        <div class="project-identity-group">
+          ${displayBadge}
+          <h3>${project.name}</h3>
+          <span class="project-classification">${project.classification}</span>
+        </div>
+        <div class="project-overview">${overviewMarkup}</div>
+        <div class="project-card-actions">
+          <a class="primary-button" href="${project.url}" target="_blank" rel="noopener noreferrer">Launch Demo</a>
+        </div>
+      </div>
+      <div class="project-detail-right">
+        <div class="detail-section editorial-block">
+          <span class="section-kicker">Product Goal</span>
+          <p class="detail-role-text">${project.problem}</p>
+        </div>
+        <div class="detail-section editorial-block">
+          <span class="section-kicker">My Role</span>
+          <p class="detail-role-text detail-role-title">${project.role}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="detail-full-section section-tone-warm">
+      <span class="section-kicker">Financial Information Architecture</span>
+      <div class="mini-flow">
+        <div class="mini-flow-inputs">${architectureInputsMarkup}</div>
+        <div class="arch-arrow" aria-hidden="true">&darr;</div>
+        <div class="mini-flow-engine">${project.architectureHub}</div>
+        <div class="arch-arrow" aria-hidden="true">&darr;</div>
+        <div class="pipeline-branch-grid">${architectureModulesMarkup}</div>
+      </div>
+    </div>
+
+    <div class="detail-full-section">
+      <span class="section-kicker">Core Experiences</span>
+      <div class="pipeline-branch-grid">${coreExperiencesMarkup}</div>
+    </div>
+
+    <div class="detail-full-section section-tone-panel">
+      <div class="dual-module-grid">
+        <div class="module-card">
+          <span class="section-kicker">Demo Boundary</span>
+          <p class="detail-role-text">${project.demoNote}</p>
+        </div>
+        <div class="module-card">
+          <span class="section-kicker">Implementation</span>
+          <div class="tech-groups-grid">${techGroupsMarkup}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="detail-full-section">
+      <span class="section-kicker">Product Flow</span>
+      <div class="pipeline-flow">${flowStepsMarkup}</div>
+      <div class="chip-row">${flowModulesMarkup}</div>
+    </div>
+    </div>
+
+    <div class="outcome-panel">
+      <div class="outcome-panel-inner">
+        <span class="section-kicker">Product Outcome</span>
+        <p class="outcome-statement">${project.outcomeStatement}</p>
+        <div class="flow-chain">${outcomeRelationMarkup}</div>
+        <a class="primary-button" href="${project.url}" target="_blank" rel="noopener noreferrer">Launch Demo &rarr;</a>
+      </div>
+    </div>
+  `;
+}
+
 function createProjectDetailWindow(projectId) {
   const project = PROJECTS.find((entry) => entry.id === projectId);
   if (!project) return null;
@@ -1692,8 +2008,13 @@ function createProjectDetailWindow(projectId) {
     : `<div class="project-plate"><div class="pinkladyz-wordmark" style="font-size: 2.2rem; letter-spacing: -0.03em; color: var(--text-dark);">${project.name}</div></div>`;
 
   const isCaseStudy = Boolean(project.extended || project.template);
-  content.innerHTML = project.template === 'cleaning'
-    ? renderCleaningServiceDetail(project, displayBadge, primaryButtonLabel)
+  const renderers = {
+    cleaning: () => renderCleaningServiceDetail(project, displayBadge, primaryButtonLabel),
+    cavalry: () => renderCavalryDetail(project),
+    fmb: () => renderFMBDetail(project, displayBadge),
+  };
+  content.innerHTML = renderers[project.template]
+    ? renderers[project.template]()
     : project.extended
       ? renderExtendedProjectDetail(project, displayBadge, primaryButtonLabel)
       : renderStandardProjectDetail(project, displayBadge, primaryButtonLabel);
