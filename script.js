@@ -851,7 +851,7 @@ const PROJECTS = [
       "Order tracking & email",
       "Secure file storage for production files",
     ],
-    url: "https://linen-buffalo-819897.hostingersite.com/",
+    url: "https://jessabel.art/santos-formworks/",
     githubUrl: "https://github.com/Jessabel-Art/Santos-FormWorks",
     logo: "santos-formworks-logo.png",
     logoDark: true,
@@ -908,48 +908,6 @@ const PROJECTS = [
     url: "https://jessabel.art/landscape-website-demo/",
     logo: "mockup.png",
     logoWide: true,
-  },
-  {
-    id: "pinkladyz-oled",
-    name: "PinkLadyZ OLED Display",
-    category: "Development",
-    cardClassification: "Embedded Display System",
-    classification: "ESP32 OLED Display System",
-    template: "pinkladyz",
-    overview: [
-      "PinkLadyZ OLED is a custom embedded display project built around an ESP32, a 128×64 SSD1306 OLED, and a hand-authored animation pipeline inspired by a modified Nissan 300ZX scene study.",
-      "The project blends monochrome bitmap art, animated weather states, time synchronization, and a simple firmware state machine to create a self-contained dashboard and ambient display experience.",
-    ],
-    role: "Embedded systems design · Firmware architecture · Hardware integration · Visual system development",
-    problem:
-      "A display system needs coherent visual behavior, not just static graphics. The project needed a firmware structure that balanced boot, idle, dashboard, and weather-reactive states while keeping memory usage low and preserving the custom aesthetic of the display.",
-    approach:
-      "The design uses a small state machine, PROGMEM bitmap assets, and Adafruit GFX drawing commands to manage discrete firmware modes. The display cycles through scripted scenes and live data overlays while keeping the hardware interactions simple and robust.",
-    features: [
-      "ESP32-based display firmware",
-      "Bitmap animation pipeline",
-      "Live clock and weather integration",
-      "Multiple state-driven display modes",
-      "Serial control commands for testing",
-    ],
-    techGroups: [
-      {
-        label: "Hardware",
-        items: ["ESP32", "SSD1306 128×64 OLED", "I²C display bus"],
-      },
-      {
-        label: "Firmware",
-        items: ["C++", "Arduino framework", "Adafruit GFX", "PROGMEM assets"],
-      },
-      {
-        label: "Connectivity",
-        items: ["Wi-Fi", "NTP time sync", "Open-Meteo weather API"],
-      },
-    ],
-    status: "Prototype",
-    statusLabel: "Prototype · Hardware Demo",
-    githubUrl: "https://github.com/Jessabel-Art/PinkLadyZ-OLED-Display",
-    logo: "pinkladyz-icon.png",
   },
 ];
 
@@ -3231,68 +3189,6 @@ function renderLandscapeDetail(project, displayBadge, primaryButtonLabel) {
   `;
 }
 
-function renderPinkLadyZDetail(project, displayBadge, primaryButtonLabel) {
-  const overviewMarkup = project.overview
-    .map((paragraph) => `<p>${paragraph}</p>`)
-    .join("");
-  const featuresMarkup = project.features
-    .map((item) => `<span class="chip">${item}</span>`)
-    .join("");
-  const techMarkup = project.techGroups
-    .map(
-      (group) => `
-    <div class="detail-capability-group">
-      <span class="detail-capability-label">${group.label}</span>
-      <div class="chip-row">${group.items.map((item) => `<span class="chip tech-chip">${item}</span>`).join("")}</div>
-    </div>
-  `,
-    )
-    .join("");
-
-  const actionMarkup = project.githubUrl
-    ? `<a class="os-button" href="${project.githubUrl}" target="_blank" rel="noopener noreferrer">View Code on GitHub</a>`
-    : "";
-
-  return `
-    <div class="case-study-wrap">
-      <div class="project-detail-grid">
-        <div class="project-detail-left has-identity-group">
-          <div class="project-identity-group">
-            ${displayBadge}
-            <h3>${project.name}</h3>
-            <span class="project-classification">${project.classification}</span>
-          </div>
-          <div class="project-overview">${overviewMarkup}</div>
-          <div class="project-card-actions">
-            ${project.url ? `<a class="primary-button" href="${project.url}" target="_blank" rel="noopener noreferrer">${primaryButtonLabel}</a>` : ""}
-            ${actionMarkup}
-          </div>
-        </div>
-        <div class="project-detail-right">
-          <div class="detail-section editorial-block">
-            <span class="section-kicker">Problem</span>
-            <p class="detail-role-text">${project.problem}</p>
-          </div>
-          <div class="detail-section editorial-block">
-            <span class="section-kicker">Approach</span>
-            <p class="detail-role-text">${project.approach}</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="detail-full-section section-tone-warm">
-        <span class="section-kicker">Key Functionality</span>
-        <div class="chip-row">${featuresMarkup}</div>
-      </div>
-
-      <div class="detail-full-section">
-        <span class="section-kicker">Technical Implementation</span>
-        <div class="tech-groups-grid">${techMarkup}</div>
-      </div>
-    </div>
-  `;
-}
-
 function renderSantosDetail(project, displayBadge) {
   const overviewMarkup = project.overview
     .map((paragraph) => `<p>${paragraph}</p>`)
@@ -3453,8 +3349,6 @@ function createProjectDetailWindow(projectId) {
     santos: () => renderSantosDetail(project, displayBadge),
     landscape: () =>
       renderLandscapeDetail(project, displayBadge, primaryButtonLabel),
-    pinkladyz: () =>
-      renderPinkLadyZDetail(project, displayBadge, primaryButtonLabel),
   };
   content.innerHTML = renderers[project.template]
     ? renderers[project.template]()

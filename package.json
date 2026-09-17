@@ -1,0 +1,7 @@
+{
+  "name": "jessabel-art-hostinger",
+  "private": true,
+  "scripts": {
+    "build:deploy": "node scripts/build-hostinger-deploy.mjs"
+  }
+}
