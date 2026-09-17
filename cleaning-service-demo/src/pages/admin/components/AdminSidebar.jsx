@@ -1,0 +1,119 @@
+// src/pages/admin/components/AdminSidebar.jsx
+import React from "react";
+import { Button } from "@/components/ui/button";
+import { useContext } from "react";
+import { AdminUIContext } from "../context/AdminUIContext";
+import {
+  LayoutDashboard,
+  CalendarDays,
+  ClipboardList,
+  Users,
+  MessageCircle,
+  Wrench,
+  CreditCard,
+  BarChart3,
+} from "lucide-react";
+
+const NAV_ITEMS = [
+  { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { id: "bookings", label: "Bookings", icon: ClipboardList },
+  { id: "calendar", label: "Calendar", icon: CalendarDays },
+  { id: "clients", label: "Clients", icon: Users },
+  { id: "payments", label: "Payments & Deposits", icon: CreditCard },
+  { id: "reviews", label: "Reviews", icon: MessageCircle },
+  { id: "reports", label: "Reports", icon: BarChart3 },
+  { id: "maintenance", label: "Maintenance", icon: Wrench },
+];
+
+export default function AdminSidebar({ activeView, onChangeView }) {
+  const { mobileMenuOpen, setMobileMenuOpen } = useContext(AdminUIContext);
+
+  const handleNavClick = (viewId) => {
+    onChangeView(viewId);
+    setMobileMenuOpen(false); // Close menu after navigation on mobile
+  };
+
+  return (
+    <>
+      {/* Desktop Sidebar */}
+      <aside className="hidden lg:flex lg:flex-col w-60 bg-white border-r border-plum/10">
+        <div className="px-4 py-5 lg:py-6 border-b border-plum/10">
+          <div className="text-xs font-semibold tracking-[0.18em] text-gold uppercase">
+            Admin Dashboard
+          </div>
+          <div className="text-sm text-plum mt-1">CleanPro Demo</div>
+        </div>
+
+        <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
+          {NAV_ITEMS.map((item) => {
+            const Icon = item.icon;
+            const isActive = activeView === item.id;
+            return (
+              <Button
+                key={item.id}
+                variant={isActive ? "default" : "ghost"}
+                size="sm"
+                className={`w-full justify-start gap-2 rounded-xl text-sm py-2 ${
+                  isActive
+                    ? "bg-plum text-white hover:bg-plum/90"
+                    : "text-plum hover:bg-[#EEF5FB]"
+                }`}
+                onClick={() => handleNavClick(item.id)}
+              >
+                <Icon className="w-4 h-4" />
+                {item.label}
+              </Button>
+            );
+          })}
+        </nav>
+      </aside>
+
+      {/* Mobile menu backdrop */}
+      {mobileMenuOpen && (
+        <button
+          type="button"
+          className="fixed inset-0 bg-black/30 z-30 lg:hidden"
+          onClick={() => setMobileMenuOpen(false)}
+          aria-label="Close admin navigation menu"
+        />
+      )}
+
+      {/* Mobile drawer menu */}
+      <aside
+        className={`fixed left-0 top-14 bottom-0 w-64 bg-white border-r border-plum/10 flex flex-col z-40 lg:hidden transition-transform duration-300 ease-in-out ${
+          mobileMenuOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
+      >
+        <div className="px-4 py-4 border-b border-plum/10 flex-shrink-0">
+          <div className="text-xs font-semibold tracking-[0.18em] text-gold uppercase">
+            Admin Dashboard
+          </div>
+          <div className="text-sm text-plum mt-1">CleanPro Demo</div>
+        </div>
+
+        <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
+          {NAV_ITEMS.map((item) => {
+            const Icon = item.icon;
+            const isActive = activeView === item.id;
+            return (
+              <Button
+                key={item.id}
+                variant={isActive ? "default" : "ghost"}
+                size="sm"
+                className={`w-full justify-start gap-2 rounded-xl text-sm py-2 ${
+                  isActive
+                    ? "bg-plum text-white hover:bg-plum/90"
+                    : "text-plum hover:bg-[#EEF5FB]"
+                }`}
+                onClick={() => handleNavClick(item.id)}
+              >
+                <Icon className="w-4 h-4" />
+                {item.label}
+              </Button>
+            );
+          })}
+        </nav>
+      </aside>
+    </>
+  );
+}

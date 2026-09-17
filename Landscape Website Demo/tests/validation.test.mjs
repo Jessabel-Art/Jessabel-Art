@@ -1,0 +1,10 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {validateQuote,validateFiles,uploadLimits} from '../src/validation.js';
+import {products,serviceCategories,serviceMaterials} from '../src/data.js';
+const valid={name:'Alex Green',email:'alex@example.com',phone:'202-555-0148',preferred:'email',services:[],products:[],description:'Refresh my planting beds.'};
+test('accepts a complete request with a description, service, or material',()=>{assert.deepEqual(validateQuote(valid),{});assert.deepEqual(validateQuote({...valid,description:'',services:['Lawn mowing']}),{});assert.deepEqual(validateQuote({...valid,description:'',products:['sod']}),{});});
+test('rejects malformed required data and missing project information',()=>{const errors=validateQuote({name:' ',email:'hello@',phone:'123',preferred:'fax',description:' '});assert.deepEqual(Object.keys(errors),['name','email','phone','preferred','description']);});
+test('accepts international phones and names without a space',()=>assert.deepEqual(validateQuote({...valid,name:'Alex',phone:'+44 20 7946 0123'}),{}));
+test('rejects upload type, size and count without changing inputs',()=>{assert.match(validateFiles([{name:'bad.svg',type:'image/svg+xml',size:5}]),/JPG/);assert.match(validateFiles([{name:'big.jpg',type:'image/jpeg',size:uploadLimits.size+1}]),/10 MB/);assert.match(validateFiles(Array(6).fill({name:'photo.jpg',type:'image/jpeg',size:10})),/up to 5/);assert.match(validateFiles([{name:'photo.jpg',type:'image/jpeg',size:10}],5),/up to 5/);assert.equal(validateFiles([{name:'photo.webp',type:'image/webp',size:100}]),'');});
+test('catalog IDs are unique and service relations resolve',()=>{assert.equal(new Set(products.map(p=>p.id)).size,products.length);for(const id of [...serviceCategories.flatMap(c=>c.products),...Object.values(serviceMaterials).flat()])assert.ok(products.find(p=>p.id===id),id);assert.equal(products.length,31);assert.equal(serviceCategories.length,6);});

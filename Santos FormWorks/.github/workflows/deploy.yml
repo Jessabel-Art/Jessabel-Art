@@ -1,0 +1,87 @@
+name: Validate and publish deploy branch
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: santos-formworks-deploy
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    # Manual runs must also originate from the source branch.
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      NEXT_TELEMETRY_DISABLED: "1"
+      DEPLOY_DIR: $RUNNER_TEMP/santos-formworks-deploy
+
+    steps:
+      - name: Check out main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          persist-credentials: true
+
+      - name: Set up Node.js LTS
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Install locked dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Generate Next.js route types
+        run: npx --no-install next typegen
+
+      - name: Type check
+        run: npm run typecheck
+
+      - name: Production build
+        run: npm run build
+
+      - name: Stage Node.js deployment
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s .next/BUILD_ID
+          mkdir -p "$DEPLOY_DIR"
+          # Explicit allowlist: no reference mockups, credentials, or dependencies.
+          cp package.json package-lock.json next.config.ts next-env.d.ts \
+            tsconfig.json postcss.config.mjs eslint.config.mjs .nvmrc "$DEPLOY_DIR/"
+          cp -R src public "$DEPLOY_DIR/"
+          mkdir -p "$DEPLOY_DIR/.next"
+          rsync -a --exclude='cache/' --exclude='diagnostics/' .next/ "$DEPLOY_DIR/.next/"
+          printf 'node_modules/\n.next/cache/\n.env*\n*.tsbuildinfo\n' > "$DEPLOY_DIR/.gitignore"
+
+      - name: Publish generated deploy branch
+        # Default success gating: never publish after any preceding failure.
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          if [ "$(git rev-parse HEAD)" != "$(git rev-parse FETCH_HEAD)" ]; then
+            echo "main changed while building; a newer run must publish instead."
+            exit 1
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          # A separate index creates a parentless deployment snapshot without
+          # changing the main index or merging generated files back into main.
+          export GIT_INDEX_FILE="$RUNNER_TEMP/santos-deploy.index"
+          git --work-tree="$DEPLOY_DIR" add --force --all
+          tree=$(git write-tree)
+          source=$(git rev-parse HEAD)
+          commit=$(printf 'Deploy source %s\n' "$source" | git commit-tree "$tree")
+          git push --force origin "$commit:refs/heads/deploy"

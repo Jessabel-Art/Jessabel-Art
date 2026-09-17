@@ -1,0 +1,112 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================
+   CleanPro Demo — Design Tokens
+   Primary blue: #3A9FDF  |  Deep navy: #0B283D
+   Off-white: #F7F7F7     |  Light gray: #E9EEF2
+   Muted text: #5F6B73
+   ============================================================ */
+:root {
+  /* Legacy variable names kept so all existing class references
+     automatically adopt the new palette without a full rename. */
+  --light-bg: #F7F7F7;   /* was warm tint — now clean off-white */
+  --plum: #0B283D;         /* was deep navy — now deep navy       */
+  --gold: #3A9FDF;         /* was gold — now primary blue         */
+  --white: #FFFFFF;
+
+  /* New explicit tokens */
+  --navy: #0B283D;
+  --blue: #3A9FDF;
+  --off-white: #F7F7F7;
+  --light-gray: #E9EEF2;
+  --muted-text: #5F6B73;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--off-white);
+  color: var(--navy);
+  line-height: 1.6;
+}
+
+.text-plum {
+  color: var(--navy);
+}
+
+.text-gold {
+  color: var(--blue);
+}
+
+.bg-clean-bg {
+  background-color: var(--off-white);
+}
+
+.bg-plum {
+  background-color: var(--navy);
+}
+
+.bg-gold {
+  background-color: var(--blue);
+}
+
+.border-gold {
+  border-color: var(--blue);
+}
+
+.hover\:bg-gold:hover {
+  background-color: var(--blue);
+}
+
+.hover\:shadow-gold:hover {
+  box-shadow: 0 0 20px rgba(58, 159, 223, 0.4);
+}
+
+.gradient-overlay {
+  background: linear-gradient(135deg, rgba(247, 247, 247, 0.9) 0%, rgba(11, 40, 61, 0.1) 100%);
+}
+
+.service-card {
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.service-card:hover {
+  transform: translateY(-5px);
+}
+
+.testimonial-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(58, 159, 223, 0.2);
+}
+
+.contact-form {
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(15px);
+}
+
+.star-rating {
+  color: var(--blue);
+}
+
+/* Demo banner */
+.demo-banner {
+  background: var(--navy);
+  color: #fff;
+  font-size: 0.75rem;
+  text-align: center;
+  padding: 6px 16px;
+  letter-spacing: 0.02em;
+}
+
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 2.5rem;
+  }
+  
+  .hero-subtitle {
+    font-size: 1.1rem;
+  }
+}

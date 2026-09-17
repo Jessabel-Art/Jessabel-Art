@@ -1,0 +1,10 @@
+# Safety net for the whole monorepo. Each nested project also carries its
+# own .gitignore for framework-specific build output; these rules catch
+# anything at the root or in a project that doesn't already exclude it.
+node_modules/
+.env
+.env.*
+!.env.example
+.DS_Store
+Thumbs.db
+.venv/

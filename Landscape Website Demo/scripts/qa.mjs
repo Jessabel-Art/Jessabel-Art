@@ -1,0 +1,13 @@
+import {createRequire} from 'node:module';
+import {mkdir} from 'node:fs/promises';
+const require=createRequire('C:/Users/Jessa/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/package.json');
+const {chromium}=require('playwright');
+const browser=await chromium.launch({headless:true,channel:'msedge'});
+const page=await browser.newPage({viewport:{width:1440,height:1000}});
+const errors=[];page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error')errors.push(m.text())});
+await mkdir('test-results',{recursive:true});
+await page.goto('http://127.0.0.1:4173/',{waitUntil:'networkidle'});
+await page.screenshot({path:'test-results/home-desktop.png',fullPage:true});
+console.log(JSON.stringify({title:await page.title(),images:await page.locator('img').evaluateAll(imgs=>imgs.map(i=>({src:i.currentSrc,loaded:i.complete&&i.naturalWidth>0}))),overflow:await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),errors}));
+await page.setViewportSize({width:390,height:844});await page.screenshot({path:'test-results/home-mobile.png',fullPage:true});
+await browser.close();

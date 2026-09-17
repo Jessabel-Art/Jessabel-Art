@@ -1,0 +1,39 @@
+# Santos FormWorks
+
+Responsive 3D-printing storefront built with Next.js App Router, React, TypeScript, and Tailwind CSS. Uses the supplied Santos FormWorks logo; reference mockups are not embedded in the website.
+
+## Development
+
+Use Node.js 24 LTS (`.nvmrc`). Run `npm ci`, then `npm run dev` and open `http://127.0.0.1:3000`.
+
+- `npm run lint` — ESLint
+- `npx --no-install next typegen` — generate route types on a fresh checkout
+- `npm run typecheck` — TypeScript validation
+- `npm run build` — production build into `.next/`
+- `npm start` — production Next.js server, using the platform's `PORT`
+
+## Frontend
+
+- `src/app/`: homepage, catalog, custom requests, About, FAQ, Contact, and layout.
+- `src/components/`: navigation, footer, cards, filters, dialogs, form fields, file selection, and temporary commerce state.
+- `src/lib/products.ts`: typed sample catalog, separated from presentation.
+- `src/app/globals.css`: design tokens, component styles, Tailwind, responsive breakpoints.
+- `public/images/`: supplied logo and generated illustrative photography; provenance and prompts in [docs/assets.md](docs/assets.md).
+
+Cart/favorites use memory across client navigation and reset on refresh. Search, filtering, sorting, and pagination work locally. Custom requests validate fields/files and display a local preview; nothing is uploaded or submitted. Product images, prices, and reviews are illustrative; some product variants reuse images.
+
+Phase 2: catalog/inventory, accounts, checkout, Stripe/PayPal, shipping rates, pickup scheduling, tracking, email, and private file storage. Custom orders remain separate: request → review → quote → approval → payment → production → pickup/shipping → completed. Actual contact details and policies still need to be supplied.
+
+## Deployment
+
+`main` is the source/development branch. Pushes to `main` (or a manual workflow run on `main`) trigger `.github/workflows/deploy.yml`. Actions installs locked dependencies, runs lint/type checks, and builds. Only successful, current builds replace `deploy`. Configure Hostinger to deploy from `deploy`. Never edit `deploy` manually or merge its generated files into `main`.
+
+This app requires the **Next.js Node.js runtime**, with `.next/` output and a dynamic `/shop` route. It is not a static export. The generated branch includes application source, public assets, the production build without cache/diagnostics, manifests, lockfile, and build configuration. It excludes `node_modules`, secrets, workflows, and reference mockups.
+
+Hostinger: select a **Node.js Web App / Next.js**, repository `Jessabel-Art/Santos-FormWorks`, branch `deploy`, root `.`, Node **24 LTS**, install **`npm ci --include=dev`**, build **`npm run build`**, start **`npm start`**. If asked, build output is `.next`, not a static publish directory. The server binds to `0.0.0.0` and respects the platform's `PORT`; use `NODE_ENV=production` at runtime. No app secrets are required for Phase 1. Build dependencies are required even when production environment settings omit dev dependencies by default.
+
+GitHub must allow Actions and `GITHUB_TOKEN` with `contents: write`; any `deploy` branch rules must permit the workflow's force updates. Keep normal protection on `main`. No PAT or Hostinger credentials are used.
+
+Still unverified: the Hostinger account/plan, Node 24 availability in that account, domain, GitHub authorization, branch and automatic-deployment settings, and whether its integration reacts to bot/force pushes. Confirm these in hPanel. GitHub-token pushes do not start another GitHub Actions workflow; Hostinger must watch the branch externally. No direct Hostinger deployment is performed here.
+
+References: [Hostinger Node.js setup](https://www.hostinger.com/support/how-to-deploy-a-nodejs-website-in-hostinger/), [Next.js deployment](https://nextjs.org/docs/pages/getting-started/deploying).

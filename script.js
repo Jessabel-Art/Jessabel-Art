@@ -171,7 +171,7 @@ const PROJECTS = [
     outcomeStatement: 'A production business website that functions as both a public presence and the first stage of Cavalry Green’s customer-acquisition workflow — turning an unstructured “contact us” interaction into organized, actionable quote requests.',
     outcomeRelation: ['Public Website', 'Quote Requests', 'Business Follow-Up'],
     liveUrl: 'https://cavalrygreenllc.com/',
-    url: 'https://cavalry-green.jessabel.art/',
+    url: 'https://jessabel.art/cavalry-green/',
     logo: 'cavalry-green-logo.png',
   },
   {
@@ -248,7 +248,7 @@ const PROJECTS = [
     outcomeStatement: 'A connected service-business platform where customer booking, pricing, scheduling, payment, and administrative operations operate as parts of the same workflow.',
     outcomeRelation: ['Customer Experience', 'Booking Engine', 'Business Logic', 'Payments + Data', 'Admin Operations'],
     tech: ['React', 'Vite', 'Tailwind CSS', 'Radix UI', 'Framer Motion', 'react-big-calendar', 'Recharts'],
-    url: 'https://cleaning-service-demo.jessabel.art/',
+    url: 'https://jessabel.art/cleaning-service-demo/',
     logo: 'cleaning-demo-icon.png',
   },
   {
@@ -287,7 +287,7 @@ const PROJECTS = [
     outcomeStatement: 'A unified financial-planning interface demonstrating how budgeting, net worth, debt, savings, and long-term financial goals can be presented as one connected financial picture.',
     outcomeRelation: ['Net Worth', 'Accounts', 'Budget', 'Debt', 'Savings', 'Mortgage Readiness'],
     tech: ['React 19', 'TypeScript', 'Vite', 'React Router', 'Recharts', 'Local Data Service'],
-    url: 'https://fmbl.jessabel.art/',
+    url: 'https://jessabel.art/fmbl/',
     logo: 'FMBLifestyle.png',
   },
   {
@@ -362,7 +362,7 @@ const LAB_PROJECT = {
     { label: 'Framework', value: 'Arduino' },
     { label: 'Source', value: 'GitHub' },
   ],
-  url: 'https://pinkladyz-oled.jessabel.art/',
+  url: 'https://jessabel.art/pinkladyz-oled/',
   githubUrl: 'https://github.com/Jessabel-Art/PinkLadyZ-OLED-Display',
   image: 'pinkladyz-icon.png',
 };
