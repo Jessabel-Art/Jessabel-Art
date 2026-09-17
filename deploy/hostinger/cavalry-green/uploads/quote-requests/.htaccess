@@ -1,0 +1,10 @@
+Options -Indexes
+
+<FilesMatch "\.(php|php3|php4|php5|phtml|cgi|pl|py|rb|exe|bat|cmd|com|dll|so|scr|js|vbs|asp|aspx)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+<IfModule mod_php.c>
+    php_flag engine off
+</IfModule>

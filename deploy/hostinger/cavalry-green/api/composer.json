@@ -1,0 +1,12 @@
+{
+  "name": "cavalrygreen/quote-api",
+  "description": "PHP API for quote form notifications",
+  "type": "project",
+  "require": {
+    "php": ">=8.1",
+    "phpmailer/phpmailer": "^6.9"
+  },
+  "config": {
+    "vendor-dir": "vendor"
+  }
+}

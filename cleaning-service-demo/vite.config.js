@@ -192,7 +192,7 @@ logger.error = (msg, options) => {
 };
 
 export default defineConfig({
-  base: process.env.NODE_ENV === "production" ? "/cleaning-service-demo/" : "./",
+  base: "/cleaning-service-demo/",
   customLogger: logger,
   plugins: [
     ...(isDev ? [inlineEditPlugin(), editModeDevPlugin()] : []),

@@ -1,4 +1,4 @@
-﻿import { defineConfig } from "vite";
+import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
 const stableFaviconFiles = new Set([
@@ -14,7 +14,7 @@ const stableFaviconFiles = new Set([
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: process.env.NODE_ENV === "production" ? "/fmbl/" : "./",
+  base: "/fmbl/",
   build: {
     rollupOptions: {
       output: {
