@@ -1,0 +1,16 @@
+{
+  "name": "Cleaning Service Demo",
+  "short_name": "CleanPro Demo",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#0b1727",
+  "theme_color": "#0b1727",
+  "description": "Cleaning service demo for the Jessabel portfolio.",
+  "icons": [
+    {
+      "src": "../favicon.ico",
+      "sizes": "64x64",
+      "type": "image/x-icon"
+    }
+  ]
+}

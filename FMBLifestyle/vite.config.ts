@@ -14,7 +14,7 @@ const stableFaviconFiles = new Set([
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: "./",
+  base: process.env.NODE_ENV === "production" ? "/fmbl/" : "./",
   build: {
     rollupOptions: {
       output: {
