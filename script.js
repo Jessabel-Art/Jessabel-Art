@@ -261,6 +261,126 @@ const PROJECTS = [
     featured: true,
   },
   {
+    id: "santos-formworks",
+    name: "Santos FormWorks",
+    category: "Business",
+    cardClassification: "3D-Printing Storefront",
+    classification: "3D-Printing Storefront & Custom Order Platform",
+    template: "santos",
+    status: "in-development",
+    statusLabel: "In Development · Early Stage",
+    statusNote:
+      "Santos FormWorks is an active product build currently in the early stages of development. This portfolio entry documents the system as it exists today — implemented functionality, emerging structure, and the direction of the product as development continues.",
+    overview: [
+      "Santos FormWorks is a responsive storefront concept for a 3D-printing business — a catalog of ready-made printed products alongside a structured path for customers to request a custom print.",
+      "The build is exploring how a small print shop can present its work, let customers browse and filter a catalog, and turn a custom idea into an organized request, ahead of the ordering, payment, and production workflow planned for a later stage.",
+    ],
+    role: "Product concept · Product architecture · UI/UX · Frontend development · System design",
+    currentBuild: [
+      {
+        title: "Product Catalog",
+        status: "Implemented",
+        body: "Browsable catalog with category, color, material, and price-range filters, plus favorites — all running client-side against a typed product dataset.",
+      },
+      {
+        title: "Cart & Favorites",
+        status: "Implemented",
+        body: "In-memory cart and favorites state shared across pages for the current session.",
+      },
+      {
+        title: "Custom Order Request",
+        status: "Implemented",
+        body: "A multi-step request form — project details, reference file upload, print preferences — that validates input and produces a local request preview.",
+      },
+      {
+        title: "File Upload & Validation",
+        status: "Implemented",
+        body: "Drag-and-drop upload accepting 3D-model and reference formats, with client-side size, count, and type validation.",
+      },
+      {
+        title: "Core Site Pages",
+        status: "Implemented",
+        body: "Home, Shop, Custom Orders, About, FAQ, and Contact, sharing a common layout, navigation, and footer.",
+      },
+      {
+        title: "Ordering, Accounts & Payments",
+        status: "Planned",
+        body: "Real inventory, customer accounts, checkout with Stripe/PayPal, shipping and pickup scheduling, and order tracking are the next-phase scope — not part of the current build.",
+      },
+    ],
+    structureNodes: [
+      "Storefront Pages",
+      "Shared Components & Catalog Data",
+      "Custom Order Form + Local Preview",
+    ],
+    structureNote:
+      "Today the product is a single Next.js front end: the storefront pages, a shared catalog/cart layer, and the custom-order form all run client-side against a typed local dataset — there is no live backend or database yet.",
+    techGroups: [
+      {
+        label: "Front End",
+        items: ["Next.js 16 (App Router)", "React 19", "TypeScript"],
+      },
+      {
+        label: "Styling",
+        items: [
+          "Tailwind CSS 4",
+          "Custom design tokens",
+          "Responsive breakpoints",
+        ],
+      },
+      {
+        label: "Data (Current)",
+        items: [
+          "Typed local product catalog",
+          "In-memory cart / favorites state",
+          "Client-side form + file validation",
+        ],
+      },
+      {
+        label: "Deployment",
+        items: [
+          "GitHub Actions CI (lint, typecheck, build)",
+          "Node.js runtime target",
+          "Live staging build on Hostinger",
+        ],
+      },
+    ],
+    activeFocus: [
+      "Rounding out the storefront UI and custom-order flow",
+      "Refining the live staging build",
+    ],
+    nextStage: [
+      "Real product inventory & checkout",
+      "Customer accounts",
+      "Payments (Stripe / PayPal)",
+      "Shipping & pickup scheduling",
+      "Order tracking & email",
+      "Secure file storage for production files",
+    ],
+    url: "https://jessabel.art/santos-formworks/",
+    githubUrl: "https://github.com/Jessabel-Art/Santos-FormWorks",
+    logo: "santos-formworks-logo.png",
+    logoDark: true,
+    logoWide: true,
+  },
+  {
+    id: "escano-construction",
+    name: "Escano Construction",
+    category: "Business",
+    cardClassification: "Construction Company Website",
+    classification: "Pending Upload",
+    status: "pending-upload",
+    statusLabel: "Pending Upload",
+    statusNote:
+      "Escano Construction's project files have not been uploaded yet. This entry will be completed once the project is available.",
+    overview: [
+      "Escano Construction's project files have not been uploaded yet. This entry will be completed once the project is available.",
+    ],
+    role: "Project details will be added once the files are uploaded.",
+    capabilityGroups: [],
+    tech: [],
+  },
+  {
     id: "cavalry-green",
     name: "Cavalry Green LLC",
     category: "Business",
@@ -390,6 +510,58 @@ const PROJECTS = [
     liveUrl: "https://cavalrygreenllc.com/",
     url: "https://jessabel.art/cavalry-green/",
     logo: "cavalry-green-logo.png",
+  },
+  {
+    id: "landscape-website-demo",
+    name: "Landscape Website Demo",
+    category: "Web Design",
+    cardClassification: "Landscape Brand Demo",
+    classification: "Landscape Services Website Demo",
+    template: "landscape",
+    overview: [
+      "A fictional landscaping portfolio demo exploring how a lawn-care and outdoor-services brand can present services, materials, and a quote-guided customer journey without relying on a real business or production data pipeline.",
+      "The project organizes services, product categories, pricing context, and local quote intent into a simple static experience that still feels complete and polished on both mobile and desktop screens.",
+    ],
+    role: "Concept design · Information architecture · Frontend development · Demo interaction design",
+    problem:
+      "A landscape brand can become difficult to evaluate when the customer has to piece together service categories, material options, and quote intent from disconnected pages or generic brochure content. This demo addresses that by building a coherent, service-led experience around the way a client would browse offerings and request a quote.",
+    approach:
+      "The demo uses a lightweight static build with semantic HTML, CSS, and JavaScript to create a complete multi-page experience: home, services, products, about, and contact. Page content, navigation, and structured metadata are declared in a small source of truth so the whole experience is intentionally coherent and easy to host under a subdirectory.",
+    features: [
+      "Multi-page static site",
+      "Responsive service and product exploration",
+      "Quote request flow",
+      "Material shortlist and local state",
+      "Structured metadata and sitemap",
+      "Subdirectory-safe static hosting",
+    ],
+    techGroups: [
+      {
+        label: "Front End",
+        items: [
+          "Vanilla JavaScript",
+          "Static HTML templates",
+          "Responsive CSS",
+        ],
+      },
+      {
+        label: "Build & Hosting",
+        items: [
+          "Node.js static build",
+          "Directory-index hosting",
+          "Subpath-safe asset rewriting",
+        ],
+      },
+      {
+        label: "Content",
+        items: ["Service catalog", "Product catalog", "Local demo quote state"],
+      },
+    ],
+    status: "Demo",
+    statusLabel: "Demo Build",
+    url: "https://jessabel.art/landscape-website-demo/",
+    logo: "mockup.png",
+    logoWide: true,
   },
   {
     id: "cleaning-service-demo",
@@ -753,161 +925,6 @@ const PROJECTS = [
     ],
     url: "https://jessabel.art/fmbl/",
     logo: "FMBLifestyle.png",
-  },
-  {
-    id: "santos-formworks",
-    name: "Santos FormWorks",
-    category: "Business",
-    cardClassification: "3D-Printing Storefront",
-    classification: "3D-Printing Storefront & Custom Order Platform",
-    template: "santos",
-    status: "in-development",
-    statusLabel: "In Development · Early Stage",
-    statusNote:
-      "Santos FormWorks is an active product build currently in the early stages of development. This portfolio entry documents the system as it exists today — implemented functionality, emerging structure, and the direction of the product as development continues.",
-    overview: [
-      "Santos FormWorks is a responsive storefront concept for a 3D-printing business — a catalog of ready-made printed products alongside a structured path for customers to request a custom print.",
-      "The build is exploring how a small print shop can present its work, let customers browse and filter a catalog, and turn a custom idea into an organized request, ahead of the ordering, payment, and production workflow planned for a later stage.",
-    ],
-    role: "Product concept · Product architecture · UI/UX · Frontend development · System design",
-    currentBuild: [
-      {
-        title: "Product Catalog",
-        status: "Implemented",
-        body: "Browsable catalog with category, color, material, and price-range filters, plus favorites — all running client-side against a typed product dataset.",
-      },
-      {
-        title: "Cart & Favorites",
-        status: "Implemented",
-        body: "In-memory cart and favorites state shared across pages for the current session.",
-      },
-      {
-        title: "Custom Order Request",
-        status: "Implemented",
-        body: "A multi-step request form — project details, reference file upload, print preferences — that validates input and produces a local request preview.",
-      },
-      {
-        title: "File Upload & Validation",
-        status: "Implemented",
-        body: "Drag-and-drop upload accepting 3D-model and reference formats, with client-side size, count, and type validation.",
-      },
-      {
-        title: "Core Site Pages",
-        status: "Implemented",
-        body: "Home, Shop, Custom Orders, About, FAQ, and Contact, sharing a common layout, navigation, and footer.",
-      },
-      {
-        title: "Ordering, Accounts & Payments",
-        status: "Planned",
-        body: "Real inventory, customer accounts, checkout with Stripe/PayPal, shipping and pickup scheduling, and order tracking are the next-phase scope — not part of the current build.",
-      },
-    ],
-    structureNodes: [
-      "Storefront Pages",
-      "Shared Components & Catalog Data",
-      "Custom Order Form + Local Preview",
-    ],
-    structureNote:
-      "Today the product is a single Next.js front end: the storefront pages, a shared catalog/cart layer, and the custom-order form all run client-side against a typed local dataset — there is no live backend or database yet.",
-    techGroups: [
-      {
-        label: "Front End",
-        items: ["Next.js 16 (App Router)", "React 19", "TypeScript"],
-      },
-      {
-        label: "Styling",
-        items: [
-          "Tailwind CSS 4",
-          "Custom design tokens",
-          "Responsive breakpoints",
-        ],
-      },
-      {
-        label: "Data (Current)",
-        items: [
-          "Typed local product catalog",
-          "In-memory cart / favorites state",
-          "Client-side form + file validation",
-        ],
-      },
-      {
-        label: "Deployment",
-        items: [
-          "GitHub Actions CI (lint, typecheck, build)",
-          "Node.js runtime target",
-          "Live staging build on Hostinger",
-        ],
-      },
-    ],
-    activeFocus: [
-      "Rounding out the storefront UI and custom-order flow",
-      "Refining the live staging build",
-    ],
-    nextStage: [
-      "Real product inventory & checkout",
-      "Customer accounts",
-      "Payments (Stripe / PayPal)",
-      "Shipping & pickup scheduling",
-      "Order tracking & email",
-      "Secure file storage for production files",
-    ],
-    url: "https://jessabel.art/santos-formworks/",
-    githubUrl: "https://github.com/Jessabel-Art/Santos-FormWorks",
-    logo: "santos-formworks-logo.png",
-    logoDark: true,
-    logoWide: true,
-  },
-  {
-    id: "landscape-website-demo",
-    name: "Landscape Website Demo",
-    category: "Web Design",
-    cardClassification: "Landscape Brand Demo",
-    classification: "Landscape Services Website Demo",
-    template: "landscape",
-    overview: [
-      "A fictional landscaping portfolio demo exploring how a lawn-care and outdoor-services brand can present services, materials, and a quote-guided customer journey without relying on a real business or production data pipeline.",
-      "The project organizes services, product categories, pricing context, and local quote intent into a simple static experience that still feels complete and polished on both mobile and desktop screens.",
-    ],
-    role: "Concept design · Information architecture · Frontend development · Demo interaction design",
-    problem:
-      "A landscape brand can become difficult to evaluate when the customer has to piece together service categories, material options, and quote intent from disconnected pages or generic brochure content. This demo addresses that by building a coherent, service-led experience around the way a client would browse offerings and request a quote.",
-    approach:
-      "The demo uses a lightweight static build with semantic HTML, CSS, and JavaScript to create a complete multi-page experience: home, services, products, about, and contact. Page content, navigation, and structured metadata are declared in a small source of truth so the whole experience is intentionally coherent and easy to host under a subdirectory.",
-    features: [
-      "Multi-page static site",
-      "Responsive service and product exploration",
-      "Quote request flow",
-      "Material shortlist and local state",
-      "Structured metadata and sitemap",
-      "Subdirectory-safe static hosting",
-    ],
-    techGroups: [
-      {
-        label: "Front End",
-        items: [
-          "Vanilla JavaScript",
-          "Static HTML templates",
-          "Responsive CSS",
-        ],
-      },
-      {
-        label: "Build & Hosting",
-        items: [
-          "Node.js static build",
-          "Directory-index hosting",
-          "Subpath-safe asset rewriting",
-        ],
-      },
-      {
-        label: "Content",
-        items: ["Service catalog", "Product catalog", "Local demo quote state"],
-      },
-    ],
-    status: "Demo",
-    statusLabel: "Demo Build",
-    url: "https://jessabel.art/landscape-website-demo/",
-    logo: "mockup.png",
-    logoWide: true,
   },
 ];
 
@@ -2116,7 +2133,9 @@ function renderProjectList(shell) {
               ? '<span class="status-pill is-demo"><span class="status-dot" aria-hidden="true"></span>Demo Build</span>'
               : project.status === "Prototype"
                 ? '<span class="status-pill is-development"><span class="status-dot" aria-hidden="true"></span>Prototype · Hardware Demo</span>'
-                : "";
+                : project.status === "pending-upload"
+                  ? '<span class="status-pill is-development"><span class="status-dot" aria-hidden="true"></span>Pending Upload</span>'
+                  : "";
         const launchMarkup = project.url
           ? `<a class="primary-button" href="${project.url}" target="_blank" rel="noopener noreferrer">${primaryAction}</a>`
           : '<span class="os-button is-disabled" aria-disabled="true">No Live Demo</span>';
