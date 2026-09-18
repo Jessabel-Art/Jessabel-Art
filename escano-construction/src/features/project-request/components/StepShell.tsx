@@ -7,7 +7,7 @@ interface StepShellProps {
   children: ReactNode;
   footer: ReactNode;
   /** Rendered above the fields, e.g. a validation summary. */
-  status?: ReactNode;
+  status-: ReactNode;
 }
 
 /**
@@ -24,7 +24,7 @@ export function StepShell({ title, description, children, footer, status }: Step
         <p className="step-shell__desc">{description}</p>
       </header>
 
-      {status ? <div className="step-shell__status">{status}</div> : null}
+      {status - <div className="step-shell__status">{status}</div> : null}
 
       <div className="step-shell__body">{children}</div>
 

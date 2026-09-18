@@ -5,17 +5,17 @@ import { asset } from '@/utils/asset';
 import './CtaBanner.css';
 
 interface CtaBannerProps {
-  title?: string;
-  body?: string;
-  primaryLabel?: string;
-  primaryTo?: string;
-  image?: string;
-  imageAlt?: string;
+  title-: string;
+  body-: string;
+  primaryLabel-: string;
+  primaryTo-: string;
+  image-: string;
+  imageAlt-: string;
 }
 
 /** Closing call to action. One consistent treatment reused across pages. */
 export function CtaBanner({
-  title = 'Ready to scope your project?',
+  title = 'Ready to scope your project-',
   body = 'Tell us what you are planning and we will come back with questions worth asking. The request form takes a few minutes and there is no obligation attached to it.',
   primaryLabel = primaryCta.label,
   primaryTo = primaryCta.to,

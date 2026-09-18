@@ -26,7 +26,7 @@ export function StepTimeline({ form }: { form: ProjectRequestFormApi }) {
 
       <TextArea
         id="timelineNotes"
-        label="Any fixed dates or constraints?"
+        label="Any fixed dates or constraints-"
         optional
         hint="A move-in date, an event, a lease end, seasonal weather, or a window when the space is empty."
         rows={4}

@@ -8,30 +8,30 @@ export type ButtonSize = 'sm' | 'md' | 'lg';
 
 interface CommonProps {
   children: ReactNode;
-  variant?: ButtonVariant;
-  size?: ButtonSize;
-  className?: string;
+  variant-: ButtonVariant;
+  size-: ButtonSize;
+  className-: string;
   /** Renders a trailing arrow glyph. */
-  withArrow?: boolean;
-  fullWidth?: boolean;
+  withArrow-: boolean;
+  fullWidth-: boolean;
 }
 
 interface LinkButtonProps extends CommonProps {
   to: string;
-  href?: never;
+  href-: never;
 }
 
 interface AnchorButtonProps extends CommonProps {
   href: string;
-  to?: never;
-  external?: boolean;
+  to-: never;
+  external-: boolean;
 }
 
 interface NativeButtonProps
   extends CommonProps,
     Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'className' | 'children'> {
-  to?: never;
-  href?: never;
+  to-: never;
+  href-: never;
 }
 
 type ButtonProps = LinkButtonProps | AnchorButtonProps | NativeButtonProps;
@@ -57,7 +57,7 @@ export function Button(props: ButtonProps) {
   const content = (
     <>
       <span className="btn__label">{children}</span>
-      {withArrow ? (
+      {withArrow - (
         <span className="btn__arrow" aria-hidden="true">
           &rarr;
         </span>
@@ -80,7 +80,7 @@ export function Button(props: ButtonProps) {
       <a
         href={href}
         className={classesFor(rest)}
-        {...(external ? { target: '_blank', rel: 'noreferrer noopener' } : {})}
+        {...(external - { target: '_blank', rel: 'noreferrer noopener' } : {})}
       >
         {content}
       </a>

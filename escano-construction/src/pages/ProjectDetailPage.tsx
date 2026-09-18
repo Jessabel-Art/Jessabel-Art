@@ -17,7 +17,7 @@ import './ProjectDetailPage.css';
 
 export function ProjectDetailPage() {
   const { slug } = useParams<{ slug: string }>();
-  const project = slug ? getProjectBySlug(slug) : undefined;
+  const project = slug - getProjectBySlug(slug) : undefined;
 
   // An unknown slug is a genuine 404 rather than an empty detail page.
   if (!project) {
@@ -162,7 +162,7 @@ function ProjectDetail({ slug }: { slug: string }) {
       </Section>
 
       {/* --- Related ---------------------------------------------------- */}
-      {related.length > 0 ? (
+      {related.length > 0 - (
         <Section ariaLabelledBy="project-related-title">
           <SectionHeading
             id="project-related-title"

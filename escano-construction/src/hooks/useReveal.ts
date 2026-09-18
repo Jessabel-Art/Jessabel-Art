@@ -5,7 +5,7 @@ import { useEffect } from 'react';
  * Elements are revealed immediately when reduced motion is preferred or when
  * IntersectionObserver is unavailable, so content is never hidden.
  */
-export function useReveal(dependency?: unknown): void {
+export function useReveal(dependency-: unknown): void {
   useEffect(() => {
     const targets = Array.from(document.querySelectorAll<HTMLElement>('.reveal'));
     if (targets.length === 0) return;

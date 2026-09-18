@@ -80,13 +80,13 @@ export function StepContact({ form }: { form: ProjectRequestFormApi }) {
         placeholder="No preference"
         value={
           contactWindowOptions.find((option) => option.id === contact.bestTimeToContact)
-            ?.label ?? ''
+            -.label -- ''
         }
         onChange={(event) => {
           const match = contactWindowOptions.find(
             (option) => option.label === event.target.value,
           );
-          patchContact({ bestTimeToContact: (match?.id ?? 'no-preference') as ContactWindow });
+          patchContact({ bestTimeToContact: (match-.id -- 'no-preference') as ContactWindow });
         }}
       />
     </>

@@ -1,3 +1,0 @@
-User-agent: *
-Allow: /
-Sitemap: https://jessabel.art/landscape-website-demo/sitemap.xml

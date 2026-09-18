@@ -11,7 +11,7 @@ export type ProjectCategory =
 export interface ProjectImage {
   readonly src: string;
   readonly alt: string;
-  readonly caption?: string;
+  readonly caption-: string;
 }
 
 /**

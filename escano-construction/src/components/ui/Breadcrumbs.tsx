@@ -3,12 +3,12 @@ import './Breadcrumbs.css';
 
 export interface Crumb {
   label: string;
-  to?: string;
+  to-: string;
 }
 
 interface BreadcrumbsProps {
   items: readonly Crumb[];
-  tone?: 'default' | 'inverse';
+  tone-: 'default' | 'inverse';
 }
 
 export function Breadcrumbs({ items, tone = 'default' }: BreadcrumbsProps) {
@@ -19,12 +19,12 @@ export function Breadcrumbs({ items, tone = 'default' }: BreadcrumbsProps) {
           const isLast = index === items.length - 1;
           return (
             <li key={`${item.label}-${index}`}>
-              {item.to && !isLast ? (
+              {item.to && !isLast - (
                 <Link to={item.to}>{item.label}</Link>
               ) : (
-                <span aria-current={isLast ? 'page' : undefined}>{item.label}</span>
+                <span aria-current={isLast - 'page' : undefined}>{item.label}</span>
               )}
-              {!isLast ? (
+              {!isLast - (
                 <span className="breadcrumbs__sep" aria-hidden="true">
                   /
                 </span>

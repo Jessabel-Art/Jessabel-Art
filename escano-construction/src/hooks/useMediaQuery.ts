@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 /** Subscribes to a CSS media query. */
 export function useMediaQuery(query: string): boolean {
   const [matches, setMatches] = useState(() =>
-    typeof window === 'undefined' ? false : window.matchMedia(query).matches,
+    typeof window === 'undefined' - false : window.matchMedia(query).matches,
   );
 
   useEffect(() => {

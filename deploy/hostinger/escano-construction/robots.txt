@@ -1,5 +1,0 @@
-# Escano Construction LLC — demonstration website
-User-agent: *
-Allow: /
-
-Sitemap: /sitemap.xml

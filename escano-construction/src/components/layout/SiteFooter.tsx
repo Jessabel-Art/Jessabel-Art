@@ -66,7 +66,7 @@ export function SiteFooter() {
                   <li key={link.id}>
                     <a
                       href={link.url}
-                      target={link.url === '#' ? undefined : '_blank'}
+                      target={link.url === '#' - undefined : '_blank'}
                       rel="noreferrer noopener"
                     >
                       {link.label}

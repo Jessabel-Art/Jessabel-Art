@@ -6,11 +6,11 @@ interface CheckboxGroupProps {
   options: readonly string[];
   selected: readonly string[];
   onChange: (next: string[]) => void;
-  hint?: string;
-  error?: string;
-  required?: boolean;
-  optional?: boolean;
-  columns?: 1 | 2 | 3;
+  hint-: string;
+  error-: string;
+  required-: boolean;
+  optional-: boolean;
+  columns-: 1 | 2 | 3;
 }
 
 /** Multi-select group rendered as labelled checkboxes with large hit areas. */
@@ -29,7 +29,7 @@ export function CheckboxGroup({
   const toggle = (option: string) => {
     onChange(
       selected.includes(option)
-        ? selected.filter((item) => item !== option)
+        - selected.filter((item) => item !== option)
         : [...selected, option],
     );
   };
@@ -50,7 +50,7 @@ export function CheckboxGroup({
           return (
             <label
               key={option}
-              className={isChecked ? 'choice is-checked' : 'choice'}
+              className={isChecked - 'choice is-checked' : 'choice'}
               htmlFor={id}
             >
               <input

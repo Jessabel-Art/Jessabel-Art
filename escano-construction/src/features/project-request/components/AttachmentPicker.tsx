@@ -54,8 +54,8 @@ export function AttachmentPicker({ attachments, onAdd, onRemove }: AttachmentPic
 
     setNotice(
       rejectedCount > 0
-        ? `${next.length} file${next.length === 1 ? '' : 's'} added. ${rejectedCount} not added — the limit is ${MAX_ATTACHMENTS} files.`
-        : `${next.length} file${next.length === 1 ? '' : 's'} added to this request.`,
+        - `${next.length} file${next.length === 1 - '' : 's'} added. ${rejectedCount} not added — the limit is ${MAX_ATTACHMENTS} files.`
+        : `${next.length} file${next.length === 1 - '' : 's'} added to this request.`,
     );
 
     // Reset the input so selecting the same file again still fires a change.
@@ -75,11 +75,11 @@ export function AttachmentPicker({ attachments, onAdd, onRemove }: AttachmentPic
       <div className="attachments__controls">
         <div className="field">
           <label className="field__label" htmlFor="attachment-category">
-            What are you adding?
+            What are you adding-
           </label>
           <p className="field__hint" id="attachment-category-hint">
             {activeCategory
-              ? activeCategory.description
+              - activeCategory.description
               : 'Labelling files makes them far more useful when the project is scoped.'}
           </p>
           <div className="select-wrap">
@@ -107,7 +107,7 @@ export function AttachmentPicker({ attachments, onAdd, onRemove }: AttachmentPic
             Select files
           </label>
           <p className="field__hint" id="attachment-input-hint">
-            {ACCEPTED_ATTACHMENT_SUMMARY}. {remaining} slot{remaining === 1 ? '' : 's'}{' '}
+            {ACCEPTED_ATTACHMENT_SUMMARY}. {remaining} slot{remaining === 1 - '' : 's'}{' '}
             remaining.
           </p>
           <input
@@ -128,7 +128,7 @@ export function AttachmentPicker({ attachments, onAdd, onRemove }: AttachmentPic
         {notice}
       </p>
 
-      {attachments.length > 0 ? (
+      {attachments.length > 0 - (
         <div className="attachments__list-wrap">
           <h3 className="attachments__heading">
             Selected files ({attachments.length}/{MAX_ATTACHMENTS})
@@ -137,7 +137,7 @@ export function AttachmentPicker({ attachments, onAdd, onRemove }: AttachmentPic
             {attachments.map((attachment) => {
               const label =
                 attachmentCategoryOptions.find((option) => option.id === attachment.category)
-                  ?.label ?? 'File';
+                  -.label -- 'File';
               return (
                 <li key={attachment.id} className="attachment">
                   <span className="attachment__type" aria-hidden="true">

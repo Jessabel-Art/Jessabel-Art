@@ -370,8 +370,10 @@ const PROJECTS = [
     cardClassification: "Construction Company Website",
     classification: "Construction Company Website & Guided Proposal Intake System",
     template: "escano",
+    status: "in-development",
+    statusLabel: "In Development · Early Stage",
     ownership:
-      "Escano Construction LLC is a self-originated business concept: I defined the brand positioning and service scope, then designed and built the complete public website and proposal-intake system end-to-end — identity, information architecture, every page, and the nine-step request flow.",
+      "Escano Construction LLC is a self-originated business concept: I defined the brand positioning and service scope, then designed and built the complete public website and proposal-intake system end-to-end - identity, information architecture, every page, and the nine-step request flow.",
     overview: [
       "Escano Construction is a residential and light-commercial construction company's public website, built around a simple premise: a contractor's site has to do two jobs at once. It has to read as credible to someone who has never heard of the company, and it has to turn a visitor's vague idea of a project into a structured, reviewable request before they ever pick up the phone.",
       "The site covers six service categories spanning new construction, remodeling, roofing, outdoor structures, repairs, and light commercial work, a project-concept gallery that shows how work is scoped and approached rather than just what it looks like finished, and a nine-step guided \"Request a Proposal\" flow that adapts its questions to the type of project being described.",
@@ -3505,6 +3507,12 @@ function renderEscanoDetail(project, displayBadge, primaryButtonLabel) {
           <div class="project-card-actions">${launchLink}</div>
         </div>
         <div class="project-detail-right">
+          <div class="detail-section editorial-block">
+            <span class="section-kicker">Status</span>
+            <span class="status-pill is-development">
+              <span class="status-dot" aria-hidden="true"></span>${project.statusLabel}
+            </span>
+          </div>
           <div class="detail-section editorial-block">
             <span class="section-kicker">My Role</span>
             <p class="detail-role-text">${project.role}</p>

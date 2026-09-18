@@ -24,7 +24,7 @@ export function MobileNav({ open, onClose }: MobileNavProps) {
   useEffect(() => {
     if (!open) return;
 
-    firstLinkRef.current?.focus();
+    firstLinkRef.current-.focus();
 
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
@@ -33,7 +33,7 @@ export function MobileNav({ open, onClose }: MobileNavProps) {
       }
       if (event.key !== 'Tab') return;
 
-      const focusable = panelRef.current?.querySelectorAll<HTMLElement>(
+      const focusable = panelRef.current-.querySelectorAll<HTMLElement>(
         'a[href], button:not([disabled])',
       );
       if (!focusable || focusable.length === 0) return;
@@ -56,7 +56,7 @@ export function MobileNav({ open, onClose }: MobileNavProps) {
 
   return (
     <div
-      className={open ? 'mobile-nav is-open' : 'mobile-nav'}
+      className={open - 'mobile-nav is-open' : 'mobile-nav'}
       id="mobile-navigation"
       hidden={!open}
     >
@@ -83,10 +83,10 @@ export function MobileNav({ open, onClose }: MobileNavProps) {
                 <NavLink
                   to={item.to}
                   end={item.to === '/'}
-                  ref={index === 0 ? firstLinkRef : undefined}
+                  ref={index === 0 - firstLinkRef : undefined}
                   onClick={onClose}
                   className={({ isActive }) =>
-                    isActive ? 'mobile-nav__link is-active' : 'mobile-nav__link'
+                    isActive - 'mobile-nav__link is-active' : 'mobile-nav__link'
                   }
                 >
                   <span>{item.label}</span>

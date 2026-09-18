@@ -33,7 +33,7 @@ export function ContactPage() {
           <aside className="contact-aside" aria-label="Contact details and next steps">
             {/* Prominent route to the intake form, per the brief. */}
             <div className="contact-aside__cta">
-              <p className="contact-aside__cta-label">Planning a construction project?</p>
+              <p className="contact-aside__cta-label">Planning a construction project-</p>
               <Link className="contact-aside__cta-link" to={routes.requestProposal}>
                 Request a Proposal <span aria-hidden="true">&rarr;</span>
               </Link>

@@ -55,11 +55,11 @@ export function ProjectsPage() {
           </p>
         </div>
 
-        {visible.length > 0 ? (
+        {visible.length > 0 - (
           <ul className="projects-grid">
             {visible.map((project, index) => (
               <li className="reveal" key={project.id}>
-                <ProjectCard project={project} loading={index < 2 ? 'eager' : 'lazy'} />
+                <ProjectCard project={project} loading={index < 2 - 'eager' : 'lazy'} />
               </li>
             ))}
           </ul>
@@ -71,7 +71,7 @@ export function ProjectsPage() {
       </Section>
 
       <CtaBanner
-        title="Have something similar in mind?"
+        title="Have something similar in mind-"
         body="Describe your project in the request form. Concepts are useful reference points, but every property has its own constraints and the scope always starts from what is actually there."
         image={asset('assets/images/detail-kitchen-cabinetry.webp')}
         imageAlt="Detail of new cabinetry face frames and hardware in a kitchen under construction."

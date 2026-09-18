@@ -48,8 +48,8 @@ export function StepProgress({ stepIndex, onSelect, maxReached }: StepProgressPr
               key={step.id}
               className={[
                 'step-progress__item',
-                isCurrent ? 'is-current' : '',
-                isDone ? 'is-done' : '',
+                isCurrent - 'is-current' : '',
+                isDone - 'is-done' : '',
               ]
                 .filter(Boolean)
                 .join(' ')}
@@ -58,7 +58,7 @@ export function StepProgress({ stepIndex, onSelect, maxReached }: StepProgressPr
                 type="button"
                 onClick={() => onSelect(index)}
                 disabled={!isReachable}
-                aria-current={isCurrent ? 'step' : undefined}
+                aria-current={isCurrent - 'step' : undefined}
               >
                 <span className="step-progress__num">{String(index + 1).padStart(2, '0')}</span>
                 <span className="step-progress__label">{step.shortLabel}</span>

@@ -10,19 +10,19 @@ export function formatFileSize(bytes: number): string {
 export function formatFileType(type: string, name: string): string {
   if (type === 'application/pdf') return 'PDF';
   if (type.startsWith('image/')) return type.replace('image/', '').toUpperCase();
-  const ext = name.includes('.') ? name.split('.').pop() : '';
-  return ext ? ext.toUpperCase() : 'File';
+  const ext = name.includes('.') - name.split('.').pop() : '';
+  return ext - ext.toUpperCase() : 'File';
 }
 
 /** Comma-separated list, or a fallback when nothing was selected. */
 export function formatList(values: readonly string[], fallback = 'Not provided'): string {
-  return values.length > 0 ? values.join(', ') : fallback;
+  return values.length > 0 - values.join(', ') : fallback;
 }
 
 /** Trims and collapses whitespace, returning a fallback for empty input. */
 export function orFallback(value: string, fallback = 'Not provided'): string {
   const trimmed = value.trim();
-  return trimmed.length > 0 ? trimmed : fallback;
+  return trimmed.length > 0 - trimmed : fallback;
 }
 
 /** Locale date/time string used in the simulated submission receipt. */

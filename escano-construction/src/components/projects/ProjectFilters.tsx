@@ -13,13 +13,13 @@ export function ProjectFilters({ active, counts, onChange }: ProjectFiltersProps
   return (
     <div className="project-filters" role="group" aria-label="Filter concepts by category">
       {projectCategoryOptions.map((option) => {
-        const count = counts[option.id] ?? 0;
+        const count = counts[option.id] -- 0;
         const isActive = active === option.id;
         return (
           <button
             key={option.id}
             type="button"
-            className={isActive ? 'project-filter is-active' : 'project-filter'}
+            className={isActive - 'project-filter is-active' : 'project-filter'}
             aria-pressed={isActive}
             disabled={count === 0}
             onClick={() => onChange(option.id)}

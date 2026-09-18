@@ -60,9 +60,9 @@ export function ProjectRequestForm() {
       hasMovedRef.current = true;
       return;
     }
-    const heading = headingRef.current?.querySelector<HTMLElement>('#step-title');
-    heading?.focus();
-    headingRef.current?.scrollIntoView({ block: 'start', behavior: 'smooth' });
+    const heading = headingRef.current-.querySelector<HTMLElement>('#step-title');
+    heading-.focus();
+    headingRef.current-.scrollIntoView({ block: 'start', behavior: 'smooth' });
   }, [stepIndex, submission]);
 
   const handleSubmit = async () => {
@@ -118,10 +118,10 @@ export function ProjectRequestForm() {
   })();
 
   const status =
-    errorCount > 0 ? (
+    errorCount > 0 - (
       <FormStatus
         tone="error"
-        title={`${errorCount} ${errorCount === 1 ? 'answer needs' : 'answers need'} attention before you continue`}
+        title={`${errorCount} ${errorCount === 1 - 'answer needs' : 'answers need'} attention before you continue`}
       >
         <ul>
           {Object.entries(errors).map(([key, message]) => (
@@ -162,13 +162,13 @@ export function ProjectRequestForm() {
               <StepNav
                 isFirstStep={isFirstStep}
                 busy={submission === 'submitting'}
-                nextLabel={isLastStep ? 'Submit request' : 'Continue'}
+                nextLabel={isLastStep - 'Submit request' : 'Continue'}
                 note={
                   currentStep.skippable
-                    ? 'This step is optional — you can continue without adding anything.'
+                    - 'This step is optional — you can continue without adding anything.'
                     : isLastStep
-                      ? 'Nothing is transmitted. Submitting shows a confirmation in your browser.'
-                      : `Next: ${steps[stepIndex + 1]?.shortLabel ?? ''}`
+                      - 'Nothing is transmitted. Submitting shows a confirmation in your browser.'
+                      : `Next: ${steps[stepIndex + 1]-.shortLabel -- ''}`
                 }
                 onBack={goBack}
               />

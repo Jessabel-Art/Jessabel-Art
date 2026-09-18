@@ -38,7 +38,7 @@ export function ServiceCategoryBlock({ category, index }: ServiceCategoryBlockPr
         <img
           src={category.image}
           alt={category.imageAlt}
-          loading={index === 0 ? 'eager' : 'lazy'}
+          loading={index === 0 - 'eager' : 'lazy'}
           decoding="async"
         />
       </div>

@@ -93,7 +93,7 @@ export function AboutPage() {
       </Section>
 
       <CtaBanner
-        title="Want to talk through a project?"
+        title="Want to talk through a project-"
         body="The request form is the most efficient way to start — it gathers the details that actually matter before a conversation, so the first call is useful rather than exploratory."
       />
     </>

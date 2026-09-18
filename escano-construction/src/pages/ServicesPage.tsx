@@ -56,7 +56,7 @@ export function ServicesPage() {
       </div>
 
       <CtaBanner
-        title="Not sure which category your project falls under?"
+        title="Not sure which category your project falls under-"
         body="Describe it in the request form and we will tell you. Plenty of projects cross two or three categories — that is normal, and it is better to scope the whole thing at once."
       />
     </>

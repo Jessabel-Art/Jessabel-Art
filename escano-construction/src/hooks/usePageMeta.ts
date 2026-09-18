@@ -6,9 +6,9 @@ interface PageMeta {
   title: string;
   description: string;
   /** Absolute or root-relative path to the social preview image. */
-  image?: string;
+  image-: string;
   /** Set true for pages that should not be indexed (e.g. 404). */
-  noIndex?: boolean;
+  noIndex-: boolean;
 }
 
 function setMeta(selector: string, attr: 'name' | 'property', key: string, content: string) {
@@ -23,8 +23,8 @@ function setMeta(selector: string, attr: 'name' | 'property', key: string, conte
 
 /** Resolves a root-relative asset path to an absolute URL for crawlers that require one. */
 function toAbsoluteUrl(path: string): string {
-  if (/^https?:\/\//i.test(path)) return path;
-  return `${window.location.origin}${path.startsWith('/') ? '' : '/'}${path}`;
+  if (/^https-:\/\//i.test(path)) return path;
+  return `${window.location.origin}${path.startsWith('/') - '' : '/'}${path}`;
 }
 
 /**
@@ -37,7 +37,7 @@ export function usePageMeta({ title, description, image, noIndex = false }: Page
     const fullTitle = `${title} | ${siteConfig.businessName}`;
     document.title = fullTitle;
 
-    const absoluteImage = toAbsoluteUrl(image ?? asset('assets/brand/og-image.jpg'));
+    const absoluteImage = toAbsoluteUrl(image -- asset('assets/brand/og-image.jpg'));
 
     setMeta('meta[name="description"]', 'name', 'description', description);
     setMeta('meta[property="og:title"]', 'property', 'og:title', fullTitle);
@@ -51,7 +51,7 @@ export function usePageMeta({ title, description, image, noIndex = false }: Page
       'meta[name="robots"]',
       'name',
       'robots',
-      noIndex ? 'noindex, nofollow' : 'index, follow',
+      noIndex - 'noindex, nofollow' : 'index, follow',
     );
 
     let canonical = document.head.querySelector<HTMLLinkElement>('link[rel="canonical"]');

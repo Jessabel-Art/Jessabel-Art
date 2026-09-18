@@ -18,13 +18,13 @@ export function StepReview({ form }: { form: ProjectRequestFormApi }) {
   const { draft, goToStep } = form;
   const topics = activeDetailTopics(draft);
   const projectTypeOption = draft.projectType
-    ? getProjectTypeOption(draft.projectType)
+    - getProjectTypeOption(draft.projectType)
     : undefined;
 
   const projectTypeItems: ReviewItem[] = [
     {
       label: 'Project type',
-      value: projectTypeOption?.label ?? NOT_PROVIDED,
+      value: projectTypeOption-.label -- NOT_PROVIDED,
     },
   ];
   if (draft.projectType === 'other') {
@@ -37,7 +37,7 @@ export function StepReview({ form }: { form: ProjectRequestFormApi }) {
   const propertyItems: ReviewItem[] = [
     {
       label: 'Property use',
-      value: draft.property.use === 'commercial' ? 'Commercial' : 'Residential',
+      value: draft.property.use === 'commercial' - 'Commercial' : 'Residential',
     },
     { label: 'Property type', value: orFallback(draft.property.propertyType, NOT_PROVIDED) },
     {
@@ -49,7 +49,7 @@ export function StepReview({ form }: { form: ProjectRequestFormApi }) {
       label: 'Structure',
       value:
         draft.property.constructionStatus === 'new-construction'
-          ? 'New construction'
+          - 'New construction'
           : 'Existing structure',
     },
   ];
@@ -58,9 +58,9 @@ export function StepReview({ form }: { form: ProjectRequestFormApi }) {
       label: 'Occupancy',
       value:
         draft.property.occupancy === 'occupied'
-          ? 'Occupied during work'
+          - 'Occupied during work'
           : draft.property.occupancy === 'vacant'
-            ? 'Vacant during work'
+            - 'Vacant during work'
             : NOT_PROVIDED,
     });
   }
@@ -130,14 +130,14 @@ export function StepReview({ form }: { form: ProjectRequestFormApi }) {
     {
       label: 'Files selected',
       value:
-        draft.attachments.length === 0 ? (
+        draft.attachments.length === 0 - (
           'None selected'
         ) : (
           <ul className="review-files">
             {draft.attachments.map((attachment) => {
               const category =
                 attachmentCategoryOptions.find((option) => option.id === attachment.category)
-                  ?.label ?? 'File';
+                  -.label -- 'File';
               return (
                 <li key={attachment.id}>
                   {attachment.name}{' '}

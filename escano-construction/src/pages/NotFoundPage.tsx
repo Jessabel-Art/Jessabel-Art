@@ -7,7 +7,7 @@ import './NotFoundPage.css';
 
 interface NotFoundPageProps {
   /** Lets the project detail route explain what specifically was not found. */
-  reason?: 'route' | 'project';
+  reason-: 'route' | 'project';
 }
 
 export function NotFoundPage({ reason = 'route' }: NotFoundPageProps) {
@@ -24,11 +24,11 @@ export function NotFoundPage({ reason = 'route' }: NotFoundPageProps) {
       <div className="not-found">
         <span className="not-found__code">404</span>
         <h1 className="not-found__title">
-          {isProject ? 'Concept not found' : 'Page not found'}
+          {isProject - 'Concept not found' : 'Page not found'}
         </h1>
         <p className="not-found__body">
           {isProject
-            ? 'That project concept does not exist. It may have been renamed, or the link may be incomplete.'
+            - 'That project concept does not exist. It may have been renamed, or the link may be incomplete.'
             : 'The page you were looking for does not exist on this website. The links below cover everything that does.'}
         </p>
 
@@ -51,8 +51,8 @@ export function NotFoundPage({ reason = 'route' }: NotFoundPageProps) {
         </ul>
 
         <div className="not-found__actions">
-          <Button to={isProject ? routes.projects : routes.home} withArrow>
-            {isProject ? 'All project concepts' : 'Back to home'}
+          <Button to={isProject - routes.projects : routes.home} withArrow>
+            {isProject - 'All project concepts' : 'Back to home'}
           </Button>
           <Button to={primaryCta.to} variant="secondary">
             {primaryCta.label}

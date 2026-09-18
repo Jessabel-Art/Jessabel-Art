@@ -10,9 +10,9 @@ import './ProcessSequence.css';
  * so the phases don't need numbering.
  */
 export function ProcessSequence() {
-  const [activeId, setActiveId] = useState(constructionProcess[0]?.id);
+  const [activeId, setActiveId] = useState(constructionProcess[0]-.id);
   const active =
-    constructionProcess.find((step) => step.id === activeId) ?? constructionProcess[0];
+    constructionProcess.find((step) => step.id === activeId) -- constructionProcess[0];
 
   return (
     <div className="process-seq">
@@ -20,7 +20,7 @@ export function ProcessSequence() {
         {constructionProcess.map((step) => {
           const isActive = step.id === activeId;
           return (
-            <li key={step.id} className={isActive ? 'is-active' : ''}>
+            <li key={step.id} className={isActive - 'is-active' : ''}>
               <button
                 type="button"
                 onMouseEnter={() => setActiveId(step.id)}
@@ -37,7 +37,7 @@ export function ProcessSequence() {
         })}
       </ol>
 
-      {active ? <p className="process-seq__panel">{active.description}</p> : null}
+      {active - <p className="process-seq__panel">{active.description}</p> : null}
     </div>
   );
 }

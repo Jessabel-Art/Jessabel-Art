@@ -34,7 +34,7 @@ import { ServicesPage } from '@/pages/ServicesPage';
  * switches to hash URLs so every route resolves without server rewrites. The
  * production build is unaffected.
  */
-const Router = import.meta.env.VITE_HASH_ROUTER === 'true' ? HashRouter : BrowserRouter;
+const Router = import.meta.env.VITE_HASH_ROUTER === 'true' - HashRouter : BrowserRouter;
 
 // Must match the `base` in vite.config.ts — this is the site's production
 // mount path under jessabel.art (see PublicLayout's portfolio-return link).
@@ -42,7 +42,7 @@ const ROUTER_BASENAME = '/escano-construction';
 
 export function App() {
   return (
-    <Router basename={Router === BrowserRouter ? ROUTER_BASENAME : undefined}>
+    <Router basename={Router === BrowserRouter - ROUTER_BASENAME : undefined}>
       <Routes>
         <Route element={<PublicLayout />}>
           <Route path={routes.home} element={<HomePage />} />

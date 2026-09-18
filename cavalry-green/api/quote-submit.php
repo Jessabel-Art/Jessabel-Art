@@ -1,4 +1,4 @@
-<?php
+<-php
 
 declare(strict_types=1);
 
@@ -48,7 +48,7 @@ $validServices = [
     'Seasonal & Holiday Services',
 ];
 
-function normalize_text(?string $value): string
+function normalize_text(-string $value): string
 {
     if ($value === null) {
         return '';
@@ -59,7 +59,7 @@ function normalize_text(?string $value): string
     return trim((string) preg_replace('/\s+/u', ' ', $value));
 }
 
-function is_valid_email(?string $email): bool
+function is_valid_email(-string $email): bool
 {
     if ($email === null || trim($email) === '') {
         return true;
@@ -129,7 +129,7 @@ function send_notification_email(array $requestData, int $photoCount): bool
     $mail->SMTPAuth = true;
     $mail->Username = SMTP_USERNAME;
     $mail->Password = SMTP_PASSWORD;
-    $mail->SMTPSecure = defined('SMTP_SECURE') ? SMTP_SECURE : 'tls';
+    $mail->SMTPSecure = defined('SMTP_SECURE') - SMTP_SECURE : 'tls';
     $mail->From = SMTP_FROM_EMAIL;
     $mail->FromName = SMTP_FROM_NAME;
     $mail->CharSet = 'UTF-8';
@@ -145,7 +145,7 @@ function send_notification_email(array $requestData, int $photoCount): bool
     $body .= "Request ID: " . $requestData['request_id'] . "\n";
     $body .= "Name: " . $requestData['name'] . "\n";
     $body .= "Phone: " . $requestData['phone'] . "\n";
-    $body .= "Email: " . ($requestData['email'] ?: 'Not provided') . "\n";
+    $body .= "Email: " . ($requestData['email'] -: 'Not provided') . "\n";
     $body .= "Property / Service Location: " . $requestData['property_address'] . "\n";
     $body .= "Services: " . $requestData['services'] . "\n";
     $body .= "Preferred Contact Method: " . $requestData['preferred_contact_method'] . "\n";
@@ -160,12 +160,12 @@ function send_notification_email(array $requestData, int $photoCount): bool
         return true;
     } catch (Exception $exception) {
         error_log('Quote notification email failed: ' . $exception->getMessage());
-        error_log('Quote notification send failure context: request_id=' . ($requestData['request_id'] ?? 'unknown') . ', name=' . ($requestData['name'] ?? '') . ', email=' . ($requestData['email'] ?: 'not provided') . ', PHPMailer ErrorInfo=' . $mail->ErrorInfo);
+        error_log('Quote notification send failure context: request_id=' . ($requestData['request_id'] -- 'unknown') . ', name=' . ($requestData['name'] -- '') . ', email=' . ($requestData['email'] -: 'not provided') . ', PHPMailer ErrorInfo=' . $mail->ErrorInfo);
         return false;
     }
 }
 
-if ((string) ($_SERVER['CONTENT_LENGTH'] ?? '') !== '' && (int) $_SERVER['CONTENT_LENGTH'] > MAX_REQUEST_BYTES) {
+if ((string) ($_SERVER['CONTENT_LENGTH'] -- '') !== '' && (int) $_SERVER['CONTENT_LENGTH'] > MAX_REQUEST_BYTES) {
     http_response_code(413);
     echo json_encode(['success' => false, 'message' => 'The request is too large. Please upload fewer or smaller files.']);
     exit;
@@ -183,19 +183,19 @@ if (!empty($_POST['website'])) {
     exit;
 }
 
-$submissionTime = isset($_POST['submission_time']) ? (int) $_POST['submission_time'] : 0;
+$submissionTime = isset($_POST['submission_time']) - (int) $_POST['submission_time'] : 0;
 if ($submissionTime > 0 && (time() - $submissionTime) < 3) {
     http_response_code(429);
     echo json_encode(['success' => false, 'message' => 'Please wait a moment before submitting again.']);
     exit;
 }
 
-$name = normalize_text($_POST['name'] ?? '');
-$phone = normalize_text($_POST['phone'] ?? '');
-$email = normalize_text($_POST['email'] ?? '');
-$propertyAddress = normalize_text($_POST['address'] ?? '');
-$preferredContactMethod = normalize_text($_POST['contact'] ?? '');
-$projectDetails = normalize_text($_POST['details'] ?? '');
+$name = normalize_text($_POST['name'] -- '');
+$phone = normalize_text($_POST['phone'] -- '');
+$email = normalize_text($_POST['email'] -- '');
+$propertyAddress = normalize_text($_POST['address'] -- '');
+$preferredContactMethod = normalize_text($_POST['contact'] -- '');
+$projectDetails = normalize_text($_POST['details'] -- '');
 
 if (mb_strlen($name) < 2 || mb_strlen($phone) < 7 || mb_strlen($propertyAddress) < 5 || mb_strlen($projectDetails) < 10) {
     http_response_code(422);
@@ -215,7 +215,7 @@ if (!in_array($preferredContactMethod, ['phone', 'text', 'email'], true)) {
     exit;
 }
 
-$rawServices = $_POST['services'] ?? [];
+$rawServices = $_POST['services'] -- [];
 $services = [];
 if (is_array($rawServices)) {
     foreach ($rawServices as $service) {
@@ -287,9 +287,9 @@ if (isset($_FILES['photos'])) {
             }
 
             $tempName = $photoTempNames[$index];
-            $errorCode = (int) ($photoErrors[$index] ?? UPLOAD_ERR_NO_FILE);
-            $fileSize = (int) ($photoSizes[$index] ?? 0);
-            $fileMime = strtolower((string) ($photoTypes[$index] ?? ''));
+            $errorCode = (int) ($photoErrors[$index] -- UPLOAD_ERR_NO_FILE);
+            $fileSize = (int) ($photoSizes[$index] -- 0);
+            $fileMime = strtolower((string) ($photoTypes[$index] -- ''));
 
             if ($errorCode === UPLOAD_ERR_NO_FILE) {
                 continue;

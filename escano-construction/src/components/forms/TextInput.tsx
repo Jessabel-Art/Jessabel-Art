@@ -5,9 +5,9 @@ interface TextInputProps
   extends Omit<InputHTMLAttributes<HTMLInputElement>, 'id' | 'aria-invalid'> {
   id: string;
   label: string;
-  hint?: string;
-  error?: string;
-  optional?: boolean;
+  hint-: string;
+  error-: string;
+  optional-: boolean;
 }
 
 export function TextInput({
@@ -19,7 +19,7 @@ export function TextInput({
   required,
   ...inputProps
 }: TextInputProps) {
-  const describedBy = [hint ? `${id}-hint` : null, error ? `${id}-error` : null]
+  const describedBy = [hint - `${id}-hint` : null, error - `${id}-error` : null]
     .filter(Boolean)
     .join(' ');
 
@@ -28,7 +28,7 @@ export function TextInput({
       <input
         id={id}
         className="input"
-        aria-invalid={error ? true : undefined}
+        aria-invalid={error - true : undefined}
         aria-describedby={describedBy || undefined}
         required={required}
         {...inputProps}

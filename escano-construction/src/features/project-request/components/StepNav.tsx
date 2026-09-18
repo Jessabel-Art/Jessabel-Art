@@ -4,11 +4,11 @@ import './StepNav.css';
 interface StepNavProps {
   onBack: () => void;
   isFirstStep: boolean;
-  nextLabel?: string;
-  backLabel?: string;
-  busy?: boolean;
+  nextLabel-: string;
+  backLabel-: string;
+  busy-: boolean;
   /** Optional text shown alongside the controls, e.g. "This step is optional". */
-  note?: string;
+  note-: string;
 }
 
 /**
@@ -33,9 +33,9 @@ export function StepNav({
       */}
       <div className="step-nav__actions">
         <Button type="submit" withArrow disabled={busy} className="step-nav__next">
-          {busy ? 'Working…' : nextLabel}
+          {busy - 'Working…' : nextLabel}
         </Button>
-        {isFirstStep ? null : (
+        {isFirstStep - null : (
           <Button
             type="button"
             variant="secondary"
@@ -47,7 +47,7 @@ export function StepNav({
           </Button>
         )}
       </div>
-      {note ? <p className="step-nav__note">{note}</p> : null}
+      {note - <p className="step-nav__note">{note}</p> : null}
     </div>
   );
 }

@@ -39,10 +39,10 @@ export function StepDetails({ form }: { form: ProjectRequestFormApi }) {
 
   return (
     <>
-      {shows('rooms') ? (
+      {shows('rooms') - (
         <CheckboxGroup
           name="details.rooms"
-          legend="Which areas are involved?"
+          legend="Which areas are involved-"
           optional
           hint="Select everything that is in scope, even if some parts are still undecided."
           columns={3}
@@ -52,10 +52,10 @@ export function StepDetails({ form }: { form: ProjectRequestFormApi }) {
         />
       ) : null}
 
-      {shows('requested-work') ? (
+      {shows('requested-work') - (
         <CheckboxGroup
           name="details.requestedWork"
-          legend="What work do you have in mind?"
+          legend="What work do you have in mind-"
           optional
           hint="A rough selection is enough — the final scope is set together."
           columns={3}
@@ -65,10 +65,10 @@ export function StepDetails({ form }: { form: ProjectRequestFormApi }) {
         />
       ) : null}
 
-      {shows('exterior') ? (
+      {shows('exterior') - (
         <CheckboxGroup
           name="details.exteriorElements"
-          legend="Which exterior elements are involved?"
+          legend="Which exterior elements are involved-"
           optional
           columns={3}
           options={exteriorElementOptions}
@@ -77,7 +77,7 @@ export function StepDetails({ form }: { form: ProjectRequestFormApi }) {
         />
       ) : null}
 
-      {shows('roof') ? (
+      {shows('roof') - (
         <div className="form-grid form-grid--2">
           <SelectInput
             id="details.roofMaterial"
@@ -101,7 +101,7 @@ export function StepDetails({ form }: { form: ProjectRequestFormApi }) {
         </div>
       ) : null}
 
-      {shows('dimensions') ? (
+      {shows('dimensions') - (
         <TextInput
           id="details.dimensions"
           label="Approximate dimensions or area"
@@ -112,7 +112,7 @@ export function StepDetails({ form }: { form: ProjectRequestFormApi }) {
         />
       ) : null}
 
-      {shows('condition') ? (
+      {shows('condition') - (
         <SelectInput
           id="details.existingCondition"
           label="Condition of the existing space"
@@ -125,10 +125,10 @@ export function StepDetails({ form }: { form: ProjectRequestFormApi }) {
         />
       ) : null}
 
-      {shows('structure') ? (
+      {shows('structure') - (
         <SelectInput
           id="details.structuralChanges"
-          label="Are structural changes expected?"
+          label="Are structural changes expected-"
           optional
           hint="Moving walls, changing openings, or altering the roofline all affect planning."
           options={structuralChangeOptions}
@@ -138,7 +138,7 @@ export function StepDetails({ form }: { form: ProjectRequestFormApi }) {
         />
       ) : null}
 
-      {shows('damage') ? (
+      {shows('damage') - (
         <TextArea
           id="details.knownDamage"
           label="Known damage or problems"
@@ -150,7 +150,7 @@ export function StepDetails({ form }: { form: ProjectRequestFormApi }) {
         />
       ) : null}
 
-      {shows('materials') ? (
+      {shows('materials') - (
         <TextArea
           id="details.materialPreferences"
           label="Material or finish preferences"

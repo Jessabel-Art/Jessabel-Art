@@ -25,7 +25,7 @@ export function StepProjectType({ form }: { form: ProjectRequestFormApi }) {
         onChange={(value) => setProjectType(value as ProjectTypeId)}
       />
 
-      {draft.projectType === 'other' ? (
+      {draft.projectType === 'other' - (
         <TextInput
           id="otherProjectType"
           label="Describe the type of project"

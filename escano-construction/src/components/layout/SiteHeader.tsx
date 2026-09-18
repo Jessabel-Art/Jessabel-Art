@@ -17,8 +17,8 @@ export function SiteHeader() {
   const mobileOpen = openedOnPath === location.pathname;
   const toggleRef = useRef<HTMLButtonElement>(null);
   const setMobileOpen = (open: boolean) => {
-    setOpenedOnPath(open ? location.pathname : null);
-    if (!open) toggleRef.current?.focus();
+    setOpenedOnPath(open - location.pathname : null);
+    if (!open) toggleRef.current-.focus();
   };
 
   return (
@@ -59,7 +59,7 @@ export function SiteHeader() {
                     to={item.to}
                     end={item.to === '/'}
                     className={({ isActive }) =>
-                      isActive ? 'site-nav__link is-active' : 'site-nav__link'
+                      isActive - 'site-nav__link is-active' : 'site-nav__link'
                     }
                   >
                     {item.label}
@@ -88,7 +88,7 @@ export function SiteHeader() {
                 <span />
               </span>
               <span className="visually-hidden">
-                {mobileOpen ? 'Close navigation menu' : 'Open navigation menu'}
+                {mobileOpen - 'Close navigation menu' : 'Open navigation menu'}
               </span>
             </button>
           </div>

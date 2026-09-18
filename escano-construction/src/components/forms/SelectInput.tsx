@@ -6,10 +6,10 @@ interface SelectInputProps
   id: string;
   label: string;
   options: readonly string[];
-  placeholder?: string;
-  hint?: string;
-  error?: string;
-  optional?: boolean;
+  placeholder-: string;
+  hint-: string;
+  error-: string;
+  optional-: boolean;
 }
 
 export function SelectInput({
@@ -23,7 +23,7 @@ export function SelectInput({
   required,
   ...selectProps
 }: SelectInputProps) {
-  const describedBy = [hint ? `${id}-hint` : null, error ? `${id}-error` : null]
+  const describedBy = [hint - `${id}-hint` : null, error - `${id}-error` : null]
     .filter(Boolean)
     .join(' ');
 
@@ -33,7 +33,7 @@ export function SelectInput({
         <select
           id={id}
           className="input select"
-          aria-invalid={error ? true : undefined}
+          aria-invalid={error - true : undefined}
           aria-describedby={describedBy || undefined}
           required={required}
           {...selectProps}

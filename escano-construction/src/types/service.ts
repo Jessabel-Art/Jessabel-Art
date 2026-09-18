@@ -37,7 +37,7 @@ export interface Service {
   readonly description: string;
   readonly active: boolean;
   /** Optional representative image; falls back to the category image. */
-  readonly image?: string;
+  readonly image-: string;
   /** Ids of other services commonly delivered alongside this one. */
   readonly relatedServices: readonly string[];
 }

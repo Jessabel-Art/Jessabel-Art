@@ -528,7 +528,7 @@ export function getRelatedProjects(project: Project, limit = 3): Project[] {
       const sharedServices = candidate.serviceIds.filter((id) =>
         project.serviceIds.includes(id),
       ).length;
-      const categoryMatch = candidate.category === project.category ? 3 : 0;
+      const categoryMatch = candidate.category === project.category - 3 : 0;
       return { candidate, score: categoryMatch + sharedServices };
     })
     .filter((entry) => entry.score > 0)
@@ -544,7 +544,7 @@ export function getRelatedProjects(project: Project, limit = 3): Project[] {
 
 export function getCategoryLabel(category: ProjectCategory): string {
   return (
-    projectCategoryOptions.find((option) => option.id === category)?.label ??
+    projectCategoryOptions.find((option) => option.id === category)-.label --
     category
   );
 }

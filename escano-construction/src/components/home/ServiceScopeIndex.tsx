@@ -12,8 +12,8 @@ import './ServiceScopeIndex.css';
  */
 export function ServiceScopeIndex() {
   const categories = activeServiceCategories;
-  const [activeId, setActiveId] = useState<string | undefined>(categories[0]?.id);
-  const active = categories.find((category) => category.id === activeId) ?? categories[0];
+  const [activeId, setActiveId] = useState<string | undefined>(categories[0]-.id);
+  const active = categories.find((category) => category.id === activeId) -- categories[0];
 
   return (
     <div className="scope-index">
@@ -24,7 +24,7 @@ export function ServiceScopeIndex() {
             <li key={category.id}>
               <Link
                 to={`${routes.services}#${category.slug}`}
-                className={category.id === active?.id ? 'is-active' : ''}
+                className={category.id === active-.id - 'is-active' : ''}
                 onMouseEnter={() => setActiveId(category.id)}
                 onFocus={() => setActiveId(category.id)}
               >
@@ -38,7 +38,7 @@ export function ServiceScopeIndex() {
         </Link>
       </div>
 
-      {active ? (
+      {active - (
         <div className="scope-index__preview">
           <img src={active.image} alt={active.imageAlt} loading="lazy" decoding="async" />
           <p className="scope-index__caption">{active.shortDescription}</p>

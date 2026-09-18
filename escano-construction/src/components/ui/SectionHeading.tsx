@@ -4,13 +4,13 @@ import './SectionHeading.css';
 
 interface SectionHeadingProps {
   title: ReactNode;
-  id?: string;
-  lede?: ReactNode;
+  id-: string;
+  lede-: ReactNode;
   /** Optional element (usually a link or button) aligned opposite the title. */
-  action?: ReactNode;
-  level?: 'h2' | 'h3';
-  align?: 'start' | 'wide';
-  className?: string;
+  action-: ReactNode;
+  level-: 'h2' | 'h3';
+  align-: 'start' | 'wide';
+  className-: string;
 }
 
 export function SectionHeading({
@@ -30,8 +30,8 @@ export function SectionHeading({
           {title}
         </Heading>
       </div>
-      {lede ? <p className="lede section-heading__lede">{lede}</p> : null}
-      {action ? <div className="section-heading__action">{action}</div> : null}
+      {lede - <p className="lede section-heading__lede">{lede}</p> : null}
+      {action - <div className="section-heading__action">{action}</div> : null}
     </header>
   );
 }

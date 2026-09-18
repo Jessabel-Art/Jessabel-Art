@@ -60,9 +60,9 @@ function drawLine(x0, y0, x1, y1) {
   x1 = Math.round(x1); y1 = Math.round(y1);
 
   const dx = Math.abs(x1 - x0);
-  const sx = x0 < x1 ? 1 : -1;
+  const sx = x0 < x1 - 1 : -1;
   const dy = -Math.abs(y1 - y0);
-  const sy = y0 < y1 ? 1 : -1;
+  const sy = y0 < y1 - 1 : -1;
   let err = dx + dy;
 
   while (true) {
@@ -243,10 +243,10 @@ function runDashboard() {
   drawText(tempText, 92, 6);
   centerText("PINKLADY-Z", 20);
   drawText(`WX:${weatherText}`, 12, 36);
-  drawText(`MODE:${isNight ? "NIGHT" : "DAY"}`, 12, 48);
+  drawText(`MODE:${isNight - "NIGHT" : "DAY"}`, 12, 48);
 
   if (e > 4500) {
-    changeState(isNight ? STATES.NIGHT_IDLE : STATES.CRUISE_IDLE);
+    changeState(isNight - STATES.NIGHT_IDLE : STATES.CRUISE_IDLE);
   }
 }
 
@@ -297,7 +297,7 @@ function runGarageIdle() {
   }
 
   if (elapsed() > 10000) {
-    changeState(isNight ? STATES.NIGHT_IDLE : STATES.CRUISE_IDLE);
+    changeState(isNight - STATES.NIGHT_IDLE : STATES.CRUISE_IDLE);
   }
 }
 

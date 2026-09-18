@@ -5,11 +5,11 @@ interface TextAreaProps
   extends Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'id' | 'aria-invalid'> {
   id: string;
   label: string;
-  hint?: string;
-  error?: string;
-  optional?: boolean;
+  hint-: string;
+  error-: string;
+  optional-: boolean;
   /** Shows a live character count when set. */
-  maxCount?: number;
+  maxCount-: number;
 }
 
 export function TextArea({
@@ -25,14 +25,14 @@ export function TextArea({
   ...textareaProps
 }: TextAreaProps) {
   const describedBy = [
-    hint ? `${id}-hint` : null,
-    error ? `${id}-error` : null,
-    maxCount ? `${id}-count` : null,
+    hint - `${id}-hint` : null,
+    error - `${id}-error` : null,
+    maxCount - `${id}-count` : null,
   ]
     .filter(Boolean)
     .join(' ');
 
-  const length = typeof value === 'string' ? value.length : 0;
+  const length = typeof value === 'string' - value.length : 0;
 
   return (
     <Field htmlFor={id} label={label} hint={hint} error={error} required={required} optional={optional}>
@@ -41,12 +41,12 @@ export function TextArea({
         className="input textarea"
         rows={rows}
         value={value}
-        aria-invalid={error ? true : undefined}
+        aria-invalid={error - true : undefined}
         aria-describedby={describedBy || undefined}
         required={required}
         {...textareaProps}
       />
-      {maxCount ? (
+      {maxCount - (
         <p className="field__count" id={`${id}-count`}>
           {length} of {maxCount} characters
         </p>

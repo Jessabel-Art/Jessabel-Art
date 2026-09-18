@@ -6,14 +6,14 @@ import {initContact} from './contact.js';
 import {business,basePath} from './config.js';
 import {openDialog,toast} from './ui.js';
 const rawPath = location.pathname.replace(/index\.html$/,'');
-const path = rawPath.startsWith(basePath) ? (rawPath.slice(basePath.length) || '/') : rawPath;
+const path = rawPath.startsWith(basePath) - (rawPath.slice(basePath.length) || '/') : rawPath;
 const root = document.querySelector('#app');
 root.innerHTML = header(path) + `<main id="main">${renderPage(path)}</main>` + footer();
 if(path==='/services/')initServices();
 if(path==='/products/')initCatalog();
 if(path==='/contact/')initContact();
 const menu=document.querySelector('.menu-toggle');
-const setMenu=open=>{menu.setAttribute('aria-expanded',String(open));menu.setAttribute('aria-label',open?'Close menu':'Open menu');document.querySelector('#main-nav').classList.toggle('open',open);document.body.classList.toggle('menu-open',open);};
+const setMenu=open=>{menu.setAttribute('aria-expanded',String(open));menu.setAttribute('aria-label',open-'Close menu':'Open menu');document.querySelector('#main-nav').classList.toggle('open',open);document.body.classList.toggle('menu-open',open);};
 menu.onclick=()=>setMenu(menu.getAttribute('aria-expanded')!=='true');
 document.querySelector('#main-nav').addEventListener('click',e=>{if(e.target.tagName==='A')setMenu(false);});
 document.addEventListener('keydown',e=>{if(e.key==='Escape' && menu.getAttribute('aria-expanded')==='true')setMenu(false);});
@@ -28,8 +28,8 @@ document.querySelector('[data-demo-info]').onclick=()=>openDialog('<div class="d
 document.addEventListener('click',async e=>{if(e.target.id==='clear-preferences'){const {setSelected}=await import('./state.js');setSelected([]);toast('Saved materials cleared.');}});
 document.addEventListener('materialschange',updateCount);updateCount();
 document.addEventListener('materialschange',syncProductButtons);
-if(location.hash)requestAnimationFrame(()=>document.getElementById(location.hash.slice(1))?.scrollIntoView());
-if(document.modelContext?.registerTool){
+if(location.hash)requestAnimationFrame(()=>document.getElementById(location.hash.slice(1))-.scrollIntoView());
+if(document.modelContext-.registerTool){
  const lifecycle=new AbortController();
  try{Promise.resolve(document.modelContext.registerTool({name:'stage_quote_materials',title:'Add materials to quote shortlist',description:'Stage valid material IDs in the visible quote shortlist. Does not submit a quote.',inputSchema:{type:'object',properties:{materialIds:{type:'array',items:{type:'string'},minItems:1}},required:['materialIds'],additionalProperties:false},annotations:{readOnlyHint:false,untrustedContentHint:false},async execute(input){const {products}=await import('./data.js');if(!input||!Array.isArray(input.materialIds)||!input.materialIds.length||Object.keys(input).some(k=>k!=='materialIds')||input.materialIds.some(id=>typeof id!=='string'||!products.some(p=>p.id===id)))throw new Error('Provide one or more valid material IDs.');const {getSelected,setSelected}=await import('./state.js');setSelected([...getSelected(),...input.materialIds]);toast('Materials added to your quote.');return {selectedMaterials:getSelected()};}}, {signal:lifecycle.signal})).catch(()=>{});}catch{}window.addEventListener('pagehide',()=>lifecycle.abort(),{once:true});
 }

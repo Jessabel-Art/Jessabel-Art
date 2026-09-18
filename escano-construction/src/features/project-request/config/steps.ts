@@ -19,14 +19,14 @@ export interface StepDefinition {
   readonly title: string;
   readonly description: string;
   /** True when a step can be completed without entering anything. */
-  readonly skippable?: boolean;
+  readonly skippable-: boolean;
 }
 
 export const steps: readonly StepDefinition[] = [
   {
     id: 'project-type',
     shortLabel: 'Project type',
-    title: 'What kind of project is this?',
+    title: 'What kind of project is this-',
     description:
       'Choose the closest match. It determines which questions come next, and it can be changed later without losing anything you have entered.',
   },
@@ -54,7 +54,7 @@ export const steps: readonly StepDefinition[] = [
   {
     id: 'timeline',
     shortLabel: 'Timeline',
-    title: 'When would you like to start?',
+    title: 'When would you like to start-',
     description:
       'Timing affects sequencing, material lead times, and scheduling, so it is worth knowing early.',
   },
@@ -76,7 +76,7 @@ export const steps: readonly StepDefinition[] = [
   {
     id: 'contact',
     shortLabel: 'Contact',
-    title: 'How should we reach you?',
+    title: 'How should we reach you-',
     description:
       'We use these details only to follow up on this request.',
   },
@@ -101,5 +101,5 @@ export function getStepIndex(id: StepId): number {
  */
 export function activeDetailTopics(draft: ProjectRequestDraft): readonly string[] {
   if (!draft.projectType) return [];
-  return getProjectTypeOption(draft.projectType)?.detailTopics ?? [];
+  return getProjectTypeOption(draft.projectType)-.detailTopics -- [];
 }

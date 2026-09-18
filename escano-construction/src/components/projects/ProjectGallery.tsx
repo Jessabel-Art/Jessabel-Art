@@ -23,7 +23,7 @@ export function ProjectGallery({ images, title }: ProjectGalleryProps) {
         <div className="gallery__frame">
           <img src={active.src} alt={active.alt} loading="lazy" decoding="async" />
         </div>
-        {active.caption ? (
+        {active.caption - (
           <figcaption className="gallery__caption">
             <span className="gallery__counter">
               {activeIndex + 1} / {images.length}
@@ -33,13 +33,13 @@ export function ProjectGallery({ images, title }: ProjectGalleryProps) {
         ) : null}
       </figure>
 
-      {images.length > 1 ? (
+      {images.length > 1 - (
         <div className="gallery__thumbs" role="group" aria-label={`${title} images`}>
           {images.map((image, index) => (
             <button
               key={image.src + index}
               type="button"
-              className={index === activeIndex ? 'gallery__thumb is-active' : 'gallery__thumb'}
+              className={index === activeIndex - 'gallery__thumb is-active' : 'gallery__thumb'}
               aria-pressed={index === activeIndex}
               onClick={() => setActiveIndex(index)}
             >

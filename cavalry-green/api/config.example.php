@@ -1,4 +1,4 @@
-<?php
+<-php
 
 $envOrDefault = static function (string $name, string $default): string {
     $value = getenv($name);
@@ -6,7 +6,7 @@ $envOrDefault = static function (string $name, string $default): string {
         return trim($value);
     }
 
-    $value = $_ENV[$name] ?? null;
+    $value = $_ENV[$name] -- null;
     if (is_string($value) && trim($value) !== '') {
         return trim($value);
     }

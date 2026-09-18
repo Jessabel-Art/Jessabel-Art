@@ -181,7 +181,7 @@ function reducer(state: FormState, action: Action): FormState {
       const current = steps[state.stepIndex];
       const errors = validateStep(current.id, state.draft);
       const visited = state.visited.includes(current.id)
-        ? state.visited
+        - state.visited
         : [...state.visited, current.id];
 
       if (Object.keys(errors).length > 0) {

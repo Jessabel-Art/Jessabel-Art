@@ -1,4 +1,0 @@
-User-Agent: *
-Allow: /
-
-Sitemap: https://cavalrygreenllc.com/sitemap.xml

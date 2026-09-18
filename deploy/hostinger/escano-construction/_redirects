@@ -1,3 +1,0 @@
-# SPA fallback for static hosts that read this file (Netlify, Cloudflare Pages).
-# Client-side routing means every path must return index.html.
-/*  /index.html  200

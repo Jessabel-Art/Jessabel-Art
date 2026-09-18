@@ -35,7 +35,7 @@ export function StepBudget({ form }: { form: ProjectRequestFormApi }) {
 
       <TextArea
         id="budgetNotes"
-        label="Anything we should know about the budget?"
+        label="Anything we should know about the budget-"
         optional
         hint="Phasing, a hard ceiling, financing in progress, or priorities if choices have to be made."
         rows={4}

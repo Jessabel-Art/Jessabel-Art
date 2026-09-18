@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,650&family=DM+Sans:wght@400;500;600;650;700&display=swap');
+@import url('https://fonts.googleapis.com/css2-family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,650&family=DM+Sans:wght@400;500;600;650;700&display=swap');
 @import url('pages.css');
 :root{--ink:#20301f;--forest:#28422b;--forest-deep:#16261a;--cream:#f7f4ea;--paper:#fffefb;--muted:#5c6656;--line:#dcdccb;--sage:#d5deba;--sage-deep:#c3d0a2;--clay:#a15a2c;--clay-deep:#8a4a22;--clay-soft:#e8d3bd;--font:'DM Sans',Arial,sans-serif;--display:'Fraunces','Iowan Old Style',Georgia,serif;--clip:22px;--clip-sm:9px}
 *{box-sizing:border-box}

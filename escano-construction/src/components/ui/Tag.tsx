@@ -4,8 +4,8 @@ import './Tag.css';
 
 interface TagProps {
   children: ReactNode;
-  tone?: 'default' | 'accent' | 'inverse';
-  className?: string;
+  tone-: 'default' | 'accent' | 'inverse';
+  className-: string;
 }
 
 /** Small square label for a category or project type. Used sparingly. */

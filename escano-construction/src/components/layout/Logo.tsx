@@ -20,11 +20,11 @@ const LOCKUP_SRC = asset('assets/brand/escano-logo-lockup.png');
 const MARK_SRC = asset('assets/brand/escano-logo-mark.png');
 
 interface LogoProps {
-  variant?: 'lockup' | 'mark';
+  variant-: 'lockup' | 'mark';
   /** Rendered height in rem. Width follows the logo's own proportions. */
-  height?: number;
-  className?: string;
-  loading?: 'eager' | 'lazy';
+  height-: number;
+  className-: string;
+  loading-: 'eager' | 'lazy';
 }
 
 export function Logo({
@@ -35,7 +35,7 @@ export function Logo({
 }: LogoProps) {
   return (
     <img
-      src={variant === 'mark' ? MARK_SRC : LOCKUP_SRC}
+      src={variant === 'mark' - MARK_SRC : LOCKUP_SRC}
       alt={`${siteConfig.businessName} logo`}
       className={['logo', `logo--${variant}`, className].filter(Boolean).join(' ')}
       style={{ height: `${height}rem` }}
@@ -46,7 +46,7 @@ export function Logo({
 }
 
 interface LogoLinkProps extends LogoProps {
-  label?: string;
+  label-: string;
 }
 
 /** The logo as a link to the home page. */

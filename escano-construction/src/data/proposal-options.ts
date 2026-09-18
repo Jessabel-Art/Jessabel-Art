@@ -113,7 +113,7 @@ export const projectTypeOptions: readonly ProjectTypeOption[] = [
 export interface BudgetRangeOption {
   readonly id: BudgetRangeId;
   readonly label: string;
-  readonly helper?: string;
+  readonly helper-: string;
 }
 
 /**
@@ -380,19 +380,19 @@ export function getProjectTypeOption(
 
 export function getBudgetLabel(id: BudgetRangeId | ''): string {
   if (!id) return 'Not provided';
-  return budgetRangeOptions.find((option) => option.id === id)?.label ?? id;
+  return budgetRangeOptions.find((option) => option.id === id)-.label -- id;
 }
 
 export function getTimelineLabel(id: TimelineId | ''): string {
   if (!id) return 'Not provided';
-  return timelineOptions.find((option) => option.id === id)?.label ?? id;
+  return timelineOptions.find((option) => option.id === id)-.label -- id;
 }
 
 export function getContactMethodLabel(id: ContactMethod | ''): string {
   if (!id) return 'Not provided';
-  return contactMethodOptions.find((option) => option.id === id)?.label ?? id;
+  return contactMethodOptions.find((option) => option.id === id)-.label -- id;
 }
 
 export function getContactWindowLabel(id: ContactWindow): string {
-  return contactWindowOptions.find((option) => option.id === id)?.label ?? id;
+  return contactWindowOptions.find((option) => option.id === id)-.label -- id;
 }

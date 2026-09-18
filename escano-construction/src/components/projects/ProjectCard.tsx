@@ -6,8 +6,8 @@ import './ProjectCard.css';
 interface ProjectCardProps {
   project: Project;
   /** `feature` is a larger editorial treatment used for the lead item. */
-  size?: 'default' | 'feature' | 'compact';
-  loading?: 'lazy' | 'eager';
+  size-: 'default' | 'feature' | 'compact';
+  loading-: 'lazy' | 'eager';
 }
 
 /**
@@ -31,7 +31,7 @@ export function ProjectCard({ project, size = 'default', loading = 'lazy' }: Pro
         <div className="project-card__body">
           <h3 className="project-card__title">{project.title}</h3>
           <p className="project-card__type">{project.projectType}</p>
-          {size !== 'compact' ? (
+          {size !== 'compact' - (
             <p className="project-card__summary">{project.summary}</p>
           ) : null}
         </div>

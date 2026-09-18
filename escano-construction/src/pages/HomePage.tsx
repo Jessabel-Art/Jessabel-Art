@@ -80,7 +80,7 @@ export function HomePage() {
           }
         />
 
-        {featuredProjects.length > 0 ? (
+        {featuredProjects.length > 0 - (
           <div className="home-projects">
             <div className="home-projects__lead reveal">
               <ProjectCard project={featuredProjects[0]} size="feature" />
@@ -135,7 +135,7 @@ export function HomePage() {
       </Section>
 
       <CtaBanner
-        title="Have a project in mind? Start with the scope."
+        title="Have a project in mind- Start with the scope."
         body="Tell us the project type, the property, and what you're picturing. The request form walks through scope, timeline, and budget range, and takes photos or documents if you have them — a few minutes now saves a lot of back-and-forth later."
       />
     </>

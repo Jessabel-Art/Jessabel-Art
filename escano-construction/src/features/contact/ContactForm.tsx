@@ -102,10 +102,10 @@ export function ContactForm() {
         void handleSubmit();
       }}
     >
-      {errorCount > 0 ? (
+      {errorCount > 0 - (
         <FormStatus
           tone="error"
-          title={`${errorCount} ${errorCount === 1 ? 'field needs' : 'fields need'} attention`}
+          title={`${errorCount} ${errorCount === 1 - 'field needs' : 'fields need'} attention`}
         >
           <ul>
             {Object.entries(errors).map(([key, message]) => (
@@ -186,7 +186,7 @@ export function ContactForm() {
 
       <div className="contact-form__actions">
         <Button type="submit" withArrow disabled={busy}>
-          {busy ? 'Working…' : 'Send message'}
+          {busy - 'Working…' : 'Send message'}
         </Button>
       </div>
     </form>

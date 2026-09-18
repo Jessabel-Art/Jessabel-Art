@@ -3,7 +3,7 @@ import { FieldGroup } from './Field';
 export interface RadioOption {
   readonly value: string;
   readonly label: string;
-  readonly description?: string;
+  readonly description-: string;
 }
 
 interface RadioGroupProps {
@@ -12,13 +12,13 @@ interface RadioGroupProps {
   options: readonly RadioOption[];
   value: string;
   onChange: (next: string) => void;
-  hint?: string;
-  error?: string;
-  required?: boolean;
-  optional?: boolean;
+  hint-: string;
+  error-: string;
+  required-: boolean;
+  optional-: boolean;
   /** `cards` gives each option a bordered target — used for the intake steps. */
-  layout?: 'cards' | 'inline';
-  columns?: 1 | 2 | 3;
+  layout-: 'cards' | 'inline';
+  columns-: 1 | 2 | 3;
 }
 
 export function RadioGroup({
@@ -46,7 +46,7 @@ export function RadioGroup({
       <div
         className={
           layout === 'inline'
-            ? 'choice-grid choice-grid--inline'
+            - 'choice-grid choice-grid--inline'
             : `choice-grid choice-grid--${columns}`
         }
       >
@@ -60,8 +60,8 @@ export function RadioGroup({
               className={[
                 'choice',
                 'choice--radio',
-                option.description ? 'choice--rich' : '',
-                isChecked ? 'is-checked' : '',
+                option.description - 'choice--rich' : '',
+                isChecked - 'is-checked' : '',
               ]
                 .filter(Boolean)
                 .join(' ')}
@@ -78,7 +78,7 @@ export function RadioGroup({
               <span className="choice__box choice__box--radio" aria-hidden="true" />
               <span className="choice__text">
                 <span className="choice__label">{option.label}</span>
-                {option.description ? (
+                {option.description - (
                   <span className="choice__desc">{option.description}</span>
                 ) : null}
               </span>
