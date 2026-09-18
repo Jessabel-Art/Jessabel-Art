@@ -8,51 +8,56 @@ export const productCategories = [
 ];
 const catalog = {
   mulch: [
-    ['Hardwood mulch','A natural, textured finish that gradually enriches planting beds.','Tree rings and established garden beds'],
-    ['Black mulch','A dark, contrasting finish that sets off fresh foliage.','Contemporary beds and curb-appeal refreshes'],
-    ['Brown mulch','An understated earth-tone finish for a cohesive landscape.','Mixed borders and residential planting beds'],
-    ['Red mulch','A warm-colored accent for distinctive landscape schemes.','Decorative beds and contrasting borders'],
-    ['Cedar mulch','A fragrant wood mulch with a softly fibrous texture.','Ornamental beds and garden paths'],
+    ['Hardwood mulch','A natural, textured finish that gradually enriches planting beds.','Tree rings and established garden beds','#8a6a45'],
+    ['Black mulch','A dark, contrasting finish that sets off fresh foliage.','Contemporary beds and curb-appeal refreshes','#2b2420'],
+    ['Brown mulch','An understated earth-tone finish for a cohesive landscape.','Mixed borders and residential planting beds','#6b4f34'],
+    ['Red mulch','A warm-colored accent for distinctive landscape schemes.','Decorative beds and contrasting borders','#9a4020'],
+    ['Cedar mulch','A fragrant wood mulch with a softly fibrous texture.','Ornamental beds and garden paths','#b98a55'],
   ],
   stone: [
-    ['River rock','Rounded natural stones with soft variation in color and size.','Dry creek beds and decorative borders'],
-    ['Pea gravel','Small, rounded aggregate with an easy, natural character.','Garden paths and seating areas'],
-    ['Decorative gravel','Versatile decorative aggregate for a clean, textured surface.','Courtyards and planting accents'],
-    ['White stone','Light-colored stone that adds definition and contrast.','Accent beds and modern landscapes'],
-    ['Landscape rock','Larger natural pieces that create structure and visual interest.','Garden accents and bed transitions'],
-    ['Crushed stone','Angular aggregate that can create a stable, compacted base.','Walkway bases and utility areas'],
+    ['River rock','Rounded natural stones with soft variation in color and size.','Dry creek beds and decorative borders','#8b9099'],
+    ['Pea gravel','Small, rounded aggregate with an easy, natural character.','Garden paths and seating areas','#a79a86'],
+    ['Decorative gravel','Versatile decorative aggregate for a clean, textured surface.','Courtyards and planting accents','#948b7d'],
+    ['White stone','Light-colored stone that adds definition and contrast.','Accent beds and modern landscapes','#d8d3c8'],
+    ['Landscape rock','Larger natural pieces that create structure and visual interest.','Garden accents and bed transitions','#766b60'],
+    ['Crushed stone','Angular aggregate that can create a stable, compacted base.','Walkway bases and utility areas','#7d8286'],
   ],
   soil: [
-    ['Topsoil','Screened soil for leveling and preparing growing areas.','Lawn renovation and new beds'],
-    ['Garden soil','A planting blend for thoughtfully prepared garden beds.','Vegetable gardens and new flower beds'],
-    ['Compost','Organic material to improve the character of existing soil.','Soil conditioning and planting preparation'],
-    ['Fill dirt','General ground material for shaping and leveling a site.','Grading and non-growing foundations'],
-    ['Sand','Fine aggregate for appropriate leveling and landscaping uses.','Paver bedding and compatible soil mixes'],
+    ['Topsoil','Screened soil for leveling and preparing growing areas.','Lawn renovation and new beds','#4a3b2c'],
+    ['Garden soil','A planting blend for thoughtfully prepared garden beds.','Vegetable gardens and new flower beds','#3f3224'],
+    ['Compost','Organic material to improve the character of existing soil.','Soil conditioning and planting preparation','#2e2419'],
+    ['Fill dirt','General ground material for shaping and leveling a site.','Grading and non-growing foundations','#7a5c3e'],
+    ['Sand','Fine aggregate for appropriate leveling and landscaping uses.','Paver bedding and compatible soil mixes','#c9b488'],
   ],
   plants: [
-    ['Shrubs','Structured planting options selected for your site and season.','Foundation beds and garden structure'],
-    ['Ornamental grasses','Movement and texture with a relaxed, natural appearance.','Layered borders and sunny beds'],
-    ['Perennials','Returning color and texture, chosen for local growing conditions.','Seasonal garden borders'],
-    ['Seasonal flowers','Fresh color for a welcoming entrance or seasonal refresh.','Entry beds and containers'],
-    ['Privacy plants','Layered living screens matched to available growing space.','Property edges and outdoor seating'],
-    ['Small ornamental trees','Garden-scale trees for shade, structure, or seasonal interest.','Feature planting and focal points'],
+    ['Shrubs','Structured planting options selected for your site and season.','Foundation beds and garden structure','#4a6b3f'],
+    ['Ornamental grasses','Movement and texture with a relaxed, natural appearance.','Layered borders and sunny beds','#8a9a52'],
+    ['Perennials','Returning color and texture, chosen for local growing conditions.','Seasonal garden borders','#736a8a'],
+    ['Seasonal flowers','Fresh color for a welcoming entrance or seasonal refresh.','Entry beds and containers','#c97b8a'],
+    ['Privacy plants','Layered living screens matched to available growing space.','Property edges and outdoor seating','#34502f'],
+    ['Small ornamental trees','Garden-scale trees for shade, structure, or seasonal interest.','Feature planting and focal points','#557a45'],
   ],
   lawn: [
-    ['Sod','Fresh turf selected to suit site conditions and intended use.','New lawns and lawn renovation'],
-    ['Grass seed','Seed options matched to sunlight, climate, and existing turf.','Overseeding and lawn repairs'],
-    ['Fertilizer','Lawn nutrition selected after considering soil and turf needs.','Seasonal lawn care'],
-    ['Soil amendments','Targeted soil support based on your project requirements.','Lawn preparation and soil improvement'],
+    ['Sod','Fresh turf selected to suit site conditions and intended use.','New lawns and lawn renovation','#5a8a3f'],
+    ['Grass seed','Seed options matched to sunlight, climate, and existing turf.','Overseeding and lawn repairs','#9a9a5a'],
+    ['Fertilizer','Lawn nutrition selected after considering soil and turf needs.','Seasonal lawn care','#7a8a5a'],
+    ['Soil amendments','Targeted soil support based on your project requirements.','Lawn preparation and soil improvement','#6b5a3f'],
   ],
   landscape: [
-    ['Landscape edging','A defined boundary between lawns, beds, and paths.','Mulch borders and garden separation'],
-    ['Pavers','Modular hardscape units in a selection of finishes and formats.','Walkways and small outdoor seating areas'],
-    ['Stepping stones','Individual stones for relaxed routes through the garden.','Garden paths and planting transitions'],
-    ['Landscape fabric','Permeable separation fabric for suitable landscape applications.','Aggregate areas and material separation'],
-    ['Decorative borders','Finishing elements that define the shape of outdoor spaces.','Flower beds and walkway edges'],
+    ['Landscape edging','A defined boundary between lawns, beds, and paths.','Mulch borders and garden separation','#5a5a52'],
+    ['Pavers','Modular hardscape units in a selection of finishes and formats.','Walkways and small outdoor seating areas','#a89a80'],
+    ['Stepping stones','Individual stones for relaxed routes through the garden.','Garden paths and planting transitions','#8a8578'],
+    ['Landscape fabric','Permeable separation fabric for suitable landscape applications.','Aggregate areas and material separation','#a89878'],
+    ['Decorative borders','Finishing elements that define the shape of outdoor spaces.','Flower beds and walkway edges','#918a7a'],
   ],
 };
 export const slugify = name => name.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/-$/,'');
-export const products = Object.entries(catalog).flatMap(([category,items]) => items.map(([name,description,uses]) => ({id:slugify(name),name,category,description,uses,image:productCategories.find(c=>c.id===category).image,price:'Quote by quantity & delivery'})));
+// `tint` is the material's real approximate color, rendered as a blended
+// overlay on the shared category photograph plus a swatch chip — since a
+// single demo photo stands in for each category, the tint is what makes an
+// individual product (e.g. red mulch vs. black mulch) read as itself rather
+// than a duplicate of its neighbors.
+export const products = Object.entries(catalog).flatMap(([category,items]) => items.map(([name,description,uses,tint]) => ({id:slugify(name),name,category,description,uses,tint,image:productCategories.find(c=>c.id===category).image,price:'Quote by quantity & delivery'})));
 export const serviceCategories = [
   {id:'lawn-care',name:'Lawn care & maintenance',short:'A lawn that feels looked after.',icon:'grass',description:'Consistent, seasonal care that keeps your property tidy, healthy, and ready to enjoy.',ideal:'Busy homeowners and properties that need a reliable, recurring care plan.',image:'lawn',products:['sod','grass-seed','fertilizer'], services:['Lawn mowing','Edging','Trimming','Blowing','Lawn cleanup','Weed control','Fertilization','Aeration','Overseeding','Lawn renovation','Seasonal lawn maintenance','Recurring maintenance plans']},
   {id:'landscaping',name:'Landscape design & installation',short:'A little vision. A lasting difference.',icon:'leaf',description:'From a new planting bed to a considered garden refresh, bring shape, texture, and year-round interest to your outdoors.',ideal:'New homes, tired gardens, and outdoor spaces ready for a fresh direction.',image:'hero',products:['hardwood-mulch','black-mulch','cedar-mulch','sod','topsoil','soil-amendments'],services:['Landscape design','Landscape installation','Landscape renovation','Flower bed installation','Garden bed installation','Plant installation','Shrub installation','Tree planting','Landscape edging','Rock installation','Decorative stone','Mulch installation','Pine straw installation','Sod installation']},

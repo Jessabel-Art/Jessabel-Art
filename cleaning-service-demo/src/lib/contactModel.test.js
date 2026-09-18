@@ -28,14 +28,14 @@ describe('contactModel', () => {
     it('should normalize all address fields', () => {
       const result = normalizeAddress({
         street: '456 Oak Ave',
-        cityName: 'Providence',
-        stateCode: 'RI',
-        postalCode: '02903',
+        cityName: 'Jacksonville',
+        stateCode: 'FL',
+        postalCode: '32207',
       });
       expect(result.line1).toBe('456 Oak Ave');
-      expect(result.city).toBe('Providence');
-      expect(result.state).toBe('RI');
-      expect(result.zip).toBe('02903');
+      expect(result.city).toBe('Jacksonville');
+      expect(result.state).toBe('FL');
+      expect(result.zip).toBe('32207');
       expect(result).not.toHaveProperty('id');
     });
   });
@@ -54,7 +54,7 @@ describe('contactModel', () => {
         address: {
           line1: '123 Main St',
           id: undefined,
-          city: 'Providence',
+          city: 'Jacksonville',
         },
         contact: {
           email: 'john@example.com',

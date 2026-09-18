@@ -227,29 +227,28 @@ function stageClasses(stage) {
   switch (stage.status) {
     case "done":
       return {
-        dot: "bg-emerald-500 border-emerald-500 text-white",
-        line: "bg-emerald-200",
-        badge:
-          "bg-emerald-50 text-emerald-800 border border-emerald-100",
+        dot: "bg-success border-success text-white",
+        line: "bg-success/25",
+        badge: "bg-success-bg text-success border border-success/20",
       };
     case "current":
       return {
-        dot: "bg-gold border-gold text-white",
-        line: "bg-gold/40",
-        badge: "bg-gold/10 text-plum border border-gold/40",
+        dot: "bg-primary border-primary text-white",
+        line: "bg-primary/30",
+        badge: "bg-accent text-primary border border-primary/20",
       };
     case "skipped":
       return {
-        dot: "bg-[#EEF5FB] border-gold/20 text-gold",
-        line: "bg-[#EEF5FB]",
-        badge: "bg-[#EEF5FB] text-[#0B283D] border border-gold/20",
+        dot: "bg-muted border-border text-muted-foreground",
+        line: "bg-muted",
+        badge: "bg-muted text-muted-foreground border border-border",
       };
     default:
       // upcoming
       return {
-        dot: "bg-white border-plum/30 text-plum/50",
-        line: "bg-plum/10",
-        badge: "bg-plum/5 text-plum/70 border border-plum/10",
+        dot: "bg-card border-border text-muted-foreground",
+        line: "bg-border",
+        badge: "bg-muted text-muted-foreground border border-border",
       };
   }
 }
@@ -269,28 +268,26 @@ export default function AppointmentTimeline({ booking, title }) {
     booking.serviceName || booking.service || booking.serviceSlug;
 
   return (
-    <Card className="bg-white border-plum/10">
+    <Card>
       <CardHeader className="pb-3">
         <div className="flex items-center gap-2">
-          <Clock className="w-4 h-4 text-plum/80" />
-          <CardTitle className="text-plum text-base md:text-lg">
+          <Clock className="w-4 h-4 text-muted-foreground" />
+          <CardTitle className="text-foreground text-base md:text-lg">
             {title || "Appointment timeline"}
           </CardTitle>
         </div>
         {serviceName && (
-          <p className="text-xs text-plum/70 mt-1">
-            {serviceName} ·{" "}
+          <p className="text-xs text-muted-foreground mt-1">
+            {serviceName}
             {booking.id
-              ? `Order CI-${String(booking.id)
-                  .slice(0, 5)
-                  .toUpperCase()}`
+              ? ` · Order CI-${String(booking.id).slice(0, 5).toUpperCase()}`
               : null}
           </p>
         )}
       </CardHeader>
 
       <CardContent className="pt-0">
-        <ol className="relative border-l border-plum/10 ml-3 space-y-4">
+        <ol className="relative border-l border-border ml-3 space-y-4">
           {stages.map((stage, idx) => {
             const cls = stageClasses(stage);
             const isLast = idx === stages.length - 1;
@@ -336,12 +333,12 @@ export default function AppointmentTimeline({ booking, title }) {
 
                 <div className="flex flex-col gap-1">
                   <div className="flex flex-wrap items-center gap-2">
-                    <span className="text-sm font-medium text-plum">
+                    <span className="text-sm font-medium text-foreground">
                       {stage.label}
                     </span>
                     <span
                       className={[
-                        "inline-flex items-center px-2 py-0.5 rounded-full text-[11px]",
+                        "inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-medium",
                         cls.badge,
                       ].join(" ")}
                     >
@@ -351,10 +348,10 @@ export default function AppointmentTimeline({ booking, title }) {
                       {stage.status === "skipped" && "Skipped"}
                     </span>
                   </div>
-                  <p className="text-xs text-plum/70">
+                  <p className="text-xs text-muted-foreground">
                     {stage.description}
                   </p>
-                  <p className="text-[11px] text-plum/60">
+                  <p className="text-[11px] text-muted-foreground/80">
                     {formatDateTime(stage.at)}
                   </p>
                 </div>

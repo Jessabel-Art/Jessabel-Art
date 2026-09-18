@@ -368,17 +368,201 @@ const PROJECTS = [
     name: "Escano Construction",
     category: "Business",
     cardClassification: "Construction Company Website",
-    classification: "Pending Upload",
-    status: "pending-upload",
-    statusLabel: "Pending Upload",
-    statusNote:
-      "Escano Construction's project files have not been uploaded yet. This entry will be completed once the project is available.",
+    classification: "Construction Company Website & Guided Proposal Intake System",
+    template: "escano",
+    ownership:
+      "Escano Construction LLC is a self-originated business concept: I defined the brand positioning and service scope, then designed and built the complete public website and proposal-intake system end-to-end — identity, information architecture, every page, and the nine-step request flow.",
     overview: [
-      "Escano Construction's project files have not been uploaded yet. This entry will be completed once the project is available.",
+      "Escano Construction is a residential and light-commercial construction company's public website, built around a simple premise: a contractor's site has to do two jobs at once. It has to read as credible to someone who has never heard of the company, and it has to turn a visitor's vague idea of a project into a structured, reviewable request before they ever pick up the phone.",
+      "The site covers six service categories spanning new construction, remodeling, roofing, outdoor structures, repairs, and light commercial work, a project-concept gallery that shows how work is scoped and approached rather than just what it looks like finished, and a nine-step guided \"Request a Proposal\" flow that adapts its questions to the type of project being described.",
     ],
-    role: "Project details will be added once the files are uploaded.",
-    capabilityGroups: [],
-    tech: [],
+    role: "Brand & UX strategy · Information architecture · UI design · Frontend engineering (React 19 / TypeScript) · Component system design · Production deployment",
+    designDecisions: [
+      {
+        title: "A visual identity pulled from the mark, not a template",
+        body: "The logo's navy-and-orange split and the bevelled facet where its two halves meet became the site's one recurring geometric signature — a chamfered corner used consistently on buttons, tags, and image frames — instead of reaching for a generic construction-site look.",
+      },
+      {
+        title: "One service model feeds every surface",
+        body: "Services and categories are defined once and read by the services pages, the project cards, the proposal form's service references, and the future proposal system. Service records use stable IDs specifically so a future estimating or invoicing feature can reference them without a data migration.",
+      },
+      {
+        title: "The public site and the future business app never touch",
+        body: "An authenticated area for estimating, scheduling, and client records will eventually need to sit beside this site. Its route prefix is reserved today so that work can be added later without restructuring anything that already ships — no dead code or unused infrastructure sits in the current build waiting for it.",
+      },
+      {
+        title: "A proposal flow that never loses an answer",
+        body: "All nine steps of the request form live in a single reducer, so moving backward and forward, or jumping in from Review to fix one field, never discards anything else the visitor entered. The alternative — per-step local state — would have made the review-and-edit step far harder to build correctly.",
+      },
+    ],
+    serviceGroups: [
+      {
+        label: "Residential Construction",
+        items: [
+          "New residential construction",
+          "Home additions",
+          "Structural improvements",
+          "Interior build-outs",
+          "Exterior construction",
+        ],
+      },
+      {
+        label: "Remodeling & Renovation",
+        items: [
+          "Whole-home renovation",
+          "Kitchen remodeling",
+          "Bathroom remodeling",
+          "Flooring",
+          "Drywall",
+          "Interior / exterior painting",
+        ],
+      },
+      {
+        label: "Roofing & Exteriors",
+        items: [
+          "Roof replacement",
+          "Roof repair",
+          "Shingle roofing",
+          "Siding",
+          "Fascia & soffit",
+          "Exterior trim",
+        ],
+      },
+      {
+        label: "Outdoor Construction",
+        items: ["Decks", "Patios", "Porches", "Outdoor structures", "Privacy structures"],
+      },
+      {
+        label: "Repairs & Improvements",
+        items: ["Carpentry", "Door & window installation", "Trim work", "Damage repair"],
+      },
+      {
+        label: "Light Commercial",
+        items: [
+          "Commercial renovations",
+          "Tenant improvements",
+          "Interior build-outs",
+          "Property repairs",
+        ],
+      },
+    ],
+    caseStudyModules: [
+      {
+        title: "Concept Filtering",
+        body: "The project index filters eight concept case studies by category — residential, kitchen, bathroom, roofing, exterior, outdoor, commercial — client-side, against the same typed dataset the detail pages read from.",
+      },
+      {
+        title: "Individual Concept Detail",
+        body: "Every concept follows one structure: scope, the specific challenge the project presented, the approach taken to solve it, and the result — not just a photo and a caption.",
+      },
+      {
+        title: "Interactive Project Galleries",
+        body: "Each concept carries a short image set with individual captions describing what the photo shows, so the gallery reads as evidence of process, not a generic stock slideshow.",
+      },
+      {
+        title: "Related-Concepts Algorithm",
+        body: "Each detail page surfaces related concepts scored by shared category and overlapping services, falling back to fill remaining slots — the same connective logic a real estimating system would use to recommend comparable past work.",
+      },
+    ],
+    proposalSteps: [
+      "Project Type",
+      "Property",
+      "Details",
+      "Budget",
+      "Timeline",
+      "Photos",
+      "Description",
+      "Contact",
+      "Review",
+    ],
+    proposalNote:
+      "Step three is conditional: the questions it renders change with the project type selected in step one, so a roofing request is never asked about cabinetry finishes and a kitchen request is never asked about roof material. Every step reduces into shared form state, and the review step can edit any earlier section without disturbing the rest of the request.",
+    contactNote:
+      "A direct contact form sits alongside the guided proposal flow for visitors who have a quick question rather than a full project to scope — validated the same way, but intentionally lighter-weight than the nine-step intake.",
+    siteMap: [
+      { path: "/", label: "Home — positioning, services, featured concepts, process, CTA" },
+      { path: "/services", label: "Six service categories with individual services" },
+      { path: "/projects", label: "Project concept index with category filtering" },
+      { path: "/projects/:slug", label: "Project concept detail — scope, challenge, approach, result" },
+      { path: "/about", label: "Approach, planning, communication, quality of work" },
+      { path: "/contact", label: "Simulated contact form + placeholder contact details" },
+      { path: "/request-proposal", label: "Nine-step guided project request flow" },
+      { path: "*", label: "Not found" },
+    ],
+    techStack: [
+      "React 19",
+      "TypeScript (strict)",
+      "Vite 8",
+      "React Router 7",
+      "Hand-written CSS + design-token layer",
+      "No CSS framework",
+      "No component library",
+      "No state-management library",
+    ],
+    componentGroups: [
+      {
+        label: "Design Tokens",
+        items: ["Color, type & spacing scale", "Chamfer motif", "WCAG AA–checked contrast pairs"],
+      },
+      {
+        label: "Component Library",
+        items: ["Form primitives", "Layout shell", "Project & service cards", "Shared UI kit"],
+      },
+      {
+        label: "Config & Data Layer",
+        items: ["Central site config", "Typed service & project datasets", "Route table"],
+      },
+      {
+        label: "State Management",
+        items: ["React state", "One reducer for the proposal flow", "No state library"],
+      },
+    ],
+    responsiveItems: [
+      "Fluid type scale (clamp-based headings)",
+      "Mobile navigation drawer",
+      "Touch-sized form controls",
+      "Tested from narrow mobile to wide desktop",
+    ],
+    accessibilityItems: [
+      "AA-checked text & focus-ring contrast",
+      "Keyboard-operable multi-step form",
+      "Semantic landmarks & breadcrumbs",
+      "Descriptive image alt text throughout",
+    ],
+    seoItems: [
+      "Per-route title, description & canonical",
+      "Open Graph / Twitter card metadata",
+      "GeneralContractor JSON-LD schema",
+      "Sitemap & robots.txt",
+    ],
+    productionNote:
+      "The build is configured for its real production mount, not just a local dev server: Vite's base path and the router's basename both target /escano-construction/, every internal asset resolves through a base-aware helper instead of a hard-coded root path, and an Apache rewrite rule handles the client-side routing fallback so a direct link to any page — not just the home page — loads correctly on Hostinger.",
+    productionItems: [
+      "Vite production base path",
+      "Router basename matched to the mount path",
+      "Apache .htaccess SPA fallback",
+      "Staged through the shared Hostinger build pipeline",
+    ],
+    expansionIntro:
+      "Everything above is real and running. The list below is deliberately not — it is the direction for evolving Escano from a strong public-facing website into a fuller construction-business platform, grounded in seams the current architecture already leaves open (a reserved app route prefix, a service model built on stable IDs, and a submission function already shaped like an API response).",
+    expansionItems: [
+      "Real proposal submission & backend processing",
+      "Lead & project intake management",
+      "Admin dashboard",
+      "Customer & project records",
+      "Proposal generation & estimate management",
+      "Document & photo management",
+      "Project status tracking",
+      "Client portal",
+      "Project communication",
+      "Scheduling",
+      "Change-order workflows",
+      "Invoice & payment integration",
+    ],
+    outcomeStatement:
+      "Escano Construction shows a real business concept carried all the way through: positioning and identity, an information architecture that scales to eight-plus service lines without feeling like a directory, a proposal system that replaces a generic contact form with something an estimator could actually work from, and a production build correctly configured for the domain it lives on — not just a folder that happens to run in development.",
+    url: "https://jessabel.art/escano-construction/",
+    logo: "escano-construction-logo.png",
   },
   {
     id: "cavalry-green",
@@ -1050,6 +1234,9 @@ const PROJECT_ALIASES = {
   cavalrygreen: "cavalry-green",
   "cavalry-green": "cavalry-green",
   cavalrygreenllc: "cavalry-green",
+  escano: "escano-construction",
+  escanoconstruction: "escano-construction",
+  "escano-construction": "escano-construction",
   cleaning: "cleaning-service-demo",
   cleaningservice: "cleaning-service-demo",
   cleaningservicedemo: "cleaning-service-demo",
@@ -1850,7 +2037,7 @@ function executeCommand(rawValue) {
         value,
         [
           "Usage: open [project]",
-          "Try: open alchemize, open cavalry, open cleaning, open fmblifestyle, open santos, open pinkladyz",
+          "Try: open alchemize, open cavalry, open cleaning, open fmblifestyle, open santos, open escano, open pinkladyz",
         ],
         true,
       );
@@ -3208,6 +3395,202 @@ function renderLandscapeDetail(project, displayBadge, primaryButtonLabel) {
   `;
 }
 
+function renderEscanoDetail(project, displayBadge, primaryButtonLabel) {
+  const overviewMarkup = project.overview
+    .map((paragraph) => `<p>${paragraph}</p>`)
+    .join("");
+
+  const decisionsMarkup = project.designDecisions
+    .map(
+      (decision, index) => `
+    <div class="decision-card">
+      <span class="decision-number">${String(index + 1).padStart(2, "0")}</span>
+      <strong class="decision-title">${decision.title}</strong>
+      <p>${decision.body}</p>
+    </div>
+  `,
+    )
+    .join("");
+
+  const serviceGroupsMarkup = project.serviceGroups
+    .map(
+      (group) => `
+    <div class="detail-capability-group">
+      <span class="detail-capability-label">${group.label}</span>
+      <div class="chip-row">${group.items.map((item) => `<span class="chip">${item}</span>`).join("")}</div>
+    </div>
+  `,
+    )
+    .join("");
+
+  const caseStudyModulesMarkup = project.caseStudyModules
+    .map(
+      (item) => `
+    <div class="module-card">
+      <strong>${item.title}</strong>
+      <p>${item.body}</p>
+    </div>
+  `,
+    )
+    .join("");
+
+  const proposalStepsMarkup = project.proposalSteps
+    .map(
+      (step, index, arr) => `
+    <span class="flow-chain-node">${step}</span>
+    ${index < arr.length - 1 ? '<span class="flow-chain-arrow" aria-hidden="true">&rarr;</span>' : ""}
+  `,
+    )
+    .join("");
+
+  const siteMapMarkup = project.siteMap
+    .map(
+      (route) => `
+    <div class="module-card">
+      <strong class="route-path">${route.path}</strong>
+      <p>${route.label}</p>
+    </div>
+  `,
+    )
+    .join("");
+
+  const techStackMarkup = project.techStack
+    .map((item) => `<span class="chip tech-chip">${item}</span>`)
+    .join("");
+
+  const componentGroupsMarkup = project.componentGroups
+    .map(
+      (group) => `
+    <div class="detail-capability-group">
+      <span class="detail-capability-label">${group.label}</span>
+      <div class="chip-row">${group.items.map((item) => `<span class="chip tech-chip">${item}</span>`).join("")}</div>
+    </div>
+  `,
+    )
+    .join("");
+
+  const responsiveMarkup = project.responsiveItems
+    .map((item) => `<span class="chip">${item}</span>`)
+    .join("");
+  const accessibilityMarkup = project.accessibilityItems
+    .map((item) => `<span class="chip">${item}</span>`)
+    .join("");
+  const seoMarkup = project.seoItems
+    .map((item) => `<span class="chip">${item}</span>`)
+    .join("");
+
+  const productionItemsMarkup = project.productionItems
+    .map((item) => `<span class="chip tech-chip">${item}</span>`)
+    .join("");
+
+  const expansionItemsMarkup = project.expansionItems
+    .map((item) => `<span class="chip chip-future">${item}</span>`)
+    .join("");
+
+  const launchLink = project.url
+    ? `<a class="primary-button" href="${project.url}" target="_blank" rel="noopener noreferrer">${primaryButtonLabel}</a>`
+    : "";
+
+  return `
+    <div class="case-study-wrap">
+      <div class="project-detail-grid">
+        <div class="project-detail-left has-identity-group">
+          <div class="project-identity-group">
+            ${displayBadge}
+            <h3>${project.name}</h3>
+            <span class="project-classification">${project.classification}</span>
+          </div>
+          ${project.ownership ? `<p class="project-ownership-note">${project.ownership}</p>` : ""}
+          <div class="project-overview">${overviewMarkup}</div>
+          <div class="project-card-actions">${launchLink}</div>
+        </div>
+        <div class="project-detail-right">
+          <div class="detail-section editorial-block">
+            <span class="section-kicker">My Role</span>
+            <p class="detail-role-text">${project.role}</p>
+          </div>
+          <div class="detail-section editorial-block">
+            <span class="section-kicker">Contact Experience</span>
+            <p class="detail-role-text">${project.contactNote}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="detail-full-section">
+        <span class="section-kicker">UX Strategy &amp; Key Decisions</span>
+        <div class="decision-list is-quad">${decisionsMarkup}</div>
+      </div>
+
+      <div class="detail-full-section section-tone-warm">
+        <span class="section-kicker">Service Architecture</span>
+        ${serviceGroupsMarkup}
+      </div>
+
+      <div class="detail-full-section">
+        <span class="section-kicker">Case-Study System: Filtering, Detail Pages &amp; Galleries</span>
+        <div class="admin-module-grid">${caseStudyModulesMarkup}</div>
+      </div>
+
+      <div class="detail-full-section section-tone-panel">
+        <span class="section-kicker">Request a Proposal — Guided Intake</span>
+        <div class="flow-chain">${proposalStepsMarkup}</div>
+        <p class="detail-role-text">${project.proposalNote}</p>
+      </div>
+
+      <div class="detail-full-section">
+        <span class="section-kicker">Site Map &amp; Tech Stack</span>
+        <div class="admin-module-grid">${siteMapMarkup}</div>
+        <div class="chip-row" style="margin-top: 18px;">${techStackMarkup}</div>
+      </div>
+
+      <div class="detail-full-section section-tone-warm">
+        <span class="section-kicker">Component Architecture &amp; Design System</span>
+        <div class="tech-groups-grid">${componentGroupsMarkup}</div>
+      </div>
+
+      <div class="detail-full-section section-tone-warm">
+        <span class="section-kicker">Responsive Design, Accessibility &amp; Technical SEO</span>
+        <div class="decision-list">
+          <div class="module-card">
+            <strong>Responsive Design</strong>
+            <div class="chip-row">${responsiveMarkup}</div>
+          </div>
+          <div class="module-card">
+            <strong>Accessibility</strong>
+            <div class="chip-row">${accessibilityMarkup}</div>
+          </div>
+          <div class="module-card">
+            <strong>Technical SEO</strong>
+            <div class="chip-row">${seoMarkup}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="detail-full-section">
+        <span class="section-kicker">Production &amp; Deployment</span>
+        <p class="detail-role-text">${project.productionNote}</p>
+        <div class="chip-row">${productionItemsMarkup}</div>
+      </div>
+
+      <div class="detail-full-section section-tone-panel">
+        <span class="section-kicker">Planned Platform Expansion</span>
+        <p class="detail-role-text">${project.expansionIntro}</p>
+        <div class="chip-row">${expansionItemsMarkup}</div>
+      </div>
+    </div>
+
+    <div class="outcome-panel">
+      <div class="outcome-panel-inner">
+        <span class="section-kicker">Outcome</span>
+        <p class="outcome-statement">${project.outcomeStatement}</p>
+        <div class="project-card-actions">
+          <a class="primary-button" href="${project.url}" target="_blank" rel="noopener noreferrer">${primaryButtonLabel} &rarr;</a>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
 function renderSantosDetail(project, displayBadge) {
   const overviewMarkup = project.overview
     .map((paragraph) => `<p>${paragraph}</p>`)
@@ -3368,6 +3751,7 @@ function createProjectDetailWindow(projectId) {
     santos: () => renderSantosDetail(project, displayBadge),
     landscape: () =>
       renderLandscapeDetail(project, displayBadge, primaryButtonLabel),
+    escano: () => renderEscanoDetail(project, displayBadge, primaryButtonLabel),
   };
   content.innerHTML = renderers[project.template]
     ? renderers[project.template]()

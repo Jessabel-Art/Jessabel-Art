@@ -1,0 +1,30 @@
+.public-layout {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+.public-layout__main {
+  flex: 1;
+}
+
+.skip-link {
+  position: absolute;
+  top: -4rem;
+  left: var(--space-4);
+  z-index: 100;
+  padding: 0.75rem 1.25rem;
+  background-color: var(--navy-800);
+  color: var(--white);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: top var(--dur) var(--ease);
+}
+.skip-link:focus-visible {
+  top: var(--space-3);
+}

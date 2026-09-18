@@ -9,6 +9,7 @@ const targetRoot = path.join(root, 'deploy', 'hostinger');
 const projectMap = [
   { source: 'FMBLifestyle', publicDir: 'fmbl', buildCommand: 'npm run build', output: 'dist' },
   { source: 'cleaning-service-demo', publicDir: 'cleaning-service-demo', buildCommand: 'npm run build', output: 'dist' },
+  { source: 'escano-construction', publicDir: 'escano-construction', buildCommand: 'npm run build', output: 'dist' },
   { source: 'Cavalry Green 2.0', publicDir: 'cavalry-green', buildCommand: 'npm run check', output: 'dist' },
   { source: 'Landscape Website Demo', publicDir: 'landscape-website-demo', buildCommand: 'npm run build', output: 'dist' },
   { source: 'PinkLadyZ-OLED-Display', publicDir: 'pinkladyz-oled', output: '.' },

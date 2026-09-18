@@ -16,7 +16,7 @@ import {
   ShieldCheck,
   BadgeDollarSign,
   X,
-  AlertCircle
+  AlertCircle,
 } from 'lucide-react';
 import { SERVICES } from '@/data/services';
 import contactImg from '@/assets/images/contact.jpeg';
@@ -171,36 +171,36 @@ const ContactSection = () => {
 
   if (sent) {
     return (
-    <section id="contact" className="py-12 sm:py-16 md:py-20 px-3 sm:px-4">
+    <section id="contact" className="py-14 sm:py-18 md:py-24 px-3 sm:px-4 bg-background">
         <div className="max-w-2xl mx-auto">
-          <Card className="p-6 sm:p-8 md:p-10 shadow-lg rounded-2xl">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-plum mb-2">Thank you — we've got it!</h2>
-            <p className="text-sm sm:text-base text-plum/80">
+          <Card className="p-6 sm:p-8 md:p-10 shadow-card rounded-2xl border-border bg-card">
+            <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-2">Thank you — we've got it!</h2>
+            <p className="text-sm sm:text-base text-muted-foreground">
               Your message has been received. A team member will get back to you
-              within <span className="font-semibold">24 hours</span> during business hours.
+              within <span className="font-semibold text-foreground">24 hours</span> during business hours.
             </p>
 
             {selectedService && (
-              <div className="mt-4 inline-flex items-center gap-2 rounded-full border border-gold/30 bg-gold/10 text-plum px-3 py-1 text-xs sm:text-sm">
+              <div className="mt-4 inline-flex items-center gap-2 rounded-md border border-border bg-accent text-accent-foreground px-3 py-1 text-xs sm:text-sm">
                 <span className="font-medium">Requested Service:</span> {selectedService.title}
               </div>
             )}
 
-            <div className="mt-6 rounded-xl border border-gold/30 bg-[#EEF5FB] p-3 sm:p-4 text-xs sm:text-sm text-plum/80">
+            <div className="mt-6 rounded-xl border border-border bg-secondary p-3 sm:p-4 text-xs sm:text-sm text-foreground/80">
               <p className="mb-2">
                 Please note: online estimates are approximate and not a final quote until we physically see the property.
               </p>
               <p>
-                A <span className="font-semibold">non-refundable deposit</span> is required to hold your appointment; it’s applied to your balance.
+                A <span className="font-semibold">non-refundable deposit</span> is required to hold your appointment; it's applied to your balance.
               </p>
-              <p className="mt-2 text-plum/50 italic">Demo — no real estimate or booking is made.</p>
+              <p className="mt-2 text-muted-foreground italic">Demo — no real estimate or booking is made.</p>
             </div>
 
-            <div className="mt-6 text-xs sm:text-sm text-plum/70">
+            <div className="mt-6 text-xs sm:text-sm text-muted-foreground">
               Demo contact: Email{' '}
-              <a href={`mailto:${BUSINESS_EMAIL}`} className="text-gold underline">{BUSINESS_EMAIL}</a> or call{' '}
-              <a href="tel:0000000000" className="text-gold underline">(000) 000-0000</a>.
-              <span className="block mt-1 text-plum/50 italic">This is a demo — no real messages are sent.</span>
+              <a href={`mailto:${BUSINESS_EMAIL}`} className="text-primary underline">{BUSINESS_EMAIL}</a> or call{' '}
+              <a href="tel:9045550100" className="text-primary underline">(904) 555-0100</a>.
+              <span className="block mt-1 text-muted-foreground italic">This is a demo — no real messages are sent.</span>
             </div>
           </Card>
         </div>
@@ -209,7 +209,7 @@ const ContactSection = () => {
   }
 
   return (
-    <section id="contact" className="py-12 sm:py-16 md:py-20 px-3 sm:px-4">
+    <section id="contact" className="py-14 sm:py-18 md:py-24 px-3 sm:px-4 bg-background">
       <div className="max-w-6xl mx-auto">
         <motion.div
           className="text-center mb-8 sm:mb-10 md:mb-12"
@@ -218,42 +218,25 @@ const ContactSection = () => {
           transition={{ duration: reduceMotion ? 0 : 0.5 }}
           viewport={reduceMotion ? undefined : { once: true }}
         >
-          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-plum">Request a Custom Estimate</h2>
-          <p className="text-sm sm:text-base md:text-lg text-plum/80 mt-2">Have a unique cleaning need or a commercial property? Let's talk.</p>
-          <p className="text-xs sm:text-sm text-plum/60 mt-1">
-            We confirm receipt immediately and typically reply within <span className="font-semibold">24 hours</span>.
+          <p className="text-xs font-semibold uppercase tracking-wide text-primary mb-2">Get In Touch</p>
+          <h2 className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-foreground">Request a Custom Estimate</h2>
+          <p className="text-sm sm:text-base md:text-lg text-muted-foreground mt-2">Have a unique cleaning need or a commercial property? Let's talk.</p>
+          <p className="text-xs sm:text-sm text-muted-foreground/80 mt-1">
+            We confirm receipt immediately and typically reply within <span className="font-semibold text-foreground">24 hours</span>.
           </p>
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 md:gap-10">
           {/* Form */}
-          <Card className="lg:col-span-7 bg-white border border-plum/10 rounded-2xl shadow-lg">
+          <Card className="lg:col-span-7 bg-card border-border rounded-2xl shadow-card">
             <CardContent className="p-4 sm:p-6 md:p-8">
-              {/* Selected service pill */}
-              {selectedService && (
-                <div className="mb-5 sm:mb-6">
-                  <span className="inline-flex items-center gap-2 rounded-full border border-gold/30 bg-gold/10 text-plum px-3 py-1 text-xs sm:text-sm">
-                    <span className="font-medium">Service:</span> {selectedService.title}
-                    <button
-                      type="button"
-                      className="ml-1 text-plum/60 hover:text-plum"
-                      onClick={clearSelectedService}
-                      aria-label="Clear selected service"
-                      title="Clear selected service"
-                    >
-                      <X className="w-4 h-4" />
-                    </button>
-                  </span>
-                </div>
-              )}
-
-              <form onSubmit={onSubmit} className="space-y-4 sm:space-y-5 md:space-y-6" noValidate autoComplete="on">
+              <form onSubmit={onSubmit} className="space-y-6 sm:space-y-7" noValidate autoComplete="on">
                 {Object.keys(errors).length > 0 && (
                   <div
                     ref={errorSummaryRef}
                     tabIndex={-1}
                     role="alert"
-                    className="rounded-xl border border-gold/30 bg-[#EEF5FB] px-4 py-3 text-sm text-plum"
+                    className="rounded-xl border border-warning/30 bg-warning-bg px-4 py-3 text-sm text-warning"
                   >
                     <p className="font-semibold">Please correct the following before submitting:</p>
                     <ul className="mt-2 list-disc pl-5 space-y-1">
@@ -264,120 +247,161 @@ const ContactSection = () => {
                   </div>
                 )}
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-                  <div>
-                    <Label htmlFor="name" className="text-xs sm:text-sm font-medium text-plum">
-                      Full Name
-                    </Label>
-                    <Input
-                      id="name"
-                      name="name"
-                      value={form.name}
-                      onChange={onChange}
-                      aria-invalid={errors.name ? 'true' : 'false'}
-                      aria-describedby={errors.name ? 'name-error' : undefined}
-                      required
-                      autoComplete="name"
-                      className="mt-2 bg-white border-plum/20 rounded-xl focus-visible:ring-gold focus-visible:border-gold text-sm"
-                    />
-                    {errors.name && (
-                      <p id="name-error" className="mt-2 text-xs text-[#0B283D]">
-                        {errors.name}
-                      </p>
-                    )}
+                {/* Group: Service */}
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-primary">
+                    <span className="flex h-5 w-5 items-center justify-center rounded-full bg-accent text-[11px]">1</span>
+                    Service
                   </div>
-                  <div>
-                    <Label htmlFor="email" className="text-xs sm:text-sm font-medium text-plum">
-                      Email
-                    </Label>
-                    <Input
-                      id="email"
-                      name="email"
-                      type="email"
-                      value={form.email}
-                      onChange={onChange}
-                      aria-invalid={errors.email ? 'true' : 'false'}
-                      aria-describedby={errors.email ? 'email-error' : undefined}
-                      required
-                      autoComplete="email"
-                      className="mt-2 bg-white border-plum/20 rounded-xl focus-visible:ring-gold focus-visible:border-gold text-sm"
-                    />
-                    {errors.email && (
-                      <p id="email-error" className="mt-2 text-xs text-[#0B283D]">
-                        {errors.email}
-                      </p>
-                    )}
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-                  <div>
-                    <Label htmlFor="phone" className="text-xs sm:text-sm font-medium text-plum">
-                      Phone
-                    </Label>
-                    <Input
-                      id="phone"
-                      name="phone"
-                      type="tel"
-                      value={form.phone}
-                      onChange={onChange}
-                      aria-invalid={errors.phone ? 'true' : 'false'}
-                      aria-describedby={errors.phone ? 'phone-error' : undefined}
-                      required
-                      autoComplete="tel"
-                      className="mt-2 bg-white border-plum/20 rounded-xl focus-visible:ring-gold focus-visible:border-gold text-sm"
-                    />
-                    {errors.phone && (
-                      <p id="phone-error" className="mt-2 text-xs text-[#0B283D]">
-                        {errors.phone}
-                      </p>
-                    )}
-                  </div>
-                  <div>
-                    <Label htmlFor="preferredDate" className="text-xs sm:text-sm font-medium text-plum">
-                      Preferred Date
-                    </Label>
-                    <Input
-                      id="preferredDate"
-                      name="preferredDate"
-                      type="date"
-                      value={form.preferredDate}
-                      onChange={onChange}
-                      className="mt-2 bg-white border-plum/20 rounded-xl focus-visible:ring-gold focus-visible:border-gold text-sm"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <Label htmlFor="message" className="text-xs sm:text-sm font-medium text-plum">
-                    Tell us about your needs
-                  </Label>
-                  <Textarea
-                    id="message"
-                    name="message"
-                    rows={5}
-                    value={form.message}
-                    onChange={onChange}
-                    aria-invalid={errors.message ? 'true' : 'false'}
-                    aria-describedby={errors.message ? 'message-error' : undefined}
-                    required
-                    className="mt-2 bg-white border-plum/20 rounded-xl focus-visible:ring-gold focus-visible:border-gold text-sm"
-                  />
-                  {errors.message && (
-                    <p id="message-error" className="mt-2 text-xs text-[#0B283D]">
-                      {errors.message}
+                  {selectedService ? (
+                    <div className="inline-flex items-center gap-2 rounded-md border border-border bg-accent text-accent-foreground px-3 py-1.5 text-xs sm:text-sm">
+                      <span className="font-medium">Service:</span> {selectedService.title}
+                      <button
+                        type="button"
+                        className="ml-1 text-accent-foreground/60 hover:text-accent-foreground"
+                        onClick={clearSelectedService}
+                        aria-label="Clear selected service"
+                        title="Clear selected service"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                    </div>
+                  ) : (
+                    <p className="text-sm text-muted-foreground">
+                      No specific service selected — tell us what you need in the project details below,
+                      or <a href="/services" className="text-primary underline underline-offset-2">browse services</a>.
                     </p>
                   )}
                 </div>
 
-                {/* ⚖️ Estimate/Quote/Deposit disclaimer (required agreement) */}
-                <div className="rounded-xl border border-gold/30 bg-[#EEF5FB] p-3 sm:p-4">
+                {/* Group: Contact Information */}
+                <div className="space-y-3 sm:space-y-4 pt-2 border-t border-border">
+                  <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-primary pt-4">
+                    <span className="flex h-5 w-5 items-center justify-center rounded-full bg-accent text-[11px]">2</span>
+                    Contact Information
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                    <div>
+                      <Label htmlFor="name" className="text-xs sm:text-sm font-medium text-foreground">
+                        Full Name
+                      </Label>
+                      <Input
+                        id="name"
+                        name="name"
+                        value={form.name}
+                        onChange={onChange}
+                        aria-invalid={errors.name ? 'true' : 'false'}
+                        aria-describedby={errors.name ? 'name-error' : undefined}
+                        required
+                        autoComplete="name"
+                        className="mt-2 bg-background border-input rounded-md focus-visible:ring-ring text-sm"
+                      />
+                      {errors.name && (
+                        <p id="name-error" className="mt-2 text-xs text-destructive">
+                          {errors.name}
+                        </p>
+                      )}
+                    </div>
+                    <div>
+                      <Label htmlFor="email" className="text-xs sm:text-sm font-medium text-foreground">
+                        Email
+                      </Label>
+                      <Input
+                        id="email"
+                        name="email"
+                        type="email"
+                        value={form.email}
+                        onChange={onChange}
+                        aria-invalid={errors.email ? 'true' : 'false'}
+                        aria-describedby={errors.email ? 'email-error' : undefined}
+                        required
+                        autoComplete="email"
+                        className="mt-2 bg-background border-input rounded-md focus-visible:ring-ring text-sm"
+                      />
+                      {errors.email && (
+                        <p id="email-error" className="mt-2 text-xs text-destructive">
+                          {errors.email}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                    <div>
+                      <Label htmlFor="phone" className="text-xs sm:text-sm font-medium text-foreground">
+                        Phone
+                      </Label>
+                      <Input
+                        id="phone"
+                        name="phone"
+                        type="tel"
+                        value={form.phone}
+                        onChange={onChange}
+                        aria-invalid={errors.phone ? 'true' : 'false'}
+                        aria-describedby={errors.phone ? 'phone-error' : undefined}
+                        required
+                        autoComplete="tel"
+                        className="mt-2 bg-background border-input rounded-md focus-visible:ring-ring text-sm"
+                      />
+                      {errors.phone && (
+                        <p id="phone-error" className="mt-2 text-xs text-destructive">
+                          {errors.phone}
+                        </p>
+                      )}
+                    </div>
+                    <div>
+                      <Label htmlFor="preferredDate" className="text-xs sm:text-sm font-medium text-foreground">
+                        Preferred Date
+                      </Label>
+                      <Input
+                        id="preferredDate"
+                        name="preferredDate"
+                        type="date"
+                        value={form.preferredDate}
+                        onChange={onChange}
+                        className="mt-2 bg-background border-input rounded-md focus-visible:ring-ring text-sm"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Group: Project Details */}
+                <div className="space-y-3 sm:space-y-4 pt-2 border-t border-border">
+                  <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-primary pt-4">
+                    <span className="flex h-5 w-5 items-center justify-center rounded-full bg-accent text-[11px]">3</span>
+                    Project Details
+                  </div>
+                  <div>
+                    <Label htmlFor="message" className="text-xs sm:text-sm font-medium text-foreground">
+                      Tell us about your needs
+                    </Label>
+                    <Textarea
+                      id="message"
+                      name="message"
+                      rows={5}
+                      value={form.message}
+                      onChange={onChange}
+                      aria-invalid={errors.message ? 'true' : 'false'}
+                      aria-describedby={errors.message ? 'message-error' : undefined}
+                      required
+                      className="mt-2 bg-background border-input rounded-md focus-visible:ring-ring text-sm"
+                    />
+                    {errors.message && (
+                      <p id="message-error" className="mt-2 text-xs text-destructive">
+                        {errors.message}
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                {/* Estimate/Quote/Deposit disclaimer (required agreement) */}
+                <div className="rounded-xl border border-border bg-secondary p-3 sm:p-4">
                   <div className="flex items-start gap-2 sm:gap-3">
                     <div className="mt-0.5">
-                      <AlertCircle className="w-5 h-5 text-gold" />
+                      <AlertCircle className="w-5 h-5 text-primary" />
                     </div>
-                    <div className="text-xs sm:text-sm text-plum/80">
-                      <p className="font-semibold text-plum">
+                    <div className="text-xs sm:text-sm text-foreground/80">
+                      <p className="font-semibold text-foreground">
                         Important: Estimates are not final quotes.
                       </p>
                       <ul className="list-disc pl-5 mt-2 space-y-1">
@@ -387,7 +411,7 @@ const ContactSection = () => {
                         </li>
                         <li>
                           A <span className="font-semibold">non-refundable deposit</span> is required to{' '}
-                          <span className="font-semibold">hold your appointment</span>; it’s applied to your balance.
+                          <span className="font-semibold">hold your appointment</span>; it's applied to your balance.
                         </li>
                       </ul>
                       <label className="mt-3 flex items-center gap-2">
@@ -400,12 +424,12 @@ const ContactSection = () => {
                           aria-invalid={errors.agree ? 'true' : 'false'}
                           aria-describedby={errors.agree ? 'agree-error' : undefined}
                           required
-                          className="h-4 w-4 rounded border-plum/30 accent-[--gold-500]"
+                          className="h-4 w-4 rounded border-input accent-primary"
                         />
                         <span className="text-xs sm:text-sm">I understand and agree to the estimate and deposit policy.</span>
                       </label>
                       {errors.agree && (
-                        <p id="agree-error" className="mt-2 text-xs text-[#0B283D]">
+                        <p id="agree-error" className="mt-2 text-xs text-destructive">
                           {errors.agree}
                         </p>
                       )}
@@ -416,12 +440,12 @@ const ContactSection = () => {
                 <Button
                   type="submit"
                   disabled={pending}
-                  className="w-full bg-gold hover:bg-gold/90 text-white rounded-full py-4 sm:py-5 md:py-6 text-sm sm:text-base transition-transform duration-200 hover:-translate-y-0.5 disabled:opacity-60"
+                  className="w-full bg-primary hover:bg-primary/90 text-primary-foreground rounded-md py-5 sm:py-6 text-sm sm:text-base font-semibold disabled:opacity-60"
                 >
                   {pending ? 'Sending…' : 'Send Request'}
                 </Button>
 
-                {/* 🔻 Image in the red-box area */}
+                {/* Supporting image */}
                 <motion.div
                   initial={reduceMotion ? false : { opacity: 0, y: 12 }}
                   whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
@@ -433,7 +457,7 @@ const ContactSection = () => {
                     src={contactImg}
                     alt="CleanPro Demo team providing quality cleaning"
                     loading="lazy"
-                    className="w-full h-40 sm:h-48 md:h-56 lg:h-64 rounded-2xl object-cover border border-plum/10 shadow-sm"
+                    className="w-full h-40 sm:h-48 md:h-56 lg:h-64 rounded-2xl object-cover border border-border shadow-card"
                   />
                 </motion.div>
               </form>
@@ -442,72 +466,72 @@ const ContactSection = () => {
 
           {/* Info card */}
           <div className="lg:col-span-5">
-            <div className="h-full bg-white p-4 sm:p-6 md:p-8 rounded-2xl shadow-md border border-plum/10 space-y-5 sm:space-y-6">
-              <h3 className="text-xl sm:text-2xl font-bold text-plum">Contact Directly</h3>
+            <div className="h-full bg-card p-4 sm:p-6 md:p-8 rounded-2xl shadow-card border border-border space-y-5 sm:space-y-6">
+              <h3 className="font-display text-xl sm:text-2xl font-bold text-foreground">Contact Directly</h3>
 
               <div className="flex items-start gap-3 sm:gap-4">
-                <div className="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 bg-gold/10 rounded-full flex items-center justify-center">
-                  <Phone className="w-5 h-5 sm:w-6 sm:h-6 text-gold" />
+                <div className="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 bg-accent rounded-md flex items-center justify-center">
+                  <Phone className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
                 </div>
                 <div>
-                  <p className="font-semibold text-sm sm:text-base text-plum">Call Us</p>
-                  <a href="tel:4016586708" className="text-gold hover:underline text-sm sm:text-lg">
-                    (401) 658-6708
+                  <p className="font-semibold text-sm sm:text-base text-foreground">Call Us</p>
+                  <a href="tel:9045550100" className="text-primary hover:underline text-sm sm:text-lg">
+                    (904) 555-0100
                   </a>
                 </div>
               </div>
 
               <div className="flex items-start gap-3 sm:gap-4">
-                <div className="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 bg-gold/10 rounded-full flex items-center justify-center">
-                  <Mail className="w-5 h-5 sm:w-6 sm:h-6 text-gold" />
+                <div className="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 bg-accent rounded-md flex items-center justify-center">
+                  <Mail className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
                 </div>
                 <div>
-                  <p className="font-semibold text-sm sm:text-base text-plum">Email Us</p>
-                  <a href={`mailto:${BUSINESS_EMAIL}`} className="text-gold hover:underline text-sm sm:text-lg">
+                  <p className="font-semibold text-sm sm:text-base text-foreground">Email Us</p>
+                  <a href={`mailto:${BUSINESS_EMAIL}`} className="text-primary hover:underline text-sm sm:text-lg">
                     {BUSINESS_EMAIL}
                   </a>
                 </div>
               </div>
 
               <div className="flex items-start gap-3 sm:gap-4">
-                <div className="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 bg-gold/10 rounded-full flex items-center justify-center">
-                  <Clock className="w-5 h-5 sm:w-6 sm:h-6 text-gold" />
+                <div className="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 bg-accent rounded-md flex items-center justify-center">
+                  <Clock className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
                 </div>
                 <div>
-                  <p className="font-semibold text-sm sm:text-base text-plum">Business Hours</p>
-                  <p className="text-xs sm:text-sm text-plum/80">Mon–Fri: 8:00 AM – 3:00 PM</p>
-                  <p className="text-xs sm:text-sm text-plum/80">Sat: 9:00 AM – 2:00 PM</p>
-                  <p className="text-xs text-plum/60 mt-1">We typically reply within 24 hours.</p>
+                  <p className="font-semibold text-sm sm:text-base text-foreground">Business Hours</p>
+                  <p className="text-xs sm:text-sm text-muted-foreground">Mon–Fri: 8:00 AM – 3:00 PM</p>
+                  <p className="text-xs sm:text-sm text-muted-foreground">Sat: 9:00 AM – 2:00 PM</p>
+                  <p className="text-xs text-muted-foreground mt-1">We typically reply within 24 hours.</p>
                 </div>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
-                <div className="rounded-xl border border-gold/20 p-3 flex items-start gap-2">
-                  <ShieldCheck className="w-4 h-4 sm:w-5 sm:h-5 text-gold mt-0.5" />
+                <div className="rounded-lg border border-border p-3 flex items-start gap-2">
+                  <ShieldCheck className="w-4 h-4 sm:w-5 sm:h-5 text-primary mt-0.5" />
                   <div>
-                    <p className="text-xs sm:text-sm font-medium text-plum">Background-Checked</p>
-                    <p className="text-xs text-plum/70">All cleaners pass background checks.</p>
+                    <p className="text-xs sm:text-sm font-medium text-foreground">Background-Checked</p>
+                    <p className="text-xs text-muted-foreground">All cleaners pass background checks.</p>
                   </div>
                 </div>
-                <div className="rounded-xl border border-gold/20 p-3 flex items-start gap-2">
-                  <BadgeDollarSign className="w-5 h-5 text-gold mt-0.5" />
+                <div className="rounded-lg border border-border p-3 flex items-start gap-2">
+                  <BadgeDollarSign className="w-5 h-5 text-primary mt-0.5" />
                   <div>
-                    <p className="text-sm font-medium text-plum">Deposit Required</p>
-                    <p className="text-xs text-plum/70">Non-refundable; applied to your balance.</p>
+                    <p className="text-sm font-medium text-foreground">Deposit Required</p>
+                    <p className="text-xs text-muted-foreground">Non-refundable; applied to your balance.</p>
                   </div>
                 </div>
-                <div className="rounded-xl border border-gold/20 p-3 flex items-start gap-2">
-                  <CalendarClock className="w-5 h-5 text-gold mt-0.5" />
+                <div className="rounded-lg border border-border p-3 flex items-start gap-2">
+                  <CalendarClock className="w-5 h-5 text-primary mt-0.5" />
                   <div>
-                    <p className="text-sm font-medium text-plum">48-Hour Cancellation</p>
-                    <p className="text-xs text-plum/70">Please give two days’ notice.</p>
+                    <p className="text-sm font-medium text-foreground">48-Hour Cancellation</p>
+                    <p className="text-xs text-muted-foreground">Please give two days' notice.</p>
                   </div>
                 </div>
-                <div className="rounded-xl border border-gold/20 p-3 flex items-start gap-2">
-                  <Mail className="w-5 h-5 text-gold mt-0.5" />
+                <div className="rounded-lg border border-border p-3 flex items-start gap-2">
+                  <Mail className="w-5 h-5 text-primary mt-0.5" />
                   <div>
-                    <p className="text-sm font-medium text-plum">Estimates, Not Quotes</p>
-                    <p className="text-xs text-plum/70">Final price confirmed after on-site review.</p>
+                    <p className="text-sm font-medium text-foreground">Estimates, Not Quotes</p>
+                    <p className="text-xs text-muted-foreground">Final price confirmed after on-site review.</p>
                   </div>
                 </div>
               </div>

@@ -1,0 +1,155 @@
+/* =============================================================================
+   Escano Construction LLC — Design Tokens
+   Single source of truth for colour, type, spacing, and structural motifs.
+   Colour values are derived from the supplied Escano Construction logo.
+   ========================================================================== */
+
+:root {
+  /* ---- Brand: deep navy (carries the identity) -------------------------- */
+  --navy-950: #06101c;
+  --navy-900: #0a1626;
+  --navy-800: #0f2036; /* primary brand surface */
+  --navy-700: #16304c;
+  --navy-600: #1e4066;
+  --navy-500: #2c557f;
+
+  /* ---- Brand: construction orange (accent only) ------------------------ */
+  --orange-700: #b04d0c; /* deepened for AA text/focus contrast on light grounds */
+  --orange-600: #d45c0a;
+  --orange-500: #f4721a; /* primary accent — backgrounds, borders, on-dark text */
+  --orange-400: #ff8c3d;
+  --orange-100: #fdead9;
+
+  /* ---- Light grounds --------------------------------------------------- */
+  --warm-white: #f8f6f3; /* primary light background */
+  --white: #ffffff;
+
+  /* ---- Supporting neutrals -------------------------------------------- */
+  --stone-100: #efebe4; /* soft stone */
+  --stone-200: #e0dad1;
+  --stone-300: #cbc4ba;
+  --concrete-400: #a8a29a; /* concrete gray */
+  --steel-500: #6d7580; /* steel gray */
+  --steel-550: #61687a; /* darkened for AA text contrast on warm-white (steel-500 is ~4.3:1) */
+  --steel-600: #545c66;
+  --charcoal-800: #24282d; /* charcoal */
+
+  /* ---- Semantic roles ------------------------------------------------- */
+  --bg: var(--warm-white);
+  --bg-raised: var(--white);
+  --bg-inverse: var(--navy-800);
+  --bg-inverse-deep: var(--navy-900);
+  --bg-subtle: var(--stone-100);
+
+  --text: var(--navy-900);
+  --text-muted: var(--steel-600);
+  --text-faint: var(--steel-550);
+  --text-on-inverse: #eef1f5;
+  --text-on-inverse-muted: #a9b6c6;
+
+  --accent: var(--orange-500);
+  --accent-hover: var(--orange-600);
+  --accent-on: #ffffff;
+  /* Orange-500 fails WCAG AA as small/normal text or a focus ring on the
+     light grounds used across the site (~2.7:1). This deepened shade holds
+     the same hue and clears 4.5:1, so it is the one used for accent TEXT and
+     for the default focus ring — orange-500 stays for backgrounds, borders,
+     and text set on dark surfaces, where it already has ample contrast. */
+  --accent-text: var(--orange-700);
+
+  --border: var(--stone-200);
+  --border-strong: var(--stone-300);
+  --border-inverse: rgba(255, 255, 255, 0.14);
+
+  /* orange-600 is the one shade in the family that clears 3:1 against both
+     the lightest (warm-white) and darkest (navy-900) surfaces the ring
+     appears on, so one value works everywhere without a per-surface
+     override — orange-500 fails on light grounds, orange-700 is too dark
+     against navy. */
+  --focus-ring: var(--orange-600);
+  --danger: #b3261e;
+  --danger-bg: #fdf2f1;
+  --success: #17603f;
+  --success-bg: #eff7f2;
+
+  /* ---- Typography ----------------------------------------------------- */
+  --font-display: 'Archivo', 'Arial Narrow', system-ui, sans-serif;
+  --font-body: 'Satoshi', 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', monospace;
+
+  --text-xs: 0.75rem; /* 12px */
+  --text-sm: 0.875rem; /* 14px */
+  --text-base: 1rem; /* 16px */
+  --text-lg: 1.125rem; /* 18px */
+  --text-xl: 1.5rem; /* 24px */
+  --text-2xl: clamp(1.75rem, 1.35rem + 1.6vw, 2.5rem);
+  --text-3xl: clamp(2.25rem, 1.6rem + 2.8vw, 3.5rem);
+  --text-hero: clamp(2.6rem, 1.5rem + 5vw, 4.75rem);
+
+  --leading-tight: 1.04;
+  --leading-snug: 1.2;
+  --leading-normal: 1.6;
+  --leading-relaxed: 1.7;
+
+  --tracking-tight: -0.02em;
+  --tracking-normal: 0;
+  --tracking-wide: 0.06em;
+  --tracking-label: 0.1em;
+
+  /* ---- Spacing (4px base) --------------------------------------------- */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-7: 1.75rem;
+  --space-8: 2rem;
+  --space-9: 2.25rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+  --space-24: 6rem;
+  --space-32: 8rem;
+
+  --section-y: clamp(3.5rem, 2rem + 6vw, 7rem);
+  --section-y-tight: clamp(2.5rem, 1.75rem + 3.5vw, 4.5rem);
+
+  /* ---- Structure ------------------------------------------------------ */
+  --container: 78rem; /* 1248px */
+  --container-narrow: 46rem;
+  --gutter: clamp(1.25rem, 0.75rem + 2.5vw, 3rem);
+
+  --radius-sm: 2px;
+  --radius: 3px;
+  --radius-lg: 4px;
+
+  --hairline: 1px;
+  --rule-accent: 3px;
+
+  /* Chamfered corner — derived from the bevelled facet where the logo's navy
+     and orange halves meet. Used as the site's one recurring geometric
+     signature: buttons, tags, and image frames all share it. */
+  --chamfer: 16px;
+  --chamfer-sm: 10px;
+
+  --shadow-sm: 0 1px 2px rgba(10, 22, 38, 0.06);
+  --shadow: 0 4px 14px rgba(10, 22, 38, 0.08);
+  --shadow-lg: 0 18px 44px rgba(10, 22, 38, 0.14);
+
+  --header-h: 4.5rem;
+  --utilitybar-h: 2.25rem;
+
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --dur-fast: 120ms;
+  --dur: 220ms;
+  --dur-slow: 480ms;
+
+  /* Architectural measurement rule — used sparingly as a section marker */
+  --tick-rule: repeating-linear-gradient(
+    to right,
+    var(--border-strong) 0 1px,
+    transparent 1px 8px
+  );
+}

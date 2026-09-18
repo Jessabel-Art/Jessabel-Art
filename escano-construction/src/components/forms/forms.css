@@ -1,0 +1,319 @@
+/* =============================================================================
+   Form styles — shared by the contact form and the proposal request flow.
+   Labels are always visible; errors are always text, never colour alone.
+   ========================================================================== */
+
+.field {
+  display: grid;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.field--group {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.field__label {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  padding: 0;
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--navy-900);
+}
+
+.field--group > .field__label {
+  margin-bottom: var(--space-1);
+}
+
+.field__required {
+  color: var(--accent-text);
+  font-weight: 700;
+}
+
+.field__optional {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 400;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.field__hint {
+  margin: 0;
+  font-size: var(--text-sm);
+  line-height: var(--leading-normal);
+  color: var(--text-muted);
+  max-width: 64ch;
+}
+
+.field__count {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--text-faint);
+}
+
+.field__error {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  margin: 0;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--danger);
+}
+
+.field__error-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 1.15rem;
+  height: 1.15rem;
+  margin-top: 0.1rem;
+  background-color: var(--danger);
+  color: var(--white);
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+/* ---- Inputs ------------------------------------------------------------- */
+.input {
+  width: 100%;
+  min-height: 3rem;
+  padding: 0.75rem 0.9rem;
+  background-color: var(--white);
+  border: var(--hairline) solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-base);
+  color: var(--text);
+  transition:
+    border-color var(--dur) var(--ease),
+    box-shadow var(--dur) var(--ease);
+}
+
+.input::placeholder {
+  color: var(--concrete-400);
+}
+
+.input:hover {
+  border-color: var(--steel-500);
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--navy-700);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--navy-600) 18%, transparent);
+}
+
+.field--error .input {
+  border-color: var(--danger);
+  background-color: var(--danger-bg);
+}
+
+.textarea {
+  min-height: 9rem;
+  line-height: var(--leading-relaxed);
+  resize: vertical;
+}
+
+.select-wrap {
+  position: relative;
+}
+.select {
+  appearance: none;
+  padding-right: 2.5rem;
+  cursor: pointer;
+}
+.select-wrap__chevron {
+  position: absolute;
+  right: 0.9rem;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: var(--steel-500);
+  font-size: 0.9rem;
+}
+
+/* ---- Choice controls ---------------------------------------------------- */
+.choice-grid {
+  display: grid;
+  gap: var(--space-3);
+}
+.choice-grid--inline {
+  grid-auto-flow: row;
+}
+
+.choice {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  /* Comfortable touch target on mobile. */
+  min-height: 3.25rem;
+  padding: var(--space-4);
+  background-color: var(--white);
+  border: var(--hairline) solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition:
+    border-color var(--dur) var(--ease),
+    background-color var(--dur) var(--ease),
+    box-shadow var(--dur) var(--ease);
+}
+
+.choice:hover {
+  border-color: var(--steel-500);
+}
+
+.choice input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+}
+
+.choice__box {
+  flex: none;
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-top: 0.1rem;
+  background-color: var(--white);
+  border: 2px solid var(--steel-500);
+  border-radius: 1px;
+  transition:
+    border-color var(--dur) var(--ease),
+    background-color var(--dur) var(--ease);
+}
+.choice__box--radio {
+  border-radius: 50%;
+}
+
+.choice.is-checked {
+  border-color: var(--navy-800);
+  box-shadow: inset 0 0 0 1px var(--navy-800);
+  background-color: color-mix(in srgb, var(--stone-100) 55%, var(--white));
+}
+
+.choice.is-checked .choice__box {
+  border-color: var(--accent);
+  background-color: var(--accent);
+  box-shadow: inset 0 0 0 3px var(--white);
+}
+
+.choice input:focus-visible + .choice__box {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.choice__text {
+  display: grid;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.choice__label {
+  font-size: var(--text-base);
+  font-weight: 500;
+  line-height: var(--leading-snug);
+  color: var(--navy-900);
+  overflow-wrap: break-word;
+}
+
+.choice--rich .choice__label {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: var(--tracking-tight);
+}
+
+.choice__desc {
+  font-size: var(--text-sm);
+  line-height: var(--leading-normal);
+  color: var(--text-muted);
+}
+
+@media (min-width: 40rem) {
+  .choice-grid--2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .choice-grid--3 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 60rem) {
+  .choice-grid--3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* ---- Form-level status -------------------------------------------------- */
+.form-status {
+  display: grid;
+  gap: var(--space-2);
+  padding: var(--space-4) var(--space-5);
+  border: var(--hairline) solid var(--border-strong);
+  border-left: var(--rule-accent) solid var(--steel-500);
+  border-radius: var(--radius-sm);
+  background-color: var(--white);
+}
+
+.form-status__title {
+  margin: 0;
+  font-weight: 700;
+  font-size: var(--text-sm);
+  color: var(--navy-900);
+}
+
+.form-status__body {
+  font-size: var(--text-sm);
+  line-height: var(--leading-normal);
+  color: var(--text-muted);
+}
+.form-status__body ul {
+  margin: 0;
+  padding-left: 1.1rem;
+}
+
+.form-status--error {
+  border-left-color: var(--danger);
+  background-color: var(--danger-bg);
+}
+.form-status--error .form-status__title {
+  color: var(--danger);
+}
+
+.form-status--success {
+  border-left-color: var(--success);
+  background-color: var(--success-bg);
+}
+.form-status--success .form-status__title {
+  color: var(--success);
+}
+
+.form-status--info {
+  border-left-color: var(--accent);
+}
+
+/* ---- Layout helpers ---------------------------------------------------- */
+.form-grid {
+  display: grid;
+  gap: var(--space-6);
+}
+
+@media (min-width: 44rem) {
+  .form-grid--2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .form-grid__span {
+    grid-column: 1 / -1;
+  }
+}

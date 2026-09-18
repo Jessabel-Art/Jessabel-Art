@@ -50,11 +50,11 @@ const AdminDashboard = ({ initialView = "dashboard" }) => {
 
   return (
     <AdminUIProvider>
-      <div className="min-h-screen flex bg-[#F7F7F7]">
+      <div className="min-h-screen flex bg-muted/40">
         <AdminSidebar activeView={activeView} onChangeView={setActiveView} />
         <div className="flex-1 flex flex-col min-w-0">
           <AdminHeader activeView={activeView} user={user} />
-          <main className="flex-1 px-3 sm:px-4 md:px-6 py-3 sm:py-4 lg:px-10 lg:py-6 bg-[#F7F7F7]">
+          <main className="flex-1 px-4 sm:px-6 py-5 sm:py-6 lg:px-10 lg:py-8 bg-muted/40 max-w-[1400px] w-full mx-auto">
             {renderView()}
           </main>
         </div>

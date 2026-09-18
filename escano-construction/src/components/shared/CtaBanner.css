@@ -1,0 +1,66 @@
+.cta-banner {
+  position: relative;
+  background-color: var(--navy-800);
+  color: var(--text-on-inverse);
+  overflow: hidden;
+}
+
+/* The plan photograph sits as a full-bleed background texture rather than an
+   equal-width panel — typography stays the dominant element. */
+.cta-banner__media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+.cta-banner__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.24;
+}
+.cta-banner__media::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    100deg,
+    var(--navy-800) 0%,
+    var(--navy-800) 40%,
+    rgba(15, 32, 54, 0.55) 66%,
+    rgba(15, 32, 54, 0.2) 100%
+  );
+}
+
+.cta-banner__inner {
+  position: relative;
+  z-index: 1;
+  padding-block: var(--section-y);
+  padding-inline: var(--gutter);
+  max-width: 36rem;
+}
+
+.cta-banner__title {
+  margin: 0 0 var(--space-5);
+  max-width: 18ch;
+  color: var(--white);
+}
+
+.cta-banner__body {
+  margin: 0 0 var(--space-7);
+  color: var(--text-on-inverse-muted);
+  font-size: var(--text-lg);
+  line-height: var(--leading-relaxed);
+  max-width: 50ch;
+}
+
+.cta-banner__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+}
+
+@media (min-width: 60rem) {
+  .cta-banner__inner {
+    padding-inline: clamp(2.5rem, 2rem + 2vw, 4.5rem);
+  }
+}

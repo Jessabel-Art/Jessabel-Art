@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from "react";
-import { Download, Filter, Search } from "lucide-react";
+import { Download, MapPin, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -10,7 +10,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import StatusPill from "./components/StatusPill";
+import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/table";
+import PageHeader from "@/components/PageHeader";
+import StatusPill from "@/components/StatusPill";
 import { getAllDemoAppointments } from "@/data/demoRuntime";
 
 function money(value) {
@@ -43,13 +45,7 @@ export default function BookingsView() {
       .filter((row) => status === "all" || row.status === status)
       .filter((row) => {
         if (!needle) return true;
-        return [
-          row.clientName,
-          row.serviceName,
-          row.contact?.email,
-          row.addressLine,
-          row.status,
-        ]
+        return [row.clientName, row.serviceName, row.contact?.email, row.addressLine, row.status]
           .filter(Boolean)
           .some((value) => String(value).toLowerCase().includes(needle));
       })
@@ -57,19 +53,11 @@ export default function BookingsView() {
   }, [rows, search, status]);
 
   const exportCsv = () => {
-    const header = ["ID", "Client", "Service", "Status", "Date", "Total", "Address"];
+    const header = ["ID", "Client", "Service", "Status", "Date", "Total", "Payment", "Address"];
     const csv = [
       header.join(","),
       ...filtered.map((row) =>
-        [
-          row.id,
-          row.clientName,
-          row.serviceName,
-          row.status,
-          formatDate(row.startAt),
-          row.total,
-          row.addressLine,
-        ]
+        [row.id, row.clientName, row.serviceName, row.status, formatDate(row.startAt), row.total, row.paymentStatus, row.addressLine]
           .map((value) => `"${String(value ?? "").replace(/"/g, '""')}"`)
           .join(",")
       ),
@@ -86,32 +74,35 @@ export default function BookingsView() {
 
   return (
     <section className="space-y-5">
-      <div>
-        <h2 className="text-2xl font-semibold text-plum">Bookings</h2>
-        <p className="text-sm text-plum/70">
-          Demo appointment list generated from local sample data.
-        </p>
-      </div>
+      <PageHeader
+        eyebrow="Operations"
+        title="Bookings"
+        description={`${filtered.length} of ${rows.length} appointments shown, generated from local sample data.`}
+        actions={
+          <Button variant="outline" size="sm" onClick={exportCsv}>
+            <Download className="w-4 h-4 mr-2" />
+            Export CSV
+          </Button>
+        }
+      />
 
-      <Card className="bg-white border-plum/10">
-        <CardHeader className="gap-3 md:flex-row md:items-center md:justify-between">
-          <CardTitle className="text-plum">All appointments</CardTitle>
+      <Card>
+        <CardContent className="p-4 sm:p-5 space-y-4">
           <div className="flex flex-col sm:flex-row gap-2">
-            <div className="relative">
-              <Search className="w-4 h-4 text-plum/50 absolute left-3 top-1/2 -translate-y-1/2" />
+            <div className="relative flex-1">
+              <Search className="w-4 h-4 text-muted-foreground absolute left-3 top-1/2 -translate-y-1/2" />
               <Input
-                className="bg-white pl-9"
-                placeholder="Search bookings"
+                className="pl-9"
+                placeholder="Search by client, service, email, or address"
                 value={search}
                 onChange={(event) => setSearch(event.target.value)}
               />
             </div>
             <Select value={status} onValueChange={setStatus}>
-              <SelectTrigger className="bg-white min-w-36">
-                <Filter className="w-4 h-4 mr-2" />
-                <SelectValue />
+              <SelectTrigger className="sm:w-44">
+                <SelectValue placeholder="All statuses" />
               </SelectTrigger>
-              <SelectContent className="bg-white">
+              <SelectContent>
                 <SelectItem value="all">All statuses</SelectItem>
                 <SelectItem value="pending">Pending</SelectItem>
                 <SelectItem value="confirmed">Confirmed</SelectItem>
@@ -119,44 +110,78 @@ export default function BookingsView() {
                 <SelectItem value="cancelled">Cancelled</SelectItem>
               </SelectContent>
             </Select>
-            <Button variant="outline" onClick={exportCsv} className="border-plum text-plum">
-              <Download className="w-4 h-4 mr-2" />
-              CSV
-            </Button>
           </div>
-        </CardHeader>
-        <CardContent className="overflow-x-auto">
-          <table className="min-w-full text-sm">
-            <thead className="text-left text-plum/60 border-b border-plum/10">
-              <tr>
-                <th className="py-3 pr-4">Date</th>
-                <th className="py-3 pr-4">Client</th>
-                <th className="py-3 pr-4">Service</th>
-                <th className="py-3 pr-4">Status</th>
-                <th className="py-3 pr-4 text-right">Total</th>
-                <th className="py-3 pr-4">Address</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-plum/10">
-              {filtered.map((row) => (
-                <tr key={row.id} className="align-top">
-                  <td className="py-3 pr-4 whitespace-nowrap text-plum">
-                    {formatDate(row.startAt)}
-                  </td>
-                  <td className="py-3 pr-4">
-                    <p className="font-medium text-plum">{row.clientName}</p>
-                    <p className="text-xs text-plum/60">{row.contact?.email}</p>
-                  </td>
-                  <td className="py-3 pr-4 text-plum">{row.serviceName}</td>
-                  <td className="py-3 pr-4">
-                    <StatusPill status={row.status} />
-                  </td>
-                  <td className="py-3 pr-4 text-right text-plum">{money(row.total)}</td>
-                  <td className="py-3 pr-4 text-plum/75 min-w-64">{row.addressLine}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+
+          {/* Desktop / tablet table */}
+          <div className="hidden md:block">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Date</TableHead>
+                  <TableHead>Client</TableHead>
+                  <TableHead>Service</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Payment</TableHead>
+                  <TableHead className="text-right">Total</TableHead>
+                  <TableHead>Address</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {filtered.map((row) => (
+                  <TableRow key={row.id}>
+                    <TableCell className="whitespace-nowrap">{formatDate(row.startAt)}</TableCell>
+                    <TableCell>
+                      <p className="font-medium text-foreground">{row.clientName}</p>
+                      <p className="text-xs text-muted-foreground">{row.contact?.email}</p>
+                    </TableCell>
+                    <TableCell className="text-muted-foreground">{row.serviceName}</TableCell>
+                    <TableCell>
+                      <StatusPill status={row.status} />
+                    </TableCell>
+                    <TableCell>
+                      <StatusPill status={row.paymentStatus} />
+                    </TableCell>
+                    <TableCell className="text-right tabular-nums">{money(row.total)}</TableCell>
+                    <TableCell className="text-muted-foreground max-w-64">{row.addressLine}</TableCell>
+                  </TableRow>
+                ))}
+                {filtered.length === 0 && (
+                  <TableRow>
+                    <TableCell colSpan={7} className="text-center text-muted-foreground py-8">
+                      No bookings match this search.
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </div>
+
+          {/* Mobile stacked cards */}
+          <div className="md:hidden space-y-3">
+            {filtered.length === 0 && (
+              <p className="text-center text-sm text-muted-foreground py-8">No bookings match this search.</p>
+            )}
+            {filtered.map((row) => (
+              <div key={row.id} className="rounded-lg border border-border p-3">
+                <div className="flex items-start justify-between gap-2">
+                  <div>
+                    <p className="font-medium text-foreground">{row.clientName}</p>
+                    <p className="text-xs text-muted-foreground">{row.serviceName}</p>
+                  </div>
+                  <span className="tabular-nums font-medium text-foreground">{money(row.total)}</span>
+                </div>
+                <p className="text-xs text-muted-foreground mt-1.5">{formatDate(row.startAt)}</p>
+                <div className="flex items-start gap-1.5 mt-1 text-xs text-muted-foreground">
+                  <MapPin className="w-3.5 h-3.5 mt-0.5 shrink-0" />
+                  <span>{row.addressLine}</span>
+                </div>
+                <div className="flex items-center gap-2 mt-2.5">
+                  <StatusPill status={row.status} />
+                  <StatusPill status={row.paymentStatus} />
+                </div>
+              </div>
+            ))}
+          </div>
         </CardContent>
       </Card>
     </section>

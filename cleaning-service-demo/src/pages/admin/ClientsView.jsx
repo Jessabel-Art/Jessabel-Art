@@ -1,109 +1,96 @@
 // src/pages/admin/ClientsView.jsx
 import React, { useState, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
+import { ChevronUp, ChevronDown, MapPin } from "lucide-react";
 import { formatPhoneForDisplay } from "@/lib/contactModel";
 import { demoClients } from "@/data/demoClients";
-
+import { getDemoAppointmentsByClientId } from "@/data/demoAppointments";
+import { getDemoInvoicesByClientId } from "@/data/demoInvoices";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/table";
+import PageHeader from "@/components/PageHeader";
+import MetricCard from "@/components/MetricCard";
 import ClientDetailsModal from "./components/ClientDetailsModal";
-import { ChevronUp, ChevronDown } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+
+// Static demo "now" — pinned to 2026-09-18, never Date.now(), so segments and
+// next/last-cleaning derivations stay honest against the seeded appointments.
+const TODAY = new Date("2026-09-18T08:00:00");
 
 const money = (n) =>
-  Number(n || 0).toLocaleString("en-US", {
-    style: "currency",
-    currency: "USD",
-  });
+  Number(n || 0).toLocaleString("en-US", { style: "currency", currency: "USD" });
 
-/**
- * Try to get a reasonable display name:
- * - profile.name (preferred)
- * - profile.fullName (legacy fallback)
- * - email local-part ("jessieleonne")
- * - fallback "Unnamed client"
- */
+function formatDate(value) {
+  if (!value) return "—";
+  const date = new Date(value);
+  return Number.isNaN(date.getTime())
+    ? "—"
+    : date.toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
+}
+
 function getDisplayName(profile) {
-  // Prefer canonical `name`, fall back to legacy `fullName`, then email local-part.
   const candidate =
-    (profile.name && profile.name.trim()) ||
-    (profile.email && String(profile.email).split("@")[0]) ||
-    "";
-
-  if (candidate) return String(candidate).trim();
-  return "Unnamed client";
+    (profile.name && profile.name.trim()) || (profile.email && String(profile.email).split("@")[0]) || "";
+  return candidate ? String(candidate).trim() : "Unnamed client";
 }
 
-function getPhone(profile) {
-  return (
-    profile?.phone ||
-    profile?.phoneNormalized ||
-    profile?.phoneRaw ||
-    profile?.primaryPhone ||
-    profile?.phoneNumber ||
-    profile?.contact?.phone ||
-    profile?.contact?.phoneRaw ||
-    ""
-  );
-}
-
-/**
- * Build a short address string from possible profile fields.
- * We expect that, as you wire up ContactDetails/ProfileSettings,
- * you’ll denormalize something like this onto the profile doc:
- *   addressLine1, city, state, zip, or addressSummary.
- */
 function formatAddressSummary(profile) {
-  if (profile.addressSummary && profile.addressSummary.trim()) {
-    return profile.addressSummary.trim();
-  }
+  if (profile.addressSummary && profile.addressSummary.trim()) return profile.addressSummary.trim();
+  const parts = [profile.addressLine1, profile.city, profile.state, profile.zip].filter(Boolean);
+  return parts.length ? parts.join(", ") : "No address on file";
+}
 
-  const parts = [
-    profile.addressLine1,
-    profile.city,
-    profile.state,
-    profile.zip,
-  ]
-    .map((p) => (typeof p === "string" ? p.trim() : p))
-    .filter(Boolean);
+/** Derive per-client booking facts from the canonical appointments/invoices —
+ * never hardcoded, so this stays honest as the seed data changes. */
+function buildClientFacts(clientId) {
+  const appointments = getDemoAppointmentsByClientId(clientId);
+  const invoices = getDemoInvoicesByClientId(clientId);
 
-  if (parts.length === 0) return "No address on file";
+  const upcoming = appointments
+    .filter((a) => new Date(a.startAt) >= TODAY && a.status !== "cancelled")
+    .sort((a, b) => new Date(a.startAt) - new Date(b.startAt));
+  const past = appointments
+    .filter((a) => new Date(a.startAt) < TODAY && a.status === "completed")
+    .sort((a, b) => new Date(b.startAt) - new Date(a.startAt));
+  const mostRecent = [...appointments].sort((a, b) => new Date(b.startAt) - new Date(a.startAt))[0];
 
-  return parts.join(", ");
+  const outstandingBalance = invoices.reduce((sum, inv) => sum + Number(inv.amountDue || 0), 0);
+
+  return {
+    nextCleaning: upcoming[0] || null,
+    lastCleaning: past[0] || null,
+    frequency: mostRecent?.frequency || "—",
+    bookingCount: appointments.length,
+    outstandingBalance,
+  };
 }
 
 export default function ClientsView() {
-  const [profiles] = useState(demoClients);
   const [search, setSearch] = useState("");
   const [selectedClient, setSelectedClient] = useState(null);
-
-  // sorting state
   const [sortField, setSortField] = useState("createdAt");
   const [sortDir, setSortDir] = useState("desc");
-
   const navigate = useNavigate();
 
-  // Segment logic
+  const facts = useMemo(() => {
+    const map = new Map();
+    demoClients.forEach((c) => map.set(c.id, buildClientFacts(c.id)));
+    return map;
+  }, []);
+
   const getSegments = (profile) => {
     const segs = [];
-
-    if ((profile.ltv || 0) >= 300)
-      segs.push({ type: "high", label: "High value" });
-
-    if (profile.lastBookingAt)
-      segs.push({ type: "active", label: "Recently active" });
-
+    if ((profile.ltv || 0) >= 1000) segs.push({ type: "high", label: "High value" });
+    if (profile.lastBookingAt) segs.push({ type: "active", label: "Recently active" });
     const createdMs = new Date(profile.createdAt || 0).getTime();
-
-    if (Date.now() - createdMs < 1000 * 60 * 60 * 24 * 14)
-      segs.push({ type: "new", label: "New" });
-
+    if (TODAY.getTime() - createdMs < 1000 * 60 * 60 * 24 * 14) segs.push({ type: "new", label: "New" });
     return segs;
   };
 
-  // Sorting logic
   const toggleSort = (field) => {
     if (sortField === field) {
-      setSortDir(sortDir === "asc" ? "desc" : "asc");
+      setSortDir((d) => (d === "asc" ? "desc" : "asc"));
     } else {
       setSortField(field);
       setSortDir("asc");
@@ -111,232 +98,216 @@ export default function ClientsView() {
   };
 
   const sorted = useMemo(() => {
-    const arr = [...profiles];
-
+    const arr = [...demoClients];
     arr.sort((a, b) => {
       let A = a[sortField];
       let B = b[sortField];
-
-      // Special case: sort by derived name or address
       if (sortField === "displayName") {
         A = getDisplayName(a);
         B = getDisplayName(b);
-      } else if (sortField === "addressSummary") {
-        A = formatAddressSummary(a);
-        B = formatAddressSummary(b);
-      }
-
-      if (sortField === "createdAt" || sortField === "lastBookingAt") {
+      } else if (sortField === "outstandingBalance") {
+        A = facts.get(a.id)?.outstandingBalance || 0;
+        B = facts.get(b.id)?.outstandingBalance || 0;
+      } else if (sortField === "createdAt" || sortField === "lastBookingAt") {
         A = new Date(A || 0);
         B = new Date(B || 0);
       }
-
       if (typeof A === "string") A = A.toLowerCase();
       if (typeof B === "string") B = B.toLowerCase();
-
       if (A < B) return sortDir === "asc" ? -1 : 1;
       if (A > B) return sortDir === "asc" ? 1 : -1;
       return 0;
     });
-
     return arr;
-  }, [profiles, sortField, sortDir]);
+  }, [sortField, sortDir, facts]);
 
   const filtered = useMemo(() => {
     const s = search.toLowerCase().trim();
     if (!s) return sorted;
-
     return sorted.filter((p) => {
       const name = getDisplayName(p).toLowerCase();
       const email = (p.email || "").toLowerCase();
-      const phone = (getPhone(p) || "").toLowerCase();
+      const phone = (p.phone || "").toLowerCase();
       const addr = formatAddressSummary(p).toLowerCase();
-      return (
-        name.includes(s) ||
-        email.includes(s) ||
-        phone.includes(s) ||
-        addr.includes(s)
-      );
+      return name.includes(s) || email.includes(s) || phone.includes(s) || addr.includes(s);
     });
   }, [sorted, search]);
 
-  // Summary metrics
   const metrics = useMemo(() => {
-    const total = profiles.length;
-    const highValue = profiles.filter((p) => (p.ltv || 0) >= 300).length;
-    const active = profiles.filter((p) => p.lastBookingAt).length;
+    const total = demoClients.length;
+    const highValue = demoClients.filter((p) => (p.ltv || 0) >= 1000).length;
+    const outstanding = demoClients.reduce((sum, p) => sum + (facts.get(p.id)?.outstandingBalance || 0), 0);
+    const totalLtv = demoClients.reduce((sum, p) => sum + (p.ltv || 0), 0);
+    return { total, highValue, outstanding, totalLtv };
+  }, [facts]);
 
-    return { total, highValue, active };
-  }, [profiles]);
+  const sortHeader = (field, label, align = "left") => (
+    <TableHead
+      className={`cursor-pointer select-none hover:text-foreground ${align === "right" ? "text-right" : ""}`}
+      onClick={() => toggleSort(field)}
+    >
+      <div className={`flex items-center gap-1 ${align === "right" ? "justify-end" : ""}`}>
+        {label}
+        {sortField === field && (sortDir === "asc" ? <ChevronUp size={13} /> : <ChevronDown size={13} />)}
+      </div>
+    </TableHead>
+  );
 
   return (
-    <section className="w-full">
-      <h1 className="text-2xl font-semibold text-plum mb-1">Clients</h1>
-      <p className="text-plum/70 mb-6">
-        View all customers who’ve created an account.
-      </p>
+    <section className="space-y-5">
+      <PageHeader
+        eyebrow="Customers"
+        title="Clients"
+        description={`${filtered.length} of ${metrics.total} customers shown.`}
+      />
 
-      {/* SUMMARY METRICS */}
-      <div className="flex gap-3 mb-6">
-        <div className="bg-plum/5 px-4 py-2 rounded-lg text-plum text-sm font-medium">
-          {metrics.total} total
-        </div>
-        <div className="bg-green-50 px-4 py-2 rounded-lg text-green-800 text-sm font-medium">
-          {metrics.highValue} high-value
-        </div>
-        <div className="bg-amber-50 px-4 py-2 rounded-lg text-amber-700 text-sm font-medium">
-          {metrics.active} active
-        </div>
+      <div className="grid gap-4 sm:grid-cols-3">
+        <MetricCard label="Total clients" value={metrics.total} sublabel="On file" />
+        <MetricCard label="High-value clients" value={metrics.highValue} sublabel="Lifetime value $1,000+" tone="success" />
+        <MetricCard label="Outstanding balance" value={money(metrics.outstanding)} sublabel="Across all clients" tone="warning" />
       </div>
 
-      <div className="flex justify-between mb-4">
-        <Input
-          className="max-w-xs bg-white text-sm"
-          placeholder="Search by name, email, phone, or address"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-      </div>
+      <Input
+        className="max-w-sm"
+        placeholder="Search by name, email, phone, or address"
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+      />
 
-      <div className="bg-white rounded-xl border p-2 shadow-sm overflow-x-auto">
-        <table className="w-full text-sm min-w-[980px]">
-          <thead>
-            <tr className="text-left text-plum/70 border-b">
-              {[
-                ["displayName", "Name"],
-                ["email", "Email"],
-                ["phone", "Phone"],
-                ["addressSummary", "Address on file"],
-                ["ltv", "LTV"],
-                ["createdAt", "Member since"],
-              ].map(([field, label]) => (
-                <th
-                  key={field}
-                  className="py-2 px-3 cursor-pointer select-none hover:text-plum transition-colors"
-                  onClick={() => toggleSort(field)}
-                >
-                  <div className="flex items-center gap-1">
-                    {label}
-                    {sortField === field &&
-                      (sortDir === "asc" ? (
-                        <ChevronUp size={14} />
-                      ) : (
-                        <ChevronDown size={14} />
-                      ))}
-                  </div>
-                </th>
-              ))}
-              <th className="py-2 px-3 text-right">Actions</th>
-            </tr>
-          </thead>
-
-          <tbody>
+      {/* Desktop / tablet table */}
+      <div className="hidden lg:block rounded-lg border border-border bg-card shadow-sm overflow-hidden">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              {sortHeader("displayName", "Client")}
+              {sortHeader("addressSummary", "Address")}
+              <TableHead>Frequency</TableHead>
+              {sortHeader("lastBookingAt", "Last cleaning")}
+              <TableHead>Next cleaning</TableHead>
+              {sortHeader("ltv", "LTV", "right")}
+              {sortHeader("outstandingBalance", "Balance", "right")}
+              <TableHead className="text-right">Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
             {filtered.map((p) => {
-              const created =
-                p.createdAt?.toDate?.().toLocaleDateString() ?? "—";
               const segs = getSegments(p);
               const displayName = getDisplayName(p);
-              const addressText = formatAddressSummary(p);
-
+              const fact = facts.get(p.id);
               return (
-                <tr
-                  key={p.id}
-                  className="border-b hover:bg-plum/5 transition"
-                >
-                  <td className="py-3 px-3">
-                    <div className="font-medium">{displayName}</div>
-
-                    {/* Segments */}
-                    <div className="flex gap-1 mt-1 flex-wrap">
-                      {segs.map((s) => (
-                        <span
-                          key={s.label}
-                          className={`text-xs px-2 py-0.5 rounded-full ${
-                            s.type === "high"
-                              ? "bg-green-100 text-green-800"
-                              : s.type === "active"
-                              ? "bg-amber-100 text-amber-700"
-                              : "bg-[#EEF5FB] text-plum"
-                          }`}
-                        >
-                          {s.label}
-                        </span>
-                      ))}
-                    </div>
-                  </td>
-
-                  <td className="py-3 px-3">{p.email || "—"}</td>
-                  <td className="py-3 px-3">
-                    {formatPhoneForDisplay(getPhone(p)) || "—"}
-                  </td>
-
-                  <td className="py-3 px-3">
-                    {addressText}
-                  </td>
-
-                  {/* COLOR-CODED LTV */}
-                  <td
-                    className={`py-3 px-3 font-medium ${
-                      (p.ltv || 0) >= 300
-                        ? "text-green-700"
-                        : (p.ltv || 0) === 0
-                        ? "text-plum/40"
-                        : "text-plum"
-                    }`}
-                  >
+                <TableRow key={p.id}>
+                  <TableCell>
+                    <div className="font-medium text-foreground">{displayName}</div>
+                    <div className="text-xs text-muted-foreground">{p.email}</div>
+                    <div className="text-xs text-muted-foreground">{formatPhoneForDisplay(p.phone)}</div>
+                    {segs.length > 0 && (
+                      <div className="flex gap-1 mt-1.5 flex-wrap">
+                        {segs.map((s) => (
+                          <Badge key={s.label} variant={s.type === "high" ? "success" : s.type === "new" ? "default" : "secondary"}>
+                            {s.label}
+                          </Badge>
+                        ))}
+                      </div>
+                    )}
+                  </TableCell>
+                  <TableCell className="text-muted-foreground max-w-56">{formatAddressSummary(p)}</TableCell>
+                  <TableCell className="text-muted-foreground">{fact?.frequency}</TableCell>
+                  <TableCell className="whitespace-nowrap">{formatDate(fact?.lastCleaning?.startAt)}</TableCell>
+                  <TableCell className="whitespace-nowrap">{formatDate(fact?.nextCleaning?.startAt)}</TableCell>
+                  <TableCell className={`text-right font-medium tabular-nums ${(p.ltv || 0) >= 1000 ? "text-success" : "text-foreground"}`}>
                     {money(p.ltv || 0)}
-                  </td>
-
-                  <td className="py-3 px-3">{created}</td>
-
-                  <td className="py-3 px-3 text-right">
+                  </TableCell>
+                  <TableCell className={`text-right tabular-nums ${fact?.outstandingBalance ? "text-warning font-medium" : "text-muted-foreground"}`}>
+                    {money(fact?.outstandingBalance || 0)}
+                  </TableCell>
+                  <TableCell className="text-right">
                     <div className="flex justify-end gap-2">
-                      {/* View */}
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="cursor-pointer hover:bg-plum/10 hover:border-plum/30 transition-colors"
-                        onClick={() => setSelectedClient(p)}
-                      >
+                      <Button variant="outline" size="sm" onClick={() => setSelectedClient(p)}>
                         View
                       </Button>
-
-                      {/* Bookings */}
                       <Button
                         size="sm"
-                        className="bg-plum text-white cursor-pointer hover:bg-plum/80 hover:shadow-md transition-all"
-                        onClick={() =>
-                          navigate(
-                            `/admin/client-bookings?email=${encodeURIComponent(
-                              p.email || ""
-                            )}&name=${encodeURIComponent(displayName || "")}`
-                          )
-                        }
+                        onClick={() => navigate(`/admin/client-bookings?clientId=${encodeURIComponent(p.id)}`)}
                       >
                         Bookings
                       </Button>
                     </div>
-                  </td>
-                </tr>
+                  </TableCell>
+                </TableRow>
               );
             })}
-
             {filtered.length === 0 && (
-              <tr>
-                <td colSpan={7} className="py-6 text-center text-plum/50">
+              <TableRow>
+                <TableCell colSpan={8} className="text-center text-muted-foreground py-8">
                   No clients match this search.
-                </td>
-              </tr>
+                </TableCell>
+              </TableRow>
             )}
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
       </div>
 
-      {/* DETAILS MODAL */}
-      <ClientDetailsModal
-        client={selectedClient}
-        onClose={() => setSelectedClient(null)}
-      />
+      {/* Mobile / tablet stacked cards */}
+      <div className="lg:hidden space-y-3">
+        {filtered.length === 0 && (
+          <p className="text-center text-sm text-muted-foreground py-8">No clients match this search.</p>
+        )}
+        {filtered.map((p) => {
+          const segs = getSegments(p);
+          const displayName = getDisplayName(p);
+          const fact = facts.get(p.id);
+          return (
+            <div key={p.id} className="rounded-lg border border-border bg-card p-4 shadow-sm">
+              <div className="flex items-start justify-between gap-2">
+                <div>
+                  <p className="font-medium text-foreground">{displayName}</p>
+                  <p className="text-xs text-muted-foreground">{p.email}</p>
+                  <p className="text-xs text-muted-foreground">{formatPhoneForDisplay(p.phone)}</p>
+                </div>
+                <span className={`text-sm font-medium tabular-nums ${(p.ltv || 0) >= 1000 ? "text-success" : "text-foreground"}`}>
+                  {money(p.ltv || 0)}
+                </span>
+              </div>
+              <div className="flex items-start gap-1.5 mt-2 text-xs text-muted-foreground">
+                <MapPin className="w-3.5 h-3.5 mt-0.5 shrink-0" />
+                <span>{formatAddressSummary(p)}</span>
+              </div>
+              <div className="grid grid-cols-2 gap-2 mt-3 text-xs">
+                <div className="rounded-md bg-muted/60 p-2">
+                  <p className="text-muted-foreground">Last cleaning</p>
+                  <p className="text-foreground font-medium">{formatDate(fact?.lastCleaning?.startAt)}</p>
+                </div>
+                <div className="rounded-md bg-muted/60 p-2">
+                  <p className="text-muted-foreground">Next cleaning</p>
+                  <p className="text-foreground font-medium">{formatDate(fact?.nextCleaning?.startAt)}</p>
+                </div>
+              </div>
+              {fact?.outstandingBalance > 0 && (
+                <p className="mt-2 text-xs text-warning font-medium">{money(fact.outstandingBalance)} outstanding</p>
+              )}
+              {segs.length > 0 && (
+                <div className="flex gap-1 mt-2 flex-wrap">
+                  {segs.map((s) => (
+                    <Badge key={s.label} variant={s.type === "high" ? "success" : s.type === "new" ? "default" : "secondary"}>
+                      {s.label}
+                    </Badge>
+                  ))}
+                </div>
+              )}
+              <div className="flex gap-2 mt-3">
+                <Button variant="outline" size="sm" className="flex-1" onClick={() => setSelectedClient(p)}>
+                  View
+                </Button>
+                <Button size="sm" className="flex-1" onClick={() => navigate(`/admin/client-bookings?clientId=${encodeURIComponent(p.id)}`)}>
+                  Bookings
+                </Button>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      <ClientDetailsModal client={selectedClient} onClose={() => setSelectedClient(null)} />
     </section>
   );
 }

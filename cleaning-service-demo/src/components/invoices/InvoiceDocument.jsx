@@ -1,5 +1,14 @@
 import React from "react";
 import logoPrimary from "@/assets/logo/logo-primary.png";
+import StatusPill from "@/components/StatusPill";
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableRow,
+  TableHead,
+  TableCell,
+} from "@/components/ui/table";
 
 const money = (value) =>
   Number(value || 0).toLocaleString("en-US", {
@@ -21,38 +30,49 @@ function formatDate(value) {
 export default function InvoiceDocument({ invoice }) {
   if (!invoice) {
     return (
-      <div className="rounded-xl border border-dashed border-plum/20 bg-white p-6 text-sm text-plum/70">
+      <div className="rounded-lg border border-dashed border-border bg-card p-6 text-sm text-muted-foreground">
         No demo invoice selected.
       </div>
     );
   }
 
   return (
-    <article className="overflow-hidden rounded-xl border border-plum/10 bg-white shadow-sm">
-      <div className="border-t-8 border-gold p-5 sm:p-7">
+    <article className="overflow-hidden rounded-xl border border-border bg-card shadow-card">
+      <div className="border-t-4 border-navy-900 p-5 sm:p-7">
         <header className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
           <div className="flex items-center gap-3">
             <img src={logoPrimary} alt="CleanPro Demo" className="h-12 w-auto" />
             <div>
-              <p className="text-lg font-semibold text-plum">CleanPro Demo</p>
-              <p className="text-xs text-plum/60">Professional Cleaning Services</p>
+              <p className="text-lg font-semibold text-foreground">CleanPro Demo</p>
+              <p className="text-xs text-muted-foreground">Professional Cleaning Services</p>
             </div>
           </div>
 
-          <div className="rounded-lg bg-[#EEF5FB] px-4 py-3 text-sm text-plum sm:text-right">
+          <div className="rounded-lg bg-secondary px-4 py-3 text-sm text-foreground sm:text-right space-y-1">
             <p className="font-semibold">{invoice.invoiceNumber}</p>
-            <p>Created {formatDate(invoice.createdAt || invoice.issueDate)}</p>
-            <p>Due {formatDate(invoice.dueDate)}</p>
+            <p className="text-muted-foreground">Created {formatDate(invoice.createdAt || invoice.issueDate)}</p>
+            <p className="text-muted-foreground">Due {formatDate(invoice.dueDate)}</p>
+            <div className="sm:flex sm:justify-end pt-1">
+              <StatusPill status={invoice.paymentStatus} />
+            </div>
           </div>
         </header>
 
-        <h1 className="my-8 text-center text-2xl font-bold uppercase tracking-wide text-plum">
-          Invoice
-        </h1>
+        <div className="my-7 flex items-center justify-between">
+          <h1 className="text-2xl font-bold uppercase tracking-wide text-foreground font-display">
+            Invoice
+          </h1>
+          <p className="hidden sm:block text-sm text-muted-foreground tabular-nums">
+            Amount due:{" "}
+            <span className="font-display text-lg font-bold text-foreground">
+              {money(invoice.amountDue)}
+            </span>
+          </p>
+        </div>
 
         <section className="grid gap-4 md:grid-cols-2">
           <InfoBlock title="Bill To">
-            <p className="font-semibold">{invoice.clientName}</p>
+            <p className="font-semibold text-foreground">{invoice.clientName}</p>
             <p>{invoice.clientAddress}</p>
           </InfoBlock>
 
@@ -68,31 +88,31 @@ export default function InvoiceDocument({ invoice }) {
           </InfoBlock>
         </section>
 
-        <section className="mt-7 overflow-hidden rounded-lg border border-plum/10">
-          <table className="w-full text-sm">
-            <thead className="bg-plum text-left text-white">
-              <tr>
-                <th className="px-4 py-3 font-semibold">Description</th>
-                <th className="px-4 py-3 text-right font-semibold">Qty</th>
-                <th className="px-4 py-3 text-right font-semibold">Unit</th>
-                <th className="px-4 py-3 text-right font-semibold">Amount</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-plum/10">
+        <section className="mt-7 overflow-hidden rounded-lg border border-border">
+          <Table>
+            <TableHeader>
+              <TableRow className="bg-navy-900 hover:bg-navy-900 border-navy-900">
+                <TableHead className="text-white/80">Description</TableHead>
+                <TableHead className="text-right text-white/80">Qty</TableHead>
+                <TableHead className="text-right text-white/80">Unit</TableHead>
+                <TableHead className="text-right text-white/80">Amount</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
               {(invoice.lineItems || []).map((item) => (
-                <tr key={item.label || item.description}>
-                  <td className="px-4 py-3 text-plum">{item.label || item.description}</td>
-                  <td className="px-4 py-3 text-right text-plum/75">{item.quantity}</td>
-                  <td className="px-4 py-3 text-right text-plum/75">
+                <TableRow key={item.label || item.description}>
+                  <TableCell className="text-foreground">{item.label || item.description}</TableCell>
+                  <TableCell className="text-right text-muted-foreground">{item.quantity}</TableCell>
+                  <TableCell className="text-right text-muted-foreground tabular-nums">
                     {money(item.unitPrice)}
-                  </td>
-                  <td className="px-4 py-3 text-right font-medium text-plum">
+                  </TableCell>
+                  <TableCell className="text-right font-medium text-foreground tabular-nums">
                     {money(item.amount)}
-                  </td>
-                </tr>
+                  </TableCell>
+                </TableRow>
               ))}
-            </tbody>
-          </table>
+            </TableBody>
+          </Table>
         </section>
 
         <section className="mt-6 grid gap-5 lg:grid-cols-[minmax(0,1fr)_320px]">
@@ -111,14 +131,17 @@ export default function InvoiceDocument({ invoice }) {
             </InfoBlock>
           </div>
 
-          <div className="h-fit rounded-lg border border-plum/10 bg-[#F7F7F7] p-4 text-sm">
+          <div className="h-fit rounded-lg border border-border bg-secondary p-4 text-sm">
             <TotalRow label="Subtotal" value={invoice.subtotal} />
-            <TotalRow label="Deposit received" value={invoice.depositReceived} />
-            <TotalRow label="Amount paid" value={invoice.amountPaid} />
-            <div className="mt-3 border-t border-plum/10 pt-3">
-              <div className="flex items-center justify-between text-lg font-bold text-plum">
+            {invoice.discount > 0 && (
+              <TotalRow label="Discount" value={-invoice.discount} tone="success" />
+            )}
+            <TotalRow label="Deposit received" value={invoice.depositReceived} tone="muted" />
+            <TotalRow label="Amount paid" value={invoice.amountPaid ?? invoice.paidAmount} tone="muted" />
+            <div className="mt-3 border-t border-border pt-3">
+              <div className="flex items-center justify-between text-lg font-bold text-foreground font-display">
                 <span>Amount due</span>
-                <span>{money(invoice.amountDue)}</span>
+                <span className="tabular-nums">{money(invoice.amountDue)}</span>
               </div>
             </div>
           </div>
@@ -130,8 +153,8 @@ export default function InvoiceDocument({ invoice }) {
 
 function InfoBlock({ title, children }) {
   return (
-    <div className="rounded-lg border border-plum/10 bg-white p-4 text-sm text-plum/80">
-      <h2 className="mb-2 text-xs font-bold uppercase tracking-wide text-gold">
+    <div className="rounded-lg border border-border bg-card p-4 text-sm text-muted-foreground">
+      <h2 className="mb-2 text-xs font-bold uppercase tracking-wide text-primary">
         {title}
       </h2>
       <div className="space-y-1">{children}</div>
@@ -142,17 +165,19 @@ function InfoBlock({ title, children }) {
 function Detail({ label, value }) {
   return (
     <p>
-      <span className="font-semibold text-plum">{label}: </span>
+      <span className="font-semibold text-foreground">{label}: </span>
       <span>{value || "--"}</span>
     </p>
   );
 }
 
-function TotalRow({ label, value }) {
+function TotalRow({ label, value, tone = "default" }) {
+  const toneClass =
+    tone === "success" ? "text-success" : tone === "muted" ? "text-muted-foreground" : "text-foreground";
   return (
-    <div className="flex items-center justify-between border-b border-plum/10 py-2 text-plum">
-      <span>{label}</span>
-      <span className="font-semibold">{money(value)}</span>
+    <div className="flex items-center justify-between border-b border-border py-2">
+      <span className="text-muted-foreground">{label}</span>
+      <span className={`font-semibold tabular-nums ${toneClass}`}>{money(value)}</span>
     </div>
   );
 }

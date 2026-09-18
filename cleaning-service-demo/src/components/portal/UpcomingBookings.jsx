@@ -2,11 +2,13 @@
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import StatusPill from "@/components/StatusPill";
 import {
   CalendarDays,
   Info,
   FileDown,
   Calendar as CalendarIcon,
+  MapPin,
 } from "lucide-react";
 import {
   Dialog,
@@ -95,6 +97,17 @@ function buildIcsFromBooking(booking) {
     "END:VCALENDAR",
     "",
   ].join("\r\n");
+}
+
+function formatServiceAddress(booking) {
+  if (booking?.address?.full) return booking.address.full;
+  return (
+    booking?.address ||
+    booking?.addressLine ||
+    booking?.fullAddress ||
+    (booking?.street && `${booking.street}${booking.city ? `, ${booking.city}` : ""}`) ||
+    "On file"
+  );
 }
 
 export default function UpcomingBookings({
@@ -231,11 +244,7 @@ export default function UpcomingBookings({
     const startDate = toDate(b.startAt || b.date);
     const endDate = toDate(b.endAt);
 
-    const address =
-      b.address ||
-      b.fullAddress ||
-      (b.street && `${b.street}${b.city ? `, ${b.city}` : ""}`) ||
-      "On file";
+    const address = formatServiceAddress(b);
 
     const frequency = getBookingField(
       b,
@@ -249,14 +258,13 @@ export default function UpcomingBookings({
 
     return (
       <Dialog open={!!activeBooking} onOpenChange={(open) => !open && closeDetails()}>
-              <DialogContent
-            className="
-              max-w-xl sm:max-w-2xl
-              max-h-[85vh] overflow-y-auto
-              rounded-3xl p-5 sm:p-6
-              bg-white shadow-xl border border-plum/10
-            "
-          >
+        <DialogContent
+          className="
+            max-w-xl sm:max-w-2xl
+            max-h-[85vh] overflow-y-auto
+            rounded-lg p-5 sm:p-6
+          "
+        >
           <DialogHeader className="mb-4 space-y-4">
             {/* Invoice-style header */}
             <div className="flex items-start justify-between gap-4">
@@ -266,14 +274,14 @@ export default function UpcomingBookings({
                   alt="CleanPro Demo"
                   className="h-10 w-auto"
                 />
-                <div className="leading-tight text-xs text-plum/70">
-                  <p className="font-semibold text-plum text-sm">
+                <div className="leading-tight text-xs text-muted-foreground">
+                  <p className="font-semibold text-foreground text-sm">
                     CleanPro Demo
                   </p>
                   <p>Appointment summary</p>
                 </div>
               </div>
-              <div className="text-right text-xs text-plum/60 space-y-1">
+              <div className="text-right text-xs text-muted-foreground space-y-1">
                 <p className="font-mono text-[11px]">
                   Order: <span className="font-semibold">{orderCode}</span>
                 </p>
@@ -286,13 +294,13 @@ export default function UpcomingBookings({
               </div>
             </div>
 
-            <DialogTitle className="text-lg sm:text-xl text-plum">
+            <DialogTitle className="text-lg sm:text-xl text-foreground">
               Appointment details
             </DialogTitle>
           </DialogHeader>
 
           {/* Body */}
-          <div className="space-y-4 text-sm text-plum">
+          <div className="space-y-4 text-sm text-foreground">
             {/* Core info */}
             <div className="grid gap-3 sm:grid-cols-2">
               <div className="space-y-1">
@@ -302,7 +310,7 @@ export default function UpcomingBookings({
 
               <div className="space-y-1">
                 <p className="font-semibold">Status</p>
-                <p>{b.friendly || b.status || "Pending"}</p>
+                <StatusPill status={b.rawStatus || b.status} />
               </div>
 
               <div className="space-y-1">
@@ -330,13 +338,13 @@ export default function UpcomingBookings({
 
               <div className="space-y-1">
                 <p className="font-semibold">Total</p>
-                <p>{money(b.total)}</p>
+                <p className="tabular-nums">{money(b.total)}</p>
               </div>
 
               {depositDue > 0 && (
                 <div className="space-y-1">
                   <p className="font-semibold">Deposit due</p>
-                  <p>{money(depositDue)}</p>
+                  <p className="tabular-nums">{money(depositDue)}</p>
                 </div>
               )}
 
@@ -347,17 +355,17 @@ export default function UpcomingBookings({
             </div>
 
             {/* Customization block */}
-            <div className="mt-2 border-t border-plum/10 pt-3 space-y-2">
+            <div className="mt-2 border-t border-border pt-3 space-y-2">
               <p className="font-semibold text-sm">Home & cleaning details</p>
               <div className="grid gap-2 sm:grid-cols-2 text-sm">
                 <div>
-                  <span className="text-plum/60 text-xs block">
+                  <span className="text-muted-foreground text-xs block">
                     Property type
                   </span>
                   <span>{propertyType}</span>
                 </div>
                 <div>
-                  <span className="text-plum/60 text-xs block">
+                  <span className="text-muted-foreground text-xs block">
                     Bedrooms / Bathrooms
                   </span>
                   <span>
@@ -365,35 +373,35 @@ export default function UpcomingBookings({
                   </span>
                 </div>
                 <div>
-                  <span className="text-plum/60 text-xs block">
+                  <span className="text-muted-foreground text-xs block">
                     Condition level
                   </span>
                   <span>{conditionLevel}</span>
                 </div>
                 <div>
-                  <span className="text-plum/60 text-xs block">
+                  <span className="text-muted-foreground text-xs block">
                     Pets on site
                   </span>
                   <span>{pets}</span>
                 </div>
                 <div>
-                  <span className="text-plum/60 text-xs block">
+                  <span className="text-muted-foreground text-xs block">
                     Fragrance preference
                   </span>
                   <span>{fragrancePreference}</span>
                 </div>
                 <div className="sm:col-span-2">
-                  <span className="text-plum/60 text-xs block">Add-ons</span>
+                  <span className="text-muted-foreground text-xs block">Add-ons</span>
                   <span>{addOns}</span>
                 </div>
               </div>
             </div>
 
             {/* Notes (editable) */}
-            <div className="mt-2 border-t border-plum/10 pt-3 space-y-1">
+            <div className="mt-2 border-t border-border pt-3 space-y-1">
               <Label
                 htmlFor="appointment-notes"
-                className="text-xs font-semibold text-plum"
+                className="text-xs font-semibold text-foreground"
               >
                 Notes for your cleaner
               </Label>
@@ -405,7 +413,7 @@ export default function UpcomingBookings({
                 value={notesDraft}
                 onChange={(e) => setNotesDraft(e.target.value)}
               />
-              <p className="text-[11px] text-plum/50">
+              <p className="text-[11px] text-muted-foreground">
                 Changes you make here will be saved to this appointment when you
                 close.
               </p>
@@ -416,7 +424,7 @@ export default function UpcomingBookings({
             <Button
               type="button"
               variant="outline"
-              className="order-1 sm:order-none border-plum/40 text-plum hover:bg-plum/5"
+              className="order-1 sm:order-none"
               onClick={closeDetails}
             >
               Close
@@ -427,7 +435,6 @@ export default function UpcomingBookings({
                 <Button
                   type="button"
                   variant="outline"
-                  className="border-gold/60 text-gold hover:bg-gold/10 flex items-center gap-2"
                   onClick={() => onViewPayments(activeBooking)}
                 >
                   Invoice
@@ -436,7 +443,7 @@ export default function UpcomingBookings({
               <Button
                 type="button"
                 variant="outline"
-                className="border-plum/40 text-plum hover:bg-plum/5 flex items-center gap-2"
+                className="flex items-center gap-2"
                 onClick={handleDownloadPdf}
               >
                 <FileDown className="w-4 h-4" />
@@ -445,7 +452,7 @@ export default function UpcomingBookings({
               <Button
                 type="button"
                 variant="outline"
-                className="border-plum/40 text-plum hover:bg-plum/5 flex items-center gap-2"
+                className="flex items-center gap-2"
                 onClick={handleDownloadCalendar}
               >
                 <CalendarIcon className="w-4 h-4" />
@@ -460,22 +467,22 @@ export default function UpcomingBookings({
 
   return (
     <>
-      <Card className="shadow-sm border-plum/10">
+      <Card>
         <CardHeader className="flex flex-col gap-1 md:flex-row md:items-center md:justify-between">
           <div className="flex items-center gap-2">
-            <CalendarDays className="h-5 w-5 text-plum/70" />
+            <CalendarDays className="h-5 w-5 text-muted-foreground" />
             <div>
-              <CardTitle className="text-plum text-lg md:text-xl">
+              <CardTitle className="text-foreground text-lg md:text-xl">
                 Upcoming Appointments
               </CardTitle>
-              <p className="text-xs text-plum/60 mt-0.5">
+              <p className="text-xs text-muted-foreground mt-0.5">
                 See what&apos;s scheduled next and manage your upcoming visits.
               </p>
             </div>
           </div>
 
           {hasBookings && (
-            <span className="inline-flex items-center rounded-full bg-plum/5 px-3 py-1 text-xs text-plum/75 border border-plum/10">
+            <span className="inline-flex items-center rounded-md bg-secondary px-3 py-1 text-xs text-muted-foreground border border-border">
               {bookings.length} upcoming&nbsp;
               {bookings.length === 1 ? "appointment" : "appointments"}
             </span>
@@ -486,8 +493,8 @@ export default function UpcomingBookings({
           {/* Deposit / repeat-client info banner (KEEP THIS) */}
           {hasBookings &&
             (isRepeatClient ? (
-              // Repeat clients: keep the “no deposit required” info banner
-              <div className="flex items-start gap-2 rounded-xl bg-emerald-50 border border-emerald-100 px-3 py-2 text-xs text-emerald-900">
+              // Repeat clients: keep the "no deposit required" info banner
+              <div className="flex items-start gap-2 rounded-md bg-success-bg border border-success/20 px-3 py-2 text-xs text-success">
                 <Info className="w-4 h-4 mt-0.5" />
                 <p>
                   <span className="font-semibold">Great news!</span>{" "}
@@ -497,7 +504,7 @@ export default function UpcomingBookings({
               </div>
             ) : depositAmount > 0 && hasUnpaidDeposit ? (
               // New client *and* at least one upcoming booking still has a deposit due
-              <div className="flex items-start gap-2 rounded-xl bg-amber-50 border border-amber-100 px-3 py-2 text-xs text-amber-900">
+              <div className="flex items-start gap-2 rounded-md bg-warning-bg border border-warning/20 px-3 py-2 text-xs text-warning">
                 <Info className="w-4 h-4 mt-0.5" />
                 <p>
                   An{" "}
@@ -516,11 +523,11 @@ export default function UpcomingBookings({
               {Array.from({ length: 3 }).map((_, i) => (
                 <div
                   key={i}
-                  className="rounded-xl border border-plum/10 bg-plum/5 p-3 animate-pulse space-y-2"
+                  className="rounded-lg border border-border bg-secondary p-3 animate-pulse space-y-2"
                 >
-                  <div className="h-4 w-40 bg-plum/10 rounded" />
-                  <div className="h-4 w-32 bg-plum/10 rounded" />
-                  <div className="h-4 w-24 bg-plum/10 rounded" />
+                  <div className="h-4 w-40 bg-muted rounded" />
+                  <div className="h-4 w-32 bg-muted rounded" />
+                  <div className="h-4 w-24 bg-muted rounded" />
                 </div>
               ))}
             </div>
@@ -568,38 +575,40 @@ export default function UpcomingBookings({
                 return (
                   <div
                     key={b.id}
-                    className="rounded-xl border border-plum/10 bg-white hover:bg-plum/5 transition-colors"
+                    className="rounded-lg border border-border bg-card hover:border-primary/30 transition-colors"
                   >
                     <div className="p-3 md:p-4 space-y-2 text-sm">
                       {/* Top row: service + status */}
                       <div className="flex items-center justify-between gap-2">
-                        <div className="font-semibold text-plum">
+                        <div className="font-semibold text-foreground">
                           {b.service || "Cleaning appointment"}
                         </div>
-                        {b.friendly && (
-                          <span className="px-2 py-1 rounded-full text-[11px] bg-emerald-50 text-emerald-700 border border-emerald-100">
-                            {b.friendly}
-                          </span>
-                        )}
+                        <StatusPill status={b.rawStatus || b.status} />
                       </div>
 
                       {/* Date / time */}
-                      <div className="text-plum/80">
+                      <div className="text-muted-foreground">
                         {formatDate(b.date)}{" "}
                         {formatTime(b.date) && <>· {formatTime(b.date)}</>}
                       </div>
 
+                      {/* Address */}
+                      <div className="flex items-start gap-1.5 text-muted-foreground text-xs">
+                        <MapPin className="w-3.5 h-3.5 mt-0.5 shrink-0" />
+                        <span>{formatServiceAddress(b)}</span>
+                      </div>
+
                       {/* Total */}
-                      <div className="text-plum/80">
+                      <div className="text-foreground">
                         Total:{" "}
-                        <span className="font-medium">
+                        <span className="font-medium tabular-nums">
                           {money(b.total)}
                         </span>
                       </div>
 
                       {/* Cancellation window badge (new clients only) */}
                       {cancelMessage && (
-                        <p className="mt-1 inline-flex items-center gap-1 text-[11px] text-amber-900/90 bg-amber-50/70 border border-amber-100 rounded-md px-2 py-1">
+                        <p className="mt-1 inline-flex items-center gap-1 text-[11px] text-warning bg-warning-bg border border-warning/20 rounded-md px-2 py-1">
                           <Info className="w-3 h-3" />
                           <span>{cancelMessage}</span>
                         </p>
@@ -607,7 +616,7 @@ export default function UpcomingBookings({
 
                       {/* Per-appointment deposit info (new clients only) */}
                       {showDepositRequired && (
-                        <div className="mt-2 text-xs text-amber-900 bg-amber-50 border border-amber-100 rounded-lg px-3 py-2">
+                        <div className="mt-2 text-xs text-warning bg-warning-bg border border-warning/20 rounded-md px-3 py-2">
                           A deposit of{" "}
                           <span className="font-semibold">
                             {money(depositDue)}
@@ -623,7 +632,6 @@ export default function UpcomingBookings({
                             <Button
                               size="sm"
                               variant="outline"
-                              className="border-plum text-plum hover:bg-plum/5"
                               onClick={() => openDetails(b)}
                             >
                               View details
@@ -631,7 +639,6 @@ export default function UpcomingBookings({
                             <Button
                               size="sm"
                               variant="outline"
-                              className="border-plum/40 text-plum hover:bg-plum/5"
                               onClick={() => handleAction("reschedule", b)}
                             >
                               Reschedule
@@ -639,7 +646,7 @@ export default function UpcomingBookings({
                             <Button
                               size="sm"
                               variant="outline"
-                              className="border-red-200 text-red-600 hover:bg-red-50"
+                              className="border-destructive/30 text-destructive hover:bg-destructive-bg"
                               onClick={() => setConfirmCancelId(b.id)}
                             >
                               Cancel
@@ -648,7 +655,7 @@ export default function UpcomingBookings({
                               <Button
                                 size="sm"
                                 variant="ghost"
-                                className="text-xs text-plum/70 hover:text-plum hover:bg-transparent underline-offset-2 hover:underline"
+                                className="text-xs text-muted-foreground hover:text-foreground"
                                 onClick={() => onViewPayments(b)}
                               >
                                 View payments
@@ -659,7 +666,7 @@ export default function UpcomingBookings({
 
                         {/* Inline confirmation "modal" */}
                         {isConfirming && (
-                          <div className="w-full mt-2 rounded-lg border border-red-100 bg-red-50 px-3 py-2 text-[11px] text-red-900 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                          <div className="w-full mt-2 rounded-md border border-destructive/20 bg-destructive-bg px-3 py-2 text-[11px] text-destructive flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                             <span>
                               Are you sure you want to cancel this appointment?
                               This cannot be undone.
@@ -668,7 +675,7 @@ export default function UpcomingBookings({
                               <Button
                                 size="sm"
                                 variant="outline"
-                                className="border-red-300 text-red-700 hover:bg-red-100"
+                                className="border-destructive/30 text-destructive hover:bg-destructive-bg"
                                 onClick={() => {
                                   handleAction("cancel", b);
                                   setConfirmCancelId(null);
@@ -679,7 +686,6 @@ export default function UpcomingBookings({
                               <Button
                                 size="sm"
                                 variant="ghost"
-                                className="text-plum/80 hover:text-plum hover:bg-plum/10"
                                 onClick={() => setConfirmCancelId(null)}
                               >
                                 Keep appointment
@@ -694,11 +700,10 @@ export default function UpcomingBookings({
               })}
             </div>
           ) : (
-            <div className="rounded-xl border border-dashed border-plum/20 bg-plum/5 p-4 text-center text-sm text-plum/70">
+            <div className="rounded-lg border border-dashed border-border bg-secondary p-4 text-center text-sm text-muted-foreground">
               You don&apos;t have any upcoming appointments yet.
               <div className="mt-3">
                 <Button
-                  className="bg-gold text-white hover:bg-gold/90 rounded-full"
                   size="sm"
                   onClick={() => {
                     if (onAction) {

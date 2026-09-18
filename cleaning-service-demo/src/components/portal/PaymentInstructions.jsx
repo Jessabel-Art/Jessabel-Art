@@ -9,33 +9,30 @@ const PaymentInstructions = ({ paymentInfo }) => {
     : 50;
 
   return (
-    <Card
-      id="payment-instructions"
-      className="mt-6 shadow-sm border-plum/10 bg-white"
-    >
+    <Card id="payment-instructions">
       <CardHeader className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-2">
-          <BadgeDollarSign className="h-5 w-5 text-gold" />
+          <BadgeDollarSign className="h-5 w-5 text-primary" />
           <div>
-            <CardTitle className="text-plum">
+            <CardTitle className="text-foreground">
               Payment &amp; deposit details
             </CardTitle>
-            <p className="text-xs text-plum/70 mt-0.5">
+            <p className="text-xs text-muted-foreground mt-0.5">
               Demo-only payment instructions. No money is collected.
             </p>
           </div>
         </div>
       </CardHeader>
 
-      <CardContent className="space-y-5 text-sm text-plum/80">
-        <div className="rounded-xl bg-plum/5 border border-plum/10 p-4 space-y-2">
-          <p className="text-sm text-plum">
+      <CardContent className="space-y-5 text-sm text-muted-foreground">
+        <div className="rounded-lg bg-secondary border border-border p-4 space-y-2">
+          <p className="text-sm text-foreground">
             New clients are shown a{" "}
-            <strong>${depositAmount.toFixed(2)} demo deposit</strong> to
+            <strong className="tabular-nums">${depositAmount.toFixed(2)} demo deposit</strong> to
             illustrate the booking flow. In this frontend demo, the deposit is
             never charged or stored.
           </p>
-          <p className="text-xs text-plum/75">
+          <p className="text-xs text-muted-foreground">
             Invoice balances and payment statuses are calculated from local
             sample data.
           </p>
@@ -67,8 +64,8 @@ const PaymentInstructions = ({ paymentInfo }) => {
           />
         )}
 
-        <div className="rounded-lg bg-[#EEF5FB] border border-gold/20 p-3 text-sm text-plum/80 flex items-start gap-2">
-          <Info className="w-4 h-4 text-gold mt-0.5 shrink-0" />
+        <div className="rounded-md bg-accent border border-primary/15 p-3 text-sm text-foreground flex items-start gap-2">
+          <Info className="w-4 h-4 text-primary mt-0.5 shrink-0" />
           <p>
             {P.notes ||
               "This website is a demonstration environment. No real payments are performed."}
@@ -80,11 +77,11 @@ const PaymentInstructions = ({ paymentInfo }) => {
 };
 
 const Row = ({ icon: Icon, title, text }) => (
-  <div className="rounded-xl border border-gold/20 bg-white p-4 flex gap-3">
-    <Icon className="w-5 h-5 text-gold mt-0.5 shrink-0" />
+  <div className="rounded-md border border-border bg-card p-4 flex gap-3">
+    <Icon className="w-5 h-5 text-primary mt-0.5 shrink-0" />
     <div>
-      <p className="text-sm font-medium text-plum">{title}</p>
-      <p className="text-sm text-plum/70 mt-0.5">{text}</p>
+      <p className="text-sm font-medium text-foreground">{title}</p>
+      <p className="text-sm text-muted-foreground mt-0.5">{text}</p>
     </div>
   </div>
 );

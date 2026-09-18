@@ -9,7 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Calendar } from '@/components/ui/calendar';
 import { useToast } from '@/components/ui/use-toast';
-import { Home, Sparkles, Truck, Building, Clock, ChevronRight, Tag, Info, Loader2 } from 'lucide-react';
+import { Home, Sparkles, Truck, Building, Clock, ChevronRight, Tag, Info, Loader2, AlertCircle } from 'lucide-react';
 import { format, isSunday } from 'date-fns';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -54,10 +54,10 @@ const OPERATING_RULES = {
 
 // ===== Solid, readable Select styles =====
 const selectTriggerClass =
-  'bg-white text-plum border border-plum/30 rounded-md ' +
-  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/50 focus:border-gold/60';
-const selectContentClass = 'bg-white border border-plum/20 text-plum shadow-xl';
-const selectItemClass = 'focus:bg-gold/10 focus:text-plum cursor-pointer';
+  'bg-background text-foreground border border-input rounded-md ' +
+  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus:border-primary/60';
+const selectContentClass = 'bg-card border border-border text-foreground shadow-pop';
+const selectItemClass = 'focus:bg-accent focus:text-accent-foreground cursor-pointer';
 
 // ----- Utils -----
 // Shared helper: 24h Date -> "hh:mm AM/PM"
@@ -499,13 +499,13 @@ const BookingPage = () => {
 
   return (
     <TooltipProvider>
-      <div className="py-12 sm:py-16 md:py-20 px-3 sm:px-4 bg-[#F7F7F7]">
+      <div className="py-12 sm:py-16 md:py-20 px-3 sm:px-4 bg-secondary">
         <div className="max-w-6xl mx-auto">
           <motion.div className="text-center mb-8 sm:mb-10 md:mb-12">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-plum mb-3 sm:mb-4">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-3 sm:mb-4">
               {isEditing ? 'Reschedule Your Cleaning' : 'Book Your Cleaning Service'}
             </h1>
-            <p className="text-sm sm:text-base md:text-lg text-plum/80">
+            <p className="text-sm sm:text-base md:text-lg text-foreground/80">
               {isEditing
                 ? 'Pick a new date and time. Details can be adjusted if needed.'
                 : 'Get an instant estimate and schedule your appointment in minutes.'}
@@ -530,16 +530,16 @@ const BookingPage = () => {
                           onClick={() => handleFormChange('service', service.id)}
                           className={[
                             'p-4 border-2 rounded-lg flex flex-col items-center justify-center gap-2 transition-all',
-                            'bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/50',
+                            'bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50',
                             selected
-                              ? 'border-gold bg-gold/10'
-                              : 'border-plum/20 hover:border-gold/50',
+                              ? 'border-primary bg-primary/10'
+                              : 'border-border/20 hover:border-primary/50',
                           ].join(' ')}
                           aria-pressed={selected}
                           aria-label={service.name}
                         >
-                          <service.icon className="w-8 h-8 text-plum" />
-                          <span className="text-sm font-medium text-center text-plum">
+                          <service.icon className="w-8 h-8 text-foreground" />
+                          <span className="text-sm font-medium text-center text-foreground">
                             {service.name}
                           </span>
                         </button>
@@ -568,7 +568,7 @@ const BookingPage = () => {
                         className="bg-white"
                       />
                       {errors.firstName && (
-                        <p className="text-xs text-red-600 mt-1">{errors.firstName}</p>
+                        <p className="text-xs text-destructive mt-1">{errors.firstName}</p>
                       )}
                     </div>
                     <div className={errors.lastName ? 'relative' : ''}>
@@ -583,7 +583,7 @@ const BookingPage = () => {
                         className="bg-white"
                       />
                       {errors.lastName && (
-                        <p className="text-xs text-red-600 mt-1">{errors.lastName}</p>
+                        <p className="text-xs text-destructive mt-1">{errors.lastName}</p>
                       )}
                     </div>
                     <div className={errors.email ? 'relative' : ''}>
@@ -599,7 +599,7 @@ const BookingPage = () => {
                         className="bg-white"
                       />
                       {errors.email && (
-                        <p className="text-xs text-red-600 mt-1">{errors.email}</p>
+                        <p className="text-xs text-destructive mt-1">{errors.email}</p>
                       )}
                     </div>
                   </div>
@@ -644,7 +644,7 @@ const BookingPage = () => {
                           })}
                         </SelectContent>
                       </Select>
-                      <p className="text-xs text-plum/70">
+                      <p className="text-xs text-foreground/70">
                         We&apos;ll pre-fill the address fields below. You can still tweak them
                         for this visit.
                       </p>
@@ -664,7 +664,7 @@ const BookingPage = () => {
                         className="bg-white"
                       />
                       {errors.street && (
-                        <p className="text-xs text-red-600 mt-1">{errors.street}</p>
+                        <p className="text-xs text-destructive mt-1">{errors.street}</p>
                       )}
                     </div>
 
@@ -680,7 +680,7 @@ const BookingPage = () => {
                         className="bg-white"
                       />
                       {errors.city && (
-                        <p className="text-xs text-red-600 mt-1">{errors.city}</p>
+                        <p className="text-xs text-destructive mt-1">{errors.city}</p>
                       )}
                     </div>
 
@@ -702,7 +702,7 @@ const BookingPage = () => {
                         </SelectContent>
                       </Select>
                       {errors.state && (
-                        <p className="text-xs text-red-600 mt-1">{errors.state}</p>
+                        <p className="text-xs text-destructive mt-1">{errors.state}</p>
                       )}
                     </div>
                   </div>
@@ -722,7 +722,7 @@ const BookingPage = () => {
                         className="bg-white"
                       />
                       {errors.phone && (
-                        <p className="text-xs text-red-600 mt-1">{errors.phone}</p>
+                        <p className="text-xs text-destructive mt-1">{errors.phone}</p>
                       )}
                     </div>
                     <div className={errors.zip ? 'relative' : ''}>
@@ -739,7 +739,7 @@ const BookingPage = () => {
                         className="bg-white"
                       />
                       {errors.zip && (
-                        <p className="text-xs text-red-600 mt-1">{errors.zip}</p>
+                        <p className="text-xs text-destructive mt-1">{errors.zip}</p>
                       )}
                     </div>
                   </div>
@@ -793,7 +793,7 @@ const BookingPage = () => {
                       className="bg-white"
                       placeholder="Example: Focus on bathrooms and kitchen, avoid strong scents in bedrooms, etc."
                     />
-                    <p className="text-xs text-plum/70 mt-1">
+                    <p className="text-xs text-foreground/70 mt-1">
                       These notes apply to this visit. Your cleaner will also see any
                       standing preferences saved in your profile.
                     </p>
@@ -983,21 +983,21 @@ const BookingPage = () => {
                       className="rounded-md border bg-white"
                       classNames={{
                         day_selected:
-                          'bg-gold text-white hover:bg-gold hover:text-white focus:bg-gold focus:text-white',
-                        day_today: 'border border-gold/50',
-                        nav_button: 'hover:bg-gold/10',
+                          'bg-primary text-white hover:bg-primary hover:text-white focus:bg-primary focus:text-white',
+                        day_today: 'border border-primary/50',
+                        nav_button: 'hover:bg-primary/10',
                       }}
                     />
                     {errors.date && (
-                      <p className="text-xs text-red-600 mt-2">{errors.date}</p>
+                      <p className="text-xs text-destructive mt-2">{errors.date}</p>
                     )}
                     {loadingDay && (
-                      <p className="text-xs text-plum/60 mt-2">
+                      <p className="text-xs text-foreground/60 mt-2">
                         Checking availability…
                       </p>
                     )}
                     {!loadingDay && availabilityStatus === 'failed' && (
-                      <p className="text-xs text-red-600 mt-2">
+                      <p className="text-xs text-destructive mt-2">
                         {availabilityError}
                       </p>
                     )}
@@ -1012,7 +1012,7 @@ const BookingPage = () => {
                         <p>Select a time that works best for you.</p>
                       </TooltipContent>
                     </Tooltip>
-                    <p className="text-sm text-plum/70 mb-2">
+                    <p className="text-sm text-foreground/70 mb-2">
                       On {form.date ? format(form.date, 'PPP') : 'your selected date'}
                     </p>
                     <RadioGroup
@@ -1021,7 +1021,7 @@ const BookingPage = () => {
                       className="grid grid-cols-2 gap-2"
                     >
                       {(!form.date || timeOptionsForUi.length === 0) && (
-                        <div className="col-span-2 text-sm text-plum/70">
+                        <div className="col-span-2 text-sm text-foreground/70">
                           {!form.date
                             ? 'Pick a date to see available times.'
                             : availabilityStatus === 'loading'
@@ -1049,8 +1049,8 @@ const BookingPage = () => {
                               className={[
                                 'block p-3 border-2 rounded-lg text-center transition bg-white cursor-pointer',
                                 selected
-                                  ? 'border-gold bg-gold/10 ring-2 ring-gold/30'
-                                  : 'border-plum/20 hover:border-gold/50',
+                                  ? 'border-primary bg-primary/10 ring-2 ring-primary/30'
+                                  : 'border-border/20 hover:border-primary/50',
                               ].join(' ')}
                               aria-pressed={selected}
                               aria-current={selected ? 'true' : undefined}
@@ -1062,7 +1062,7 @@ const BookingPage = () => {
                       })}
                     </RadioGroup>
                     {errors.time && (
-                      <p className="text-xs text-red-600 mt-2">{errors.time}</p>
+                      <p className="text-xs text-destructive mt-2">{errors.time}</p>
                     )}
                   </div>
                 </CardContent>
@@ -1073,7 +1073,7 @@ const BookingPage = () => {
             <div className="lg:col-span-1 sticky top-24">
               <Card className="bg-white">
                 <CardHeader>
-                  <CardTitle className="text-plum">Your Estimate</CardTitle>
+                  <CardTitle className="text-foreground">Your Estimate</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2">
                   {Object.entries(estimate).map(([key, value]) => {
@@ -1087,14 +1087,14 @@ const BookingPage = () => {
                     if (value > 0 && labels[key]) {
                       return (
                         <div key={key} className="flex justify-between text-sm">
-                          <span className="text-plum/80">{labels[key]}</span>
+                          <span className="text-foreground/80">{labels[key]}</span>
                           <span>${value.toFixed(2)}</span>
                         </div>
                       );
                     }
                     return null;
                   })}
-                  <div className="border-t border-gold/30 my-2 pt-2 space-y-2">
+                  <div className="border-t border-primary/30 my-2 pt-2 space-y-2">
                     {estimate.discount > 0 && (
                       <div className="flex justify-between text-sm font-semibold text-green-700">
                         <span className="flex items-center">
@@ -1113,19 +1113,19 @@ const BookingPage = () => {
                         <span>−${estimate.promoDiscount.toFixed(2)}</span>
                       </div>
                     )}
-                    <div className="flex justify-between font-bold text-plum mt-1">
+                    <div className="flex justify-between font-bold text-foreground mt-1">
                       <span className="flex items-center text-lg">
-                        <Clock className="h-5 w-5 mr-2 text-gold" />
+                        <Clock className="h-5 w-5 mr-2 text-primary" />
                         Est. Duration
                       </span>
                       <span>~{estimate.duration} hours</span>
                     </div>
-                    <div className="flex justify-between text-2xl font-bold text-plum">
+                    <div className="flex justify-between text-2xl font-bold text-foreground">
                       <span>Total</span>
                       <span>${estimate.total.toFixed(2)}</span>
                     </div>
                   </div>
-                  <div className="text-xs text-plum/70 pt-2 flex items-start gap-1">
+                  <div className="text-xs text-foreground/70 pt-2 flex items-start gap-1">
                     <Info className="h-4 w-4 flex-shrink-0 mt-0.5" />
                     <span>Final price may adjust on site after walkthrough.</span>
                   </div>
@@ -1151,7 +1151,7 @@ const BookingPage = () => {
                       type="button"
                       variant="outline"
                       onClick={handleApplyPromoCode}
-                      className="border-gold text-gold hover:bg-gold/10 hover:text-gold"
+                      className="border-primary text-primary hover:bg-primary/10 hover:text-primary"
                       disabled={!form.promoCode?.trim() || promoApplied}
                     >
                       {promoApplied ? 'Applied' : 'Apply'}
@@ -1159,11 +1159,11 @@ const BookingPage = () => {
                   </div>
 
                   {/* ⚖️ Disclaimer before the button */}
-                  <div className="rounded-xl border border-gold/30 bg-[#EEF5FB] p-4 -mt-1">
+                  <div className="rounded-xl border border-primary/30 bg-secondary p-4 -mt-1">
                     <div className="flex items-start gap-3">
-                      <AlertCircle className="w-5 h-5 text-gold mt-0.5" />
-                      <div className="text-sm text-plum/80">
-                        <p className="font-semibold text-plum">
+                      <AlertCircle className="w-5 h-5 text-primary mt-0.5" />
+                      <div className="text-sm text-foreground/80">
+                        <p className="font-semibold text-foreground">
                           Important: estimates are not final quotes.
                         </p>
                         <ul className="list-disc pl-5 mt-2 space-y-1">
@@ -1206,14 +1206,14 @@ const BookingPage = () => {
                             onChange={(e) =>
                               handleFormChange('agreePolicy', e.target.checked)
                             }
-                            className="h-4 w-4 rounded border-plum/30 accent-[--gold-500]"
+                            className="h-4 w-4 rounded border-border/30 accent-primary"
                           />
                           <span>
                             I understand and agree to the estimate and deposit policy.
                           </span>
                         </label>
                         {errors.agreePolicy && (
-                          <p className="text-xs text-red-600 mt-1">
+                          <p className="text-xs text-destructive mt-1">
                             {errors.agreePolicy}
                           </p>
                         )}
@@ -1227,7 +1227,7 @@ const BookingPage = () => {
                       handleProceedToCheckout();
                     }}
                     size="lg"
-                    className="w-full bg-gold hover:bg-gold/90 text-white rounded-full disabled:opacity-60 flex items-center justify-center gap-2"
+                    className="w-full bg-primary hover:bg-primary/90 text-white rounded-full disabled:opacity-60 flex items-center justify-center gap-2"
                     disabled={isSubmitting}
                   >
                     {isSubmitting ? (

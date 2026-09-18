@@ -11,7 +11,7 @@ http.createServer((req,res) => {
   if (fs.existsSync(file) && fs.statSync(file).isDirectory()) file = path.join(file,'index.html');
   if (!fs.existsSync(file) && !path.extname(file) && url.searchParams.get('noRewrite') !== '1') {
     const mount = relative.split('/')[0];
-    if (['fmbl','cleaning-service-demo'].includes(mount)) file = path.join(root,mount,'index.html');
+    if (['fmbl','cleaning-service-demo','escano-construction'].includes(mount)) file = path.join(root,mount,'index.html');
   }
   if (!fs.existsSync(file)) { res.writeHead(404).end('Not found (no static file)'); return; }
   res.writeHead(200, {'Content-Type':types[path.extname(file)] || 'application/octet-stream', 'Cache-Control':'no-store'});

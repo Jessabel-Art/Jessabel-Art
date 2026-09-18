@@ -1,726 +1,415 @@
 // src/pages/admin/DashboardHome.jsx
 import React from "react";
-import { Button } from "@/components/ui/button";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { money } from "./utils";
-import { getAllDemoAppointments } from "@/data/demoRuntime";
 import {
-  ResponsiveContainer,
-  LineChart,
-  Line,
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  Tooltip as RechartsTooltip,
-  PieChart,
-  Pie,
-  Cell,
-} from "recharts";
+  CalendarClock,
+  DollarSign,
+  Clock3,
+  AlertCircle,
+  Sparkles,
+  Star,
+  CheckCircle2,
+  Wallet,
+  MessageSquareText,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card";
+import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/table";
+import PageHeader from "@/components/PageHeader";
+import MetricCard from "@/components/MetricCard";
+import StatusPill from "@/components/StatusPill";
+import { money } from "./utils";
+import { getAllDemoAppointments, getAllDemoInvoices } from "@/data/demoRuntime";
+import { reviews, getReviewSummary, formatRelativeDate } from "@/lib/reviews";
 
-// Simple color set re-using brand vibes
-const COLORS = ["#3A9FDF", "#22c55e", "#eab308", "#06b6d4", "#f97316", "#0B283D"];
+// This is a static portfolio demo pinned to 2026-09-18 — never Date.now().
+const TODAY = new Date("2026-09-18T08:00:00");
 
-const STATUS_COLORS = {
-  pending: "#eab308",
-  confirmed: "#22c55e",
-  completed: "#8b5cf6",
-  cancelled: "#f97316",
-  declined: "#ef4444",
+function startOfDay(value) {
+  const date = new Date(value);
+  date.setHours(0, 0, 0, 0);
+  return date;
+}
+
+function formatDateShort(value) {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "--";
+  return date.toLocaleDateString(undefined, { month: "short", day: "numeric" });
+}
+
+function formatDateTime(value) {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "--";
+  return date.toLocaleString(undefined, {
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+  });
+}
+
+const STATUS_TONE = {
+  confirmed: "bg-primary",
+  pending: "bg-warning",
+  completed: "bg-success",
+  cancelled: "bg-destructive",
 };
 
-function getWhenDate(b) {
-  const value = b?.scheduledAt || b?.startAt || b?.date || null;
-  if (!value) return null;
-  if (typeof value?.toDate === "function") return value.toDate();
-  const date = new Date(value);
-  return Number.isNaN(date.getTime()) ? null : date;
-}
-
-function sameDay(a, b) {
-  return (
-    a.getFullYear() === b.getFullYear() &&
-    a.getMonth() === b.getMonth() &&
-    a.getDate() === b.getDate()
-  );
-}
-
-function startOfDay(d) {
-  const x = new Date(d);
-  x.setHours(0, 0, 0, 0);
-  return x;
-}
-function endOfDay(d) {
-  const x = new Date(d);
-  x.setHours(23, 59, 59, 999);
-  return x;
-}
+const ACTIVITY_STYLES = {
+  request: { icon: Clock3, wrap: "bg-warning-bg" },
+  completed: { icon: CheckCircle2, wrap: "bg-success-bg" },
+  payment: { icon: Wallet, wrap: "bg-accent" },
+  review: { icon: MessageSquareText, wrap: "bg-accent" },
+};
 
 export default function DashboardHome({ onChangeView }) {
-  const rows = React.useMemo(() => getAllDemoAppointments(), []);
-  const loading = false;
+  const appointments = React.useMemo(() => getAllDemoAppointments(), []);
+  const invoices = React.useMemo(() => getAllDemoInvoices(), []);
+  const reviewSummary = React.useMemo(() => getReviewSummary(reviews), []);
 
-  // ---- Analytics / derived views ----
   const analytics = React.useMemo(() => {
-    if (!rows.length) {
-      return {
-        todayRevenue: 0,
-        next7Revenue: 0,
-        monthRevenue: 0,
-        avgTicket: 0,
-        todaySeries: [],
-        next7Series: [],
-        monthSeries: [],
-        statusBreakdown: [],
-        serviceMix: [],
-        todayJobs: [],
-        pipeline: {
-          pending: 0,
-          confirmed: 0,
-          completed: 0,
-          upcomingFromToday: 0,
-        },
-      };
-    }
+    const windowStart = startOfDay(TODAY);
+    const windowEnd = new Date(windowStart);
+    windowEnd.setDate(windowEnd.getDate() + 6);
+    windowEnd.setHours(23, 59, 59, 999);
 
-    const today = new Date();
-    const todayStart = startOfDay(today);
-    const todayEnd = endOfDay(today);
-
-    const sevenDaysAhead = new Date(today);
-    sevenDaysAhead.setDate(today.getDate() + 7);
-    const sevenEnd = endOfDay(sevenDaysAhead);
-
-    const monthStart = new Date(today.getFullYear(), today.getMonth(), 1);
-    const monthEnd = new Date(today.getFullYear(), today.getMonth() + 1, 0, 23, 59, 59, 999);
-
-    let todayRevenue = 0;
-    let next7Revenue = 0;
-    let monthRevenue = 0;
-
-    const statusCounts = new Map();
-    const serviceCounts = new Map();
-
-    const todayJobs = [];
-
-    // For charts
-    const dayBucketsMonth = new Map(); // yyyy-mm-dd -> { label, revenue }
-    const dayBucketsNext7 = new Map();
-    const dayBucketsToday = new Map();
-
-    // For avg ticket this month
-    let monthBookingsCount = 0;
-
-    const isRevenueStatus = (st) => {
-      const s = String(st || "").toLowerCase();
-      return s === "confirmed" || s === "completed";
-    };
-
-    for (const b of rows) {
-      const when = getWhenDate(b);
-      if (!when) continue;
-
-      const status = String(b.status || "unknown").toLowerCase();
-      const amt = Number(b.amount ?? b.cost ?? 0) || 0;
-
-      // pipeline counts (today forward)
-      if (when >= todayStart) {
-        if (status === "pending") statusCounts.set("pending", (statusCounts.get("pending") || 0) + 1);
-        if (status === "confirmed") statusCounts.set("confirmed", (statusCounts.get("confirmed") || 0) + 1);
-        if (status === "completed") statusCounts.set("completed", (statusCounts.get("completed") || 0) + 1);
-        if (status === "cancelled" || status === "cancelled")
-          statusCounts.set("cancelled", (statusCounts.get("cancelled") || 0) + 1);
-        if (status === "declined")
-          statusCounts.set("declined", (statusCounts.get("declined") || 0) + 1);
-      }
-
-      const dateKey = when.toISOString().slice(0, 10);
-      const label = when.toLocaleDateString(undefined, {
-        month: "short",
-        day: "2-digit",
-      });
-
-      // today metrics + jobs
-      if (when >= todayStart && when <= todayEnd) {
-        if (isRevenueStatus(status)) {
-          todayRevenue += amt;
-        }
-
-        const bucketToday = dayBucketsToday.get(dateKey) || { label, value: 0 };
-        bucketToday.value += amt;
-        dayBucketsToday.set(dateKey, bucketToday);
-
-        // jobs list (regardless of revenue status)
-        todayJobs.push(b);
-      }
-
-      // next 7 days revenue (starting tomorrow)
-      if (when > todayEnd && when <= sevenEnd && isRevenueStatus(status)) {
-        next7Revenue += amt;
-
-        const bucket = dayBucketsNext7.get(dateKey) || { label, value: 0 };
-        bucket.value += amt;
-        dayBucketsNext7.set(dateKey, bucket);
-      }
-
-      // this month totals + service mix
-      if (when >= monthStart && when <= monthEnd) {
-        if (isRevenueStatus(status)) {
-          monthRevenue += amt;
-          monthBookingsCount += 1;
-
-          const bucketMonth = dayBucketsMonth.get(dateKey) || { label, value: 0 };
-          bucketMonth.value += amt;
-          dayBucketsMonth.set(dateKey, bucketMonth);
-        }
-
-        const svc =
-          (b.serviceName || b.service || "Other").toString().toLowerCase();
-        serviceCounts.set(svc, (serviceCounts.get(svc) || 0) + 1);
-      }
-    }
-
-    // derived chart arrays
-    const todaySeries = Array.from(dayBucketsToday.values()).sort(
-      (a, b) => a.label.localeCompare(b.label)
-    );
-    const next7Series = Array.from(dayBucketsNext7.values()).sort(
-      (a, b) => a.label.localeCompare(b.label)
-    );
-    const monthSeries = Array.from(dayBucketsMonth.values()).sort(
-      (a, b) => a.label.localeCompare(b.label)
-    );
-
-    const statusBreakdown = Array.from(statusCounts.entries()).map(
-      ([name, value]) => ({
-        name,
-        value,
+    const weekAppointments = appointments
+      .filter((a) => {
+        const when = new Date(a.startAt);
+        return when >= windowStart && when <= windowEnd;
       })
-    );
+      .sort((a, b) => new Date(a.startAt) - new Date(b.startAt));
 
-    const serviceMix = Array.from(serviceCounts.entries())
-      .map(([name, count]) => ({ name, count }))
-      .sort((a, b) => b.count - a.count)
+    const weekRevenue = weekAppointments
+      .filter((a) => a.status !== "cancelled")
+      .reduce((sum, a) => sum + Number(a.total || 0), 0);
+
+    const pendingRequests = appointments.filter((a) => a.status === "pending");
+
+    const statusCounts = appointments.reduce((acc, a) => {
+      acc[a.status] = (acc[a.status] || 0) + 1;
+      return acc;
+    }, {});
+
+    const nextAppointment = appointments
+      .filter((a) => new Date(a.startAt) >= TODAY && a.status !== "cancelled")
+      .sort((a, b) => new Date(a.startAt) - new Date(b.startAt))[0] || null;
+
+    const outstandingBalance = invoices.reduce((sum, inv) => sum + Number(inv.amountDue || 0), 0);
+    const openInvoiceCount = invoices.filter((inv) => Number(inv.amountDue || 0) > 0).length;
+
+    const serviceMap = new Map();
+    appointments
+      .filter((a) => a.status !== "cancelled")
+      .forEach((a) => {
+        const key = a.serviceName || "Other";
+        const entry = serviceMap.get(key) || { name: key, count: 0, revenue: 0 };
+        entry.count += 1;
+        entry.revenue += Number(a.total || 0);
+        serviceMap.set(key, entry);
+      });
+    const topServices = Array.from(serviceMap.values()).sort((a, b) => b.revenue - a.revenue);
+
+    const recentPayments = invoices
+      .filter((inv) => Number(inv.paidAmount || 0) > 0)
+      .sort((a, b) => new Date(b.issueDate) - new Date(a.issueDate))
       .slice(0, 5);
 
-    const pipeline = {
-      pending: statusCounts.get("pending") || 0,
-      confirmed: statusCounts.get("confirmed") || 0,
-      completed: statusCounts.get("completed") || 0,
-      upcomingFromToday:
-        (statusCounts.get("pending") || 0) +
-        (statusCounts.get("confirmed") || 0),
-    };
-
-    const avgTicket = monthBookingsCount
-      ? monthRevenue / monthBookingsCount
-      : 0;
-
-    // sort today jobs by time
-    todayJobs.sort((a, b) => {
-      const ad = getWhenDate(a)?.getTime() ?? 0;
-      const bd = getWhenDate(b)?.getTime() ?? 0;
-      return ad - bd;
-    });
+    const activity = [
+      ...pendingRequests.map((a) => ({
+        type: "request",
+        timestamp: a.startAt,
+        text: `${a.clientName} requested ${a.serviceName} for ${formatDateShort(a.startAt)}`,
+      })),
+      ...appointments
+        .filter((a) => a.status === "completed")
+        .map((a) => ({
+          type: "completed",
+          timestamp: a.startAt,
+          text: `Completed ${a.serviceName} for ${a.clientName} — ${money(a.total)}`,
+        })),
+      ...recentPayments.map((inv) => ({
+        type: "payment",
+        timestamp: inv.issueDate,
+        text: `${inv.clientName} paid ${money(inv.paidAmount)} (${inv.paymentMethod})`,
+      })),
+      ...reviews.map((r) => ({
+        type: "review",
+        timestamp: r.date,
+        text: `${r.name} left a ${r.rating}-star review for ${r.service}`,
+      })),
+    ]
+      .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+      .slice(0, 8);
 
     return {
-      todayRevenue,
-      next7Revenue,
-      monthRevenue,
-      avgTicket,
-      todaySeries,
-      next7Series,
-      monthSeries,
-      statusBreakdown,
-      serviceMix,
-      todayJobs,
-      pipeline,
+      weekAppointments,
+      weekRevenue,
+      pendingRequests,
+      statusCounts,
+      nextAppointment,
+      outstandingBalance,
+      openInvoiceCount,
+      topServices,
+      recentPayments,
+      activity,
     };
-  }, [rows]);
+  }, [appointments, invoices]);
 
-  const {
-    todayRevenue,
-    next7Revenue,
-    monthRevenue,
-    avgTicket,
-    todaySeries,
-    next7Series,
-    monthSeries,
-    statusBreakdown,
-    serviceMix,
-    todayJobs,
-    pipeline,
-  } = analytics;
-
-  const goToBookings = () => onChangeView && onChangeView("bookings");
-  const goToCalendar = () => onChangeView && onChangeView("calendar");
-  const goToReports = () => onChangeView && onChangeView("reports");
+  const goTo = (view) => () => onChangeView && onChangeView(view);
+  const totalBookings = appointments.length;
 
   return (
     <section className="space-y-6">
-      {/* Quick actions */}
-      <div className="flex flex-wrap items-center gap-3 mb-1">
-        <Button
-          className="rounded-full bg-plum text-white text-xs sm:text-sm"
-          onClick={goToBookings}
-        >
-          Bookings
-        </Button>
-        <Button
-          variant="outline"
-          className="rounded-full text-xs sm:text-sm"
-          onClick={goToCalendar}
-        >
-          Open calendar
-        </Button>
-        <Button
-          variant="outline"
-          className="rounded-full text-xs sm:text-sm"
-          onClick={goToReports}
-        >
-          View detailed reports
-        </Button>
+      <PageHeader
+        eyebrow="Operations"
+        title="Dashboard"
+        description="Live snapshot of this week's schedule, revenue, and outstanding work — derived from current bookings and invoices."
+        actions={
+          <>
+            <Button size="sm" onClick={goTo("bookings")}>
+              View bookings
+            </Button>
+            <Button size="sm" variant="outline" onClick={goTo("calendar")}>
+              Open calendar
+            </Button>
+            <Button size="sm" variant="outline" onClick={goTo("reports")}>
+              Full reports
+            </Button>
+          </>
+        }
+      />
+
+      {/* KPI row */}
+      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <MetricCard
+          tone="primary"
+          icon={DollarSign}
+          label="Upcoming revenue (7 days)"
+          value={money(analytics.weekRevenue)}
+          sublabel={`Confirmed + pending, ${formatDateShort(analytics.weekAppointments[0]?.startAt || TODAY)}–${formatDateShort(
+            new Date(startOfDay(TODAY).getTime() + 6 * 86400000)
+          )}`}
+        />
+        <MetricCard
+          icon={CalendarClock}
+          label="Bookings this week"
+          value={analytics.weekAppointments.length}
+          sublabel={`${totalBookings} total on the books`}
+        />
+        <MetricCard
+          tone="warning"
+          icon={Clock3}
+          label="Pending requests"
+          value={analytics.pendingRequests.length}
+          sublabel="Awaiting your approval"
+        />
+        <MetricCard
+          icon={AlertCircle}
+          label="Outstanding balance"
+          value={money(analytics.outstandingBalance)}
+          sublabel={`${analytics.openInvoiceCount} open invoices`}
+        />
       </div>
 
-      {/* At a glance header */}
-      <div>
-        <h2 className="text-xl font-semibold text-plum mb-1">
-          At a glance
-        </h2>
-        <p className="text-sm text-plum/70">
-          Today&apos;s revenue, upcoming work, and booking pipeline in one view.
-        </p>
-      </div>
-
-      {/* KPI row with mini charts */}
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        {/* Today */}
-        <Card className="rounded-2xl border-plum/10 bg-white">
-          <CardHeader className="pb-1">
-            <CardTitle className="text-sm text-plum/70 flex items-center gap-1">
-              <span className="w-2 h-2 rounded-full bg-[#F97316]" />
-              Today&apos;s revenue
-            </CardTitle>
+      {/* Schedule + status/services */}
+      <div className="grid gap-5 xl:grid-cols-[minmax(0,1.6fr),minmax(0,1fr)]">
+        <Card>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-base">This week's schedule</CardTitle>
+            <CardDescription>
+              {analytics.weekAppointments.length
+                ? `${analytics.weekAppointments.length} appointments scheduled Sep 18–24.`
+                : "Nothing scheduled in the next 7 days."}
+            </CardDescription>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-semibold text-plum mb-1">
-              {money(todayRevenue)}
-            </div>
-            <p className="text-[11px] text-plum/60 mb-2">
-              Confirmed + completed scheduled for today.
-            </p>
-            <div className="h-16">
-              {todaySeries.length ? (
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={todaySeries}>
-                    <XAxis dataKey="label" hide />
-                    <YAxis hide />
-                    <RechartsTooltip
-                      formatter={(v) => money(v)}
-                      labelFormatter={(l) => `Date: ${l}`}
-                    />
-                    <Bar dataKey="value" fill={COLORS[0]} radius={[4, 4, 0, 0]} />
-                  </BarChart>
-                </ResponsiveContainer>
-              ) : (
-                <div className="text-[11px] text-plum/40 flex items-center h-full">
-                  No bookings today yet.
-                </div>
-              )}
-            </div>
+          <CardContent className="pt-0">
+            {analytics.weekAppointments.length === 0 ? (
+              <p className="text-sm text-muted-foreground py-6 text-center">No bookings in this window yet.</p>
+            ) : (
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>When</TableHead>
+                    <TableHead>Client</TableHead>
+                    <TableHead>Service</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead className="text-right">Amount</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {analytics.weekAppointments.map((a) => (
+                    <TableRow key={a.id}>
+                      <TableCell className="whitespace-nowrap text-sm">{formatDateTime(a.startAt)}</TableCell>
+                      <TableCell className="font-medium">{a.clientName}</TableCell>
+                      <TableCell className="text-muted-foreground">{a.serviceName}</TableCell>
+                      <TableCell>
+                        <StatusPill status={a.status} />
+                      </TableCell>
+                      <TableCell className="text-right tabular-nums">{money(a.total)}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            )}
           </CardContent>
         </Card>
 
-        {/* Next 7 days */}
-        <Card className="rounded-2xl border-[#D7EAFE] bg-[#F8FBFF]">
-          <CardHeader className="pb-1">
-            <CardTitle className="text-sm text-[#1E293B]/80 flex items-center gap-1">
-              <span className="w-2 h-2 rounded-full bg-[#0EA5E9]" />
-              Next 7 days
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-semibold text-[#0F172A] mb-1">
-              {money(next7Revenue)}
-            </div>
-            <p className="text-[11px] text-[#1E293B]/60 mb-2">
-              Revenue scheduled in the next week.
-            </p>
-            <div className="h-16">
-              {next7Series.length ? (
-                <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={next7Series}>
-                    <XAxis dataKey="label" hide />
-                    <YAxis hide />
-                    <RechartsTooltip
-                      formatter={(v) => money(v)}
-                      labelFormatter={(l) => `Date: ${l}`}
-                    />
-                    <Line
-                      type="monotone"
-                      dataKey="value"
-                      stroke={COLORS[2]}
-                      strokeWidth={2}
-                      dot={false}
-                    />
-                  </LineChart>
-                </ResponsiveContainer>
-              ) : (
-                <div className="text-[11px] text-[#1E293B]/40 flex items-center h-full">
-                  No upcoming revenue in the next week yet.
-                </div>
-              )}
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* This month */}
-        <Card className="rounded-2xl border-[#CDEFD6] bg-[#F4FFF7]">
-          <CardHeader className="pb-1">
-            <CardTitle className="text-sm text-[#064E3B]/80 flex items-center gap-1">
-              <span className="w-2 h-2 rounded-full bg-[#22C55E]" />
-              This month
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-semibold text-[#064E3B] mb-1">
-              {money(monthRevenue)}
-            </div>
-            <p className="text-[11px] text-[#065F46]/60 mb-2">
-              Booked in the current calendar month.
-            </p>
-            <div className="h-16">
-              {monthSeries.length ? (
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={monthSeries}>
-                    <XAxis dataKey="label" hide />
-                    <YAxis hide />
-                    <RechartsTooltip
-                      formatter={(v) => money(v)}
-                      labelFormatter={(l) => `Date: ${l}`}
-                    />
-                    <Bar
-                      dataKey="value"
-                      fill={COLORS[3]}
-                      radius={[4, 4, 0, 0]}
-                    />
-                  </BarChart>
-                </ResponsiveContainer>
-              ) : (
-                <div className="text-[11px] text-[#047857]/40 flex items-center h-full">
-                  No revenue recorded yet this month.
-                </div>
-              )}
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Avg ticket */}
-        <Card className="rounded-2xl border-[#F9E3C7] bg-[#FFF9F2]">
-          <CardHeader className="pb-1">
-            <CardTitle className="text-sm text-[#78350F]/80 flex items-center gap-1">
-              <span className="w-2 h-2 rounded-full bg-[#F97316]" />
-              Avg. ticket
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-semibold text-[#78350F] mb-1">
-              {money(avgTicket)}
-            </div>
-            <p className="text-[11px] text-[#92400E]/60 mb-2">
-              Average per booking this month.
-            </p>
-            <div className="h-16 flex items-center text-[11px] text-[#92400E]/40">
-              Based on confirmed + completed bookings in the current month.
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Pipeline status row (clickable cards) */}
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <Card
-          className="rounded-2xl border-[#F9E3C7] bg-[#FFF7E6] cursor-pointer hover:shadow-md transition"
-          onClick={goToBookings}
-        >
-          <CardContent className="pt-4 pb-4">
-            <div className="flex items-center justify-between mb-1">
-              <div className="flex items-center gap-2 text-sm text-[#92400E]">
-                <span className="w-2 h-2 rounded-full bg-[#FACC15]" />
-                Pending approvals
-              </div>
-              {pipeline.pending > 0 && (
-                <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[#F97316] text-white text-[10px]">
-                  !
-                </span>
-              )}
-            </div>
-            <div className="text-2xl font-semibold text-[#92400E]">
-              {pipeline.pending}
-            </div>
-            <p className="text-[11px] text-[#92400E]/60 mt-1">
-              Requests waiting on your decision.
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card className="rounded-2xl border-[#CDEFD6] bg-[#F4FFF7]">
-          <CardContent className="pt-4 pb-4">
-            <div className="flex items-center gap-2 text-sm text-[#065F46] mb-1">
-              <span className="w-2 h-2 rounded-full bg-[#22C55E]" />
-              Confirmed
-            </div>
-            <div className="text-2xl font-semibold text-[#065F46]">
-              {pipeline.confirmed}
-            </div>
-            <p className="text-[11px] text-[#065F46]/60 mt-1">
-              Booked and ready to go.
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card className="rounded-2xl border-[#D8E3FF] bg-[#F5F7FF]">
-          <CardContent className="pt-4 pb-4">
-            <div className="flex items-center gap-2 text-sm text-[#1E3A8A] mb-1">
-              <span className="w-2 h-2 rounded-full bg-[#6366F1]" />
-              Completed
-            </div>
-            <div className="text-2xl font-semibold text-[#1E3A8A]">
-              {pipeline.completed}
-            </div>
-            <p className="text-[11px] text-[#1D4ED8]/60 mt-1">
-              Finished jobs in this range.
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card
-          className="rounded-2xl border-plum/10 bg-white cursor-pointer hover:shadow-md transition"
-          onClick={goToCalendar}
-        >
-          <CardContent className="pt-4 pb-4">
-            <div className="flex items-center gap-2 text-sm text-plum mb-1">
-              <span className="w-2 h-2 rounded-full bg-[#3A9FDF]" />
-              Upcoming jobs
-            </div>
-            <div className="text-2xl font-semibold text-plum">
-              {pipeline.upcomingFromToday}
-            </div>
-            <p className="text-[11px] text-plum/60 mt-1">
-              Pending + confirmed from today forward.
-            </p>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Lower section: charts + today list */}
-      <div className="grid gap-6 xl:grid-cols-[minmax(0,2fr),minmax(0,1.4fr)]">
-        {/* Left column: status + service mix */}
-        <div className="space-y-4">
-          {/* Status breakdown donut */}
-          <Card className="rounded-2xl border-plum/10 bg-white">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm text-plum">
-                Status breakdown
-              </CardTitle>
-              <p className="text-[11px] text-plum/60">
-                Quick view of how many bookings are pending, confirmed,
-                completed, etc.
-              </p>
+        <div className="space-y-5">
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-base">Booking status</CardTitle>
+              <CardDescription>All {totalBookings} bookings on file.</CardDescription>
             </CardHeader>
-            <CardContent className="flex items-center gap-4">
-              {statusBreakdown.length === 0 ? (
-                <div className="text-sm text-plum/60">
-                  No bookings in the loaded range yet.
-                </div>
-              ) : (
-                <>
-                  <div className="w-40 h-40">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <PieChart>
-                        <Pie
-                          data={statusBreakdown}
-                          dataKey="value"
-                          nameKey="name"
-                          innerRadius={45}
-                          outerRadius={70}
-                          paddingAngle={3}
-                        >
-                          {statusBreakdown.map((entry, index) => {
-                            const key = entry.name;
-                            const color =
-                              STATUS_COLORS[key] ||
-                              COLORS[index % COLORS.length];
-                            return <Cell key={key} fill={color} />;
-                          })}
-                        </Pie>
-                        <RechartsTooltip
-                          formatter={(val, name) => [`${val}`, String(name)]}
-                        />
-                      </PieChart>
-                    </ResponsiveContainer>
+            <CardContent className="pt-0 space-y-3">
+              {["confirmed", "pending", "completed", "cancelled"].map((key) => {
+                const count = analytics.statusCounts[key] || 0;
+                const pct = totalBookings ? Math.round((count / totalBookings) * 100) : 0;
+                return (
+                  <div key={key}>
+                    <div className="flex items-center justify-between text-sm mb-1">
+                      <span className="capitalize text-foreground">{key}</span>
+                      <span className="text-muted-foreground tabular-nums">{count}</span>
+                    </div>
+                    <div className="h-1.5 rounded-full bg-muted overflow-hidden">
+                      <div
+                        className={`h-full rounded-full ${STATUS_TONE[key] || "bg-muted-foreground"}`}
+                        style={{ width: `${pct}%` }}
+                      />
+                    </div>
                   </div>
-                  <ul className="space-y-1 text-xs">
-                    {statusBreakdown.map((s, idx) => {
-                      const color =
-                        STATUS_COLORS[s.name] ||
-                        COLORS[idx % COLORS.length];
-                      return (
-                        <li
-                          key={s.name}
-                          className="flex items-center gap-2 text-plum"
-                        >
-                          <span
-                            className="inline-block w-3 h-3 rounded-full"
-                            style={{ backgroundColor: color }}
-                          />
-                          <span className="capitalize">{s.name}</span>
-                          <span className="ml-1 text-[11px] text-plum/60">
-                            ({s.value})
-                          </span>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                </>
-              )}
+                );
+              })}
             </CardContent>
           </Card>
 
-          {/* Service mix bar chart */}
-          <Card className="rounded-2xl border-plum/10 bg-white">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm text-plum">
-                Top services this month
-              </CardTitle>
-              <p className="text-[11px] text-plum/60">
-                Based on confirmed + completed bookings in the current month.
-              </p>
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-base">Top services</CardTitle>
+              <CardDescription>By revenue, excluding cancellations.</CardDescription>
             </CardHeader>
-            <CardContent className="h-56">
-              {serviceMix.length === 0 ? (
-                <div className="text-sm text-plum/60 flex items-center h-full">
-                  No services to show yet.
+            <CardContent className="pt-0 space-y-2">
+              {analytics.topServices.map((service) => (
+                <div key={service.name} className="flex items-center justify-between text-sm py-1.5 border-b border-border last:border-0">
+                  <div>
+                    <p className="font-medium text-foreground">{service.name}</p>
+                    <p className="text-xs text-muted-foreground">{service.count} bookings</p>
+                  </div>
+                  <span className="tabular-nums text-foreground">{money(service.revenue)}</span>
                 </div>
-              ) : (
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart
-                    data={serviceMix}
-                    layout="vertical"
-                    margin={{ left: 60 }}
-                  >
-                    <XAxis type="number" hide />
-                    <YAxis
-                      dataKey="name"
-                      type="category"
-                      tickFormatter={(v) =>
-                        v
-                          .split(" ")
-                          .map(
-                            (w) => w.charAt(0).toUpperCase() + w.slice(1)
-                          )
-                          .join(" ")
-                      }
-                      fontSize={11}
-                    />
-                    <RechartsTooltip />
-                    <Bar
-                      dataKey="count"
-                      radius={[0, 4, 4, 0]}
-                      fill={COLORS[0]}
-                    />
-                  </BarChart>
-                </ResponsiveContainer>
-              )}
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Right column: today's schedule */}
-        <div>
-          <Card className="rounded-2xl border-plum/10 bg-white h-full">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm text-plum">
-                Today&apos;s jobs
-              </CardTitle>
-              <p className="text-[11px] text-plum/60">
-                Jobs scheduled for today. Open the calendar for more detail.
-              </p>
-            </CardHeader>
-            <CardContent>
-              {todayJobs.length === 0 ? (
-                <div className="text-sm text-plum/60">
-                  No jobs scheduled today yet.
-                </div>
-              ) : (
-                <ul className="space-y-2 text-sm">
-                  {todayJobs.map((b) => {
-                    const when = getWhenDate(b);
-                    const timeLabel = when
-                      ? when.toLocaleTimeString([], {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })
-                      : "—";
-                    const svc =
-                      b.serviceName || b.service || "Cleaning service";
-                    const name =
-                      b.contact?.name || b.name || "Client";
-
-                    const st = String(b.status || "").toLowerCase();
-                    const color =
-                      STATUS_COLORS[st] || "#6B7280";
-
-                    return (
-                      <li
-                        key={b.id}
-                        className="flex items-center justify-between gap-3 border-b border-plum/10 last:border-b-0 pb-2"
-                      >
-                        <div className="flex flex-col">
-                          <span className="text-xs text-[#6B7280]">
-                            {timeLabel}
-                          </span>
-                          <span className="font-medium text-plum">
-                            {name}
-                          </span>
-                          <span className="text-xs text-[#6B7280]">
-                            {svc}
-                          </span>
-                        </div>
-                        <span
-                          className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] capitalize"
-                          style={{
-                            backgroundColor: `${color}1A`,
-                            color,
-                          }}
-                        >
-                          {st || "unknown"}
-                        </span>
-                      </li>
-                    );
-                  })}
-                </ul>
-              )}
-
-              <div className="mt-4">
-                <Button
-                  variant="outline"
-                  className="rounded-full text-xs"
-                  onClick={goToCalendar}
-                >
-                  Open full calendar
-                </Button>
-              </div>
+              ))}
             </CardContent>
           </Card>
         </div>
       </div>
 
-      {loading && (
-        <div className="text-[11px] text-plum/50">
-          Loading demo dashboard data...
-        </div>
-      )}
+      {/* Payments + reviews */}
+      <div className="grid gap-5 xl:grid-cols-[minmax(0,1.2fr),minmax(0,1fr)]">
+        <Card>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-base">Recent payments</CardTitle>
+            <CardDescription>Most recent deposits and payments on invoices.</CardDescription>
+          </CardHeader>
+          <CardContent className="pt-0">
+            {analytics.recentPayments.length === 0 ? (
+              <p className="text-sm text-muted-foreground py-6 text-center">No payments recorded yet.</p>
+            ) : (
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Client</TableHead>
+                    <TableHead>Invoice</TableHead>
+                    <TableHead>Method</TableHead>
+                    <TableHead className="text-right">Paid</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {analytics.recentPayments.map((inv) => (
+                    <TableRow key={inv.id}>
+                      <TableCell className="font-medium">{inv.clientName}</TableCell>
+                      <TableCell className="text-muted-foreground">{inv.invoiceNumber}</TableCell>
+                      <TableCell className="text-muted-foreground">{inv.paymentMethod}</TableCell>
+                      <TableCell className="text-right tabular-nums">{money(inv.paidAmount)}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            )}
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-base flex items-center gap-2">
+              <Star className="h-4 w-4 fill-warning text-warning" />
+              Customer reviews
+            </CardTitle>
+            <CardDescription>
+              {reviewSummary.average.toFixed(1)} average across {reviewSummary.count} reviews.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="pt-0 space-y-3">
+            {[...reviews]
+              .sort((a, b) => new Date(b.date) - new Date(a.date))
+              .slice(0, 3)
+              .map((review) => (
+                <div key={review.id} className="border-b border-border last:border-0 pb-3 last:pb-0">
+                  <div className="flex items-center justify-between gap-2">
+                    <p className="font-medium text-sm text-foreground">{review.name}</p>
+                    <span className="text-xs text-muted-foreground">{formatRelativeDate(review.date)}</span>
+                  </div>
+                  <div className="flex items-center gap-2 mt-0.5 mb-1">
+                    <span className="inline-flex">
+                      {Array.from({ length: 5 }).map((_, i) => (
+                        <Star
+                          key={i}
+                          className={`h-3.5 w-3.5 ${i < review.rating ? "fill-warning text-warning" : "text-muted"}`}
+                        />
+                      ))}
+                    </span>
+                    <span className="text-xs text-muted-foreground">{review.service}</span>
+                  </div>
+                  <p className="text-sm text-muted-foreground line-clamp-2">{review.body}</p>
+                </div>
+              ))}
+            <Button variant="outline" size="sm" className="w-full" onClick={goTo("reviews")}>
+              View all reviews
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Activity feed */}
+      <Card>
+        <CardHeader className="pb-3">
+          <CardTitle className="text-base flex items-center gap-2">
+            <Sparkles className="h-4 w-4 text-primary" />
+            Recent activity
+          </CardTitle>
+          <CardDescription>Booking requests, completed jobs, payments, and reviews, most recent first.</CardDescription>
+        </CardHeader>
+        <CardContent className="pt-0">
+          <ul className="space-y-3">
+            {analytics.activity.map((item, index) => {
+              const style = ACTIVITY_STYLES[item.type];
+              const Icon = style.icon;
+              return (
+                <li key={`${item.type}-${index}`} className="flex items-start gap-3 text-sm">
+                  <span className={`mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-full ${style.wrap}`}>
+                    <Icon className="h-3.5 w-3.5 text-foreground" />
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-foreground">{item.text}</p>
+                  </div>
+                  <span className="shrink-0 text-xs text-muted-foreground whitespace-nowrap">
+                    {formatDateShort(item.timestamp)}
+                  </span>
+                </li>
+              );
+            })}
+          </ul>
+        </CardContent>
+      </Card>
     </section>
   );
 }

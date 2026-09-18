@@ -256,14 +256,14 @@ function generateAppointmentPrintView(booking) {
 
 function CancellationPolicyCard({ cancellationWindowHours = 48 }) {
   return (
-    <div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 shadow-sm mb-4">
-      <p className="text-xs font-semibold text-amber-900 flex items-center gap-2">
-        <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-white border border-amber-200 text-amber-700 text-[11px]">
+    <div className="rounded-lg border border-warning/20 bg-warning-bg px-4 py-3 mb-4">
+      <p className="text-xs font-semibold text-warning flex items-center gap-2">
+        <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-card border border-warning/30 text-warning text-[11px]">
           i
         </span>
         Cancellation policy
       </p>
-      <p className="mt-1 text-xs text-amber-900/80">
+      <p className="mt-1 text-xs text-warning/90">
         You can cancel or reschedule your appointment up to{" "}
         <span className="font-semibold">{cancellationWindowHours} hours</span>{" "}
         before the scheduled start time. After this window, your deposit is
@@ -309,16 +309,16 @@ export default function AppointmentsView({
       <CancellationPolicyCard cancellationWindowHours={cancellationWindowHours} />
 
       <Tabs defaultValue={defaultTab} className="w-full">
-      <TabsList className="bg-plum border border-plum/20 rounded-full p-1 mb-4">
+      <TabsList className="bg-secondary border border-border rounded-lg p-1 mb-4">
         <TabsTrigger
           value="upcoming"
           className="
-            rounded-full text-xs sm:text-sm px-4 py-1.5
-            text-white/90
-            data-[state=active]:bg-[#EEF5FB]
-            data-[state=active]:!text-plum
+            rounded-md text-xs sm:text-sm px-4 py-1.5
+            text-muted-foreground
+            data-[state=active]:bg-card
+            data-[state=active]:!text-foreground
             data-[state=active]:font-semibold
-            data-[state=active]:shadow
+            data-[state=active]:shadow-sm
           "
         >
           Upcoming Appointments
@@ -327,12 +327,12 @@ export default function AppointmentsView({
         <TabsTrigger
           value="completed"
           className="
-            rounded-full text-xs sm:text-sm px-4 py-1.5
-            text-white/90
-            data-[state=active]:bg-[#EEF5FB]
-            data-[state=active]:!text-plum
+            rounded-md text-xs sm:text-sm px-4 py-1.5
+            text-muted-foreground
+            data-[state=active]:bg-card
+            data-[state=active]:!text-foreground
             data-[state=active]:font-semibold
-            data-[state=active]:shadow
+            data-[state=active]:shadow-sm
           "
         >
           Completed Appointments

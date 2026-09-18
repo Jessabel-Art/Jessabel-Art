@@ -20,6 +20,9 @@ import {
   DEMO_INVALID_MESSAGE,
   findDemoCredential,
 } from '@/lib/demoAuth';
+import { ShieldCheck, Sparkles, Users, KeyRound } from 'lucide-react';
+import brandLogoWhite from '@/assets/logo/logo-primary-white.png';
+import brandLogo from '@/assets/logo/logo-primary.png';
 
 export default function AuthPage() {
   const { toast } = useToast();
@@ -126,217 +129,265 @@ export default function AuthPage() {
     });
   };
 
+  const trustPoints = [
+    { icon: ShieldCheck, text: 'Background-checked, insured cleaning pros' },
+    { icon: Sparkles, text: 'Transparent, upfront estimates every time' },
+    { icon: Users, text: 'Trusted across Jacksonville & Duval County' },
+  ];
+
   return (
-    <div className="relative min-h-[90vh] flex items-center justify-center px-3 sm:px-4 py-12 md:py-20 bg-[#F7F7F7]">
-      <motion.div
-        className="relative z-10 w-full max-w-md"
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        {/* === DEMO CREDENTIALS PANEL === */}
-        <div className="mb-6 rounded-xl border-2 border-[#3A9FDF] bg-[#EEF5FB] p-4 text-sm text-[#0B283D]">
-          <p className="font-bold text-[#0B283D] mb-2 flex items-center gap-2">
-            <span className="inline-block w-2 h-2 rounded-full bg-[#3A9FDF] animate-pulse" />
-            Demo Access Credentials
+    <div className="min-h-[90vh] grid grid-cols-1 lg:grid-cols-2 bg-background">
+      {/* Brand panel */}
+      <div className="hidden lg:flex flex-col justify-between bg-navy-900 text-white p-10 xl:p-14 relative overflow-hidden">
+        <div
+          className="pointer-events-none absolute inset-0 opacity-40"
+          style={{
+            backgroundImage: 'radial-gradient(circle at 20% 20%, hsl(203 64% 43% / 0.35), transparent 55%)',
+          }}
+          aria-hidden="true"
+        />
+        <Link to="/" className="relative flex items-center gap-3">
+          <img src={brandLogoWhite} alt="CleanPro Demo" className="h-12 w-auto" />
+        </Link>
+
+        <div className="relative">
+          <h2 className="font-display text-3xl xl:text-4xl font-bold leading-tight mb-4">
+            Your home, your account, your schedule.
+          </h2>
+          <p className="text-white/70 text-sm xl:text-base mb-8 max-w-md">
+            Sign in to manage bookings, view invoices, and message your cleaning
+            team — or create an account to book your first visit.
           </p>
-          <div className="grid grid-cols-2 gap-3 text-xs">
-            <div className="rounded-lg bg-white/70 p-3 border border-[#3A9FDF]/30">
-              <p className="font-semibold text-[#0B283D] mb-1">Client Portal</p>
-              <p>Username: <code className="bg-white px-1 rounded">clientdemo</code></p>
-              <p>Password: <code className="bg-white px-1 rounded">demo123</code></p>
-            </div>
-            <div className="rounded-lg bg-white/70 p-3 border border-[#3A9FDF]/30">
-              <p className="font-semibold text-[#0B283D] mb-1">Admin Portal</p>
-              <p>Username: <code className="bg-white px-1 rounded">admindemo</code></p>
-              <p>Password: <code className="bg-white px-1 rounded">demo123</code></p>
-            </div>
-          </div>
-          <p className="mt-2 text-[11px] text-[#5F6B73] italic">
-            This website is a demonstration environment. No real accounts, bookings, payments, or administrative actions are performed.
-          </p>
+          <ul className="space-y-4">
+            {trustPoints.map((point) => (
+              <li key={point.text} className="flex items-start gap-3">
+                <div className="flex-shrink-0 w-8 h-8 rounded-md bg-white/10 flex items-center justify-center">
+                  <point.icon className="w-4 h-4 text-primary" />
+                </div>
+                <span className="text-sm text-white/80 pt-1.5">{point.text}</span>
+              </li>
+            ))}
+          </ul>
         </div>
 
-        <div className="text-center mb-6">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-plum">
-            Log in or Create your account
-          </h1>
-          <p className="text-xs sm:text-sm md:text-base text-plum/80 mt-1">
-            <span className="font-medium">Returning customers:</span> Sign in.{' '}
-            <span className="font-medium">New customers:</span> Create your
-            account to book.
-          </p>
-        </div>
-
-        <Tabs value={tab} onValueChange={setTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-2 rounded-full bg-white p-1">
-            <TabsTrigger
-              value="login"
-              className="rounded-full data-[state=active]:bg-white data-[state=active]:shadow"
-            >
-              Sign In
-            </TabsTrigger>
-            <TabsTrigger
-              value="signup"
-              className="rounded-full data-[state=active]:bg-white data-[state=active]:shadow"
-            >
-              Create Account
-            </TabsTrigger>
-          </TabsList>
-
-          {/* LOGIN */}
-          <TabsContent value="login">
-            <Card className="shadow-md border-plum/10 bg-white">
-              <CardHeader className="text-center">
-                <CardTitle className="text-2xl font-bold text-plum">
-                  Welcome back
-                </CardTitle>
-                <CardDescription>
-                  Access your bookings and account details.
-                </CardDescription>
-              </CardHeader>
-              <form onSubmit={handleLogin} autoComplete="on">
-                <CardContent className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="login-username">Username</Label>
-                    <Input
-                      id="login-username"
-                      name="username"
-                      type="text"
-                      value={loginUsername}
-                      onChange={(e) => setLoginUsername(e.target.value)}
-                      placeholder="Username"
-                      required
-                      autoComplete="username"
-                      className="bg-white"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="login-password">Password</Label>
-                    <Input
-                      id="login-password"
-                      name="password"
-                      type="password"
-                      value={loginPassword}
-                      onChange={(e) => setLoginPassword(e.target.value)}
-                      placeholder="Password"
-                      required
-                      autoComplete="current-password"
-                      className="bg-white"
-                    />
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <button
-                      type="button"
-                      onClick={handleReset}
-                      className="text-sm text-gold hover:underline"
-                    >
-                      Forgot password?
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setTab('signup')}
-                      className="text-sm text-plum/80 hover:underline"
-                    >
-                      New customer? Create your account
-                    </button>
-                  </div>
-                </CardContent>
-                <CardFooter>
-                  <Button
-                    type="submit"
-                    disabled={loading}
-                    className="w-full bg-gold hover:bg-gold/90 text-white rounded-full"
-                  >
-                    {loading ? 'Please wait…' : 'Sign In'}
-                  </Button>
-                </CardFooter>
-              </form>
-            </Card>
-          </TabsContent>
-
-          {/* SIGNUP */}
-          <TabsContent value="signup">
-            <Card className="shadow-md border-plum/10 bg-white">
-              <CardHeader className="text-center">
-                <CardTitle className="text-2xl font-bold text-plum">
-                  Create Account
-                </CardTitle>
-                <CardDescription>
-                  Join to easily manage your bookings.
-                </CardDescription>
-              </CardHeader>
-              <form onSubmit={handleSignup} autoComplete="on">
-                <CardContent className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="signup-name">Full Name</Label>
-                    <Input
-                      id="signup-name"
-                      name="name"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      placeholder="Jane Doe"
-                      required
-                      autoComplete="name"
-                      className="bg-white"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="signup-email">Email</Label>
-                    <Input
-                      id="signup-email"
-                      name="email"
-                      type="email"
-                      value={signEmail}
-                      onChange={(e) => setSignEmail(e.target.value)}
-                      placeholder="you@example.com"
-                      required
-                      autoComplete="email"
-                      className="bg-white"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="signup-password">Password</Label>
-                    <Input
-                      id="signup-password"
-                      name="password"
-                      type="password"
-                      value={signPassword}
-                      onChange={(e) => setSignPassword(e.target.value)}
-                      placeholder="Create a password"
-                      required
-                      minLength={6}
-                      autoComplete="new-password"
-                      className="bg-white"
-                    />
-                  </div>
-                </CardContent>
-                <CardFooter>
-                  <Button
-                    type="submit"
-                    disabled={loading}
-                    className="w-full bg-gold hover:bg-gold/90 text-white rounded-full"
-                  >
-                    {loading ? 'Please wait…' : 'Create Account'}
-                  </Button>
-                </CardFooter>
-              </form>
-            </Card>
-          </TabsContent>
-        </Tabs>
-
-        <p className="text-center text-sm text-plum/80 mt-6">
-          By continuing you agree to our{' '}
-          <Link to="/terms-of-service" className="underline hover:text-plum">
-            Terms
-          </Link>{' '}
-          and{' '}
-          <Link to="/privacy-policy" className="underline hover:text-plum">
-            Privacy Policy
-          </Link>
-          .
+        <p className="relative text-xs text-white/40">
+          Demo product for portfolio purposes — no real accounts are created.
         </p>
-      </motion.div>
+      </div>
+
+      {/* Form panel */}
+      <div className="flex items-center justify-center px-4 sm:px-6 py-12 md:py-16">
+        <motion.div
+          className="w-full max-w-md"
+          initial={{ opacity: 0, y: -16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          {/* Mobile brand mark */}
+          <div className="flex lg:hidden justify-center mb-6">
+            <Link to="/" className="inline-flex items-center gap-2">
+              <img src={brandLogo} alt="CleanPro Demo" className="h-10 w-auto" />
+            </Link>
+          </div>
+
+          {/* Demo credentials panel — kept prominent and easy to find */}
+          <div className="mb-6 rounded-xl border-2 border-primary bg-accent p-4 text-sm text-accent-foreground">
+            <p className="font-bold mb-2 flex items-center gap-2">
+              <KeyRound className="h-4 w-4 text-primary" />
+              Demo Access Credentials
+            </p>
+            <div className="grid grid-cols-2 gap-3 text-xs">
+              <div className="rounded-lg bg-card p-3 border border-border">
+                <p className="font-semibold text-foreground mb-1">Client Portal</p>
+                <p>Username: <code className="bg-secondary px-1 rounded">clientdemo</code></p>
+                <p>Password: <code className="bg-secondary px-1 rounded">demo123</code></p>
+              </div>
+              <div className="rounded-lg bg-card p-3 border border-border">
+                <p className="font-semibold text-foreground mb-1">Admin Portal</p>
+                <p>Username: <code className="bg-secondary px-1 rounded">admindemo</code></p>
+                <p>Password: <code className="bg-secondary px-1 rounded">demo123</code></p>
+              </div>
+            </div>
+            <p className="mt-2 text-[11px] text-muted-foreground italic">
+              This website is a demonstration environment. No real accounts, bookings, payments, or administrative actions are performed.
+            </p>
+          </div>
+
+          <div className="text-center mb-6">
+            <h1 className="font-display text-2xl sm:text-3xl font-bold text-foreground">
+              Log in or create your account
+            </h1>
+            <p className="text-xs sm:text-sm text-muted-foreground mt-1">
+              <span className="font-medium text-foreground">Returning customers:</span> Sign in.{' '}
+              <span className="font-medium text-foreground">New customers:</span> Create your
+              account to book.
+            </p>
+          </div>
+
+          <Tabs value={tab} onValueChange={setTab} className="w-full">
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="login">
+                Sign In
+              </TabsTrigger>
+              <TabsTrigger value="signup">
+                Create Account
+              </TabsTrigger>
+            </TabsList>
+
+            {/* LOGIN */}
+            <TabsContent value="login">
+              <Card className="shadow-card border-border bg-card">
+                <CardHeader className="text-center">
+                  <CardTitle className="text-2xl font-display font-bold text-foreground">
+                    Welcome back
+                  </CardTitle>
+                  <CardDescription>
+                    Access your bookings and account details.
+                  </CardDescription>
+                </CardHeader>
+                <form onSubmit={handleLogin} autoComplete="on">
+                  <CardContent className="space-y-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="login-username">Username</Label>
+                      <Input
+                        id="login-username"
+                        name="username"
+                        type="text"
+                        value={loginUsername}
+                        onChange={(e) => setLoginUsername(e.target.value)}
+                        placeholder="Username"
+                        required
+                        autoComplete="username"
+                        className="bg-background"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="login-password">Password</Label>
+                      <Input
+                        id="login-password"
+                        name="password"
+                        type="password"
+                        value={loginPassword}
+                        onChange={(e) => setLoginPassword(e.target.value)}
+                        placeholder="Password"
+                        required
+                        autoComplete="current-password"
+                        className="bg-background"
+                      />
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <button
+                        type="button"
+                        onClick={handleReset}
+                        className="text-sm text-primary hover:underline"
+                      >
+                        Forgot password?
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setTab('signup')}
+                        className="text-sm text-muted-foreground hover:underline"
+                      >
+                        New customer? Create your account
+                      </button>
+                    </div>
+                  </CardContent>
+                  <CardFooter>
+                    <Button
+                      type="submit"
+                      disabled={loading}
+                      className="w-full bg-primary hover:bg-primary/90 text-primary-foreground rounded-md font-semibold"
+                    >
+                      {loading ? 'Please wait…' : 'Sign In'}
+                    </Button>
+                  </CardFooter>
+                </form>
+              </Card>
+            </TabsContent>
+
+            {/* SIGNUP */}
+            <TabsContent value="signup">
+              <Card className="shadow-card border-border bg-card">
+                <CardHeader className="text-center">
+                  <CardTitle className="text-2xl font-display font-bold text-foreground">
+                    Create Account
+                  </CardTitle>
+                  <CardDescription>
+                    Join to easily manage your bookings.
+                  </CardDescription>
+                </CardHeader>
+                <form onSubmit={handleSignup} autoComplete="on">
+                  <CardContent className="space-y-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="signup-name">Full Name</Label>
+                      <Input
+                        id="signup-name"
+                        name="name"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        placeholder="Jane Doe"
+                        required
+                        autoComplete="name"
+                        className="bg-background"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="signup-email">Email</Label>
+                      <Input
+                        id="signup-email"
+                        name="email"
+                        type="email"
+                        value={signEmail}
+                        onChange={(e) => setSignEmail(e.target.value)}
+                        placeholder="you@example.com"
+                        required
+                        autoComplete="email"
+                        className="bg-background"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="signup-password">Password</Label>
+                      <Input
+                        id="signup-password"
+                        name="password"
+                        type="password"
+                        value={signPassword}
+                        onChange={(e) => setSignPassword(e.target.value)}
+                        placeholder="Create a password"
+                        required
+                        minLength={6}
+                        autoComplete="new-password"
+                        className="bg-background"
+                      />
+                    </div>
+                  </CardContent>
+                  <CardFooter>
+                    <Button
+                      type="submit"
+                      disabled={loading}
+                      className="w-full bg-primary hover:bg-primary/90 text-primary-foreground rounded-md font-semibold"
+                    >
+                      {loading ? 'Please wait…' : 'Create Account'}
+                    </Button>
+                  </CardFooter>
+                </form>
+              </Card>
+            </TabsContent>
+          </Tabs>
+
+          <p className="text-center text-sm text-muted-foreground mt-6">
+            By continuing you agree to our{' '}
+            <Link to="/terms-of-service" className="underline hover:text-foreground">
+              Terms
+            </Link>{' '}
+            and{' '}
+            <Link to="/privacy-policy" className="underline hover:text-foreground">
+              Privacy Policy
+            </Link>
+            .
+          </p>
+        </motion.div>
+      </div>
     </div>
   );
 }

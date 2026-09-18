@@ -269,14 +269,14 @@ export default function TermOfServicePage() {
             <br />
             <strong>CleanPro Demo</strong>
             <br />
-            Phone: (000) 000-0000
+            Phone: (904) 555-0100
             <br />
             Email:{" "}
             <a href="mailto:demo@example.com">
               demo@example.com
             </a>
             <br />
-            Demo City, ST (demo site only)
+            Jacksonville, FL (demo site only)
           </p>
         </section>
 

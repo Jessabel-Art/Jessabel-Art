@@ -2,9 +2,9 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Menu, X, Phone } from "lucide-react";
+import { Menu, X, Phone, ArrowUpRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import headerLogo from "@/assets/logo/logo-primary.png";
+import headerLogo from "@/assets/logo/logo-primary-white.png";
 import { useAdminAuth } from "@/pages/admin/hooks/useAdminAuth";
 
 const Header = () => {
@@ -19,7 +19,7 @@ const Header = () => {
   const showAdminLink = !!isAdmin;
 
   const handleCallClick = () => {
-    window.location.href = "tel:00000000000";
+    window.location.href = "tel:9045550100";
   };
 
   const closeMenu = useCallback(() => setIsOpen(false), []);
@@ -95,47 +95,49 @@ const Header = () => {
   }, [isOpen]);
 
   const navLinkClass = ({ isActive }) =>
-    `text-plum hover:text-gold transition-colors duration-300 font-medium pb-1 border-b-2 ${
-      isActive ? "border-gold" : "border-transparent"
+    `relative py-2 text-sm font-semibold tracking-wide transition-colors duration-200 ${
+      isActive ? "text-white" : "text-white/65 hover:text-white"
+    } after:absolute after:left-0 after:-bottom-[2px] after:h-[2px] after:bg-primary after:transition-all after:duration-300 ${
+      isActive ? "after:w-full" : "after:w-0 hover:after:w-full"
     }`;
 
   const mobileNavLinkClass = ({ isActive }) =>
-    `block py-3 text-2xl text-plum hover:text-gold transition-colors duration-300 font-medium ${
-      isActive ? "text-gold" : ""
+    `flex items-center justify-between border-b border-white/10 py-4 text-xl font-display font-semibold transition-colors duration-200 ${
+      isActive ? "text-white" : "text-white/70 hover:text-white"
     }`;
 
   const menuVariants = {
-    closed: { opacity: 0, y: "-8%" },
+    closed: { opacity: 0, y: "-4%" },
     open: {
       opacity: 1,
       y: "0%",
-      transition: { duration: 0.28, ease: "easeInOut" },
+      transition: { duration: 0.25, ease: "easeInOut" },
     },
   };
 
   return (
-    <header className="sticky top-0 z-50 transition-all duration-300 bg-[#EEF5FB]/90 backdrop-blur-lg shadow-md rounded-b-2xl">
+    <header className="sticky top-0 z-50 bg-navy-900 shadow-soft">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 sm:h-20">
           {/* Left: Brand */}
           <Link
             to="/"
-            className="flex items-center gap-3"
+            className="flex items-center gap-3 shrink-0"
             aria-label="CleanPro Demo home"
           >
             <img
               src={headerLogo}
               alt="CleanPro Demo"
-              className="h-14 sm:h-16 md:h-[4.5rem] lg:h-[5.5rem] xl:h-24 w-auto shrink-0"
-              width={256}
-              height={64}
+              className="h-11 sm:h-12 md:h-14 w-auto"
+              width={224}
+              height={56}
               loading="eager"
             />
           </Link>
 
-          {/* Right: Navigation + CTA */}
-          <div className="hidden md:flex items-center space-x-8">
-            <NavLink to="/" className={navLinkClass}>
+          {/* Center-right: Navigation */}
+          <nav className="hidden md:flex items-center gap-9" aria-label="Primary">
+            <NavLink to="/" className={navLinkClass} end>
               Home
             </NavLink>
             <NavLink to="/services" className={navLinkClass}>
@@ -151,24 +153,37 @@ const Header = () => {
                 Admin
               </NavLink>
             )}
+          </nav>
 
-            {/* CTA → Client Portal */}
+          {/* Right: Call + CTA */}
+          <div className="hidden md:flex items-center gap-3">
+            <a
+              href="tel:9045550100"
+              className="flex items-center gap-2 text-sm font-medium text-white/75 hover:text-white transition-colors"
+            >
+              <Phone className="h-4 w-4 text-primary" />
+              (904) 555-0100
+            </a>
+            <div className="h-6 w-px bg-white/15" aria-hidden="true" />
             <Button
               asChild
-              className="bg-gold hover:bg-gold/90 text-white rounded-full px-5 py-2 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-gold/60"
+              className="rounded-md bg-primary hover:bg-primary/90 text-primary-foreground font-semibold focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-navy-900 focus-visible:ring-primary"
             >
-              <Link to="/portal">My Account</Link>
+              <Link to="/portal" className="flex items-center gap-1.5">
+                My Account
+                <ArrowUpRight className="h-4 w-4" />
+              </Link>
             </Button>
           </div>
 
           {/* Mobile actions (call + menu) */}
-          <div className="md:hidden flex items-center gap-2">
+          <div className="md:hidden flex items-center gap-1.5">
             <Button
               size="icon"
-              variant="outline"
-              className="rounded-full border-gold text-gold hover:bg-gold/10 focus-visible:ring-2 focus-visible:ring-gold/60"
+              variant="ghost"
+              className="rounded-md text-white hover:bg-white/10 focus-visible:ring-2 focus-visible:ring-primary"
               onClick={handleCallClick}
-              aria-label="Call CleanPro Demo at (000) 000-0000"
+              aria-label="Call CleanPro Demo at (904) 555-0100"
             >
               <Phone className="h-5 w-5" />
             </Button>
@@ -176,13 +191,13 @@ const Header = () => {
               ref={menuButtonRef}
               type="button"
               onClick={() => setIsOpen((v) => !v)}
-              className="text-plum p-2 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/60"
+              className="text-white p-2 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
               aria-label={isOpen ? "Close menu" : "Open menu"}
               aria-expanded={isOpen}
               aria-controls="mobile-menu"
               aria-haspopup="dialog"
             >
-              {isOpen ? <X size={28} /> : <Menu size={28} />}
+              {isOpen ? <X size={26} /> : <Menu size={26} />}
             </button>
           </div>
         </div>
@@ -201,26 +216,14 @@ const Header = () => {
             initial="closed"
             animate="open"
             exit="closed"
-            className="md:hidden absolute top-full left-0 w-full bg-[#EEF5FB]/95 backdrop-blur-lg shadow-xl rounded-b-2xl"
+            className="md:hidden absolute top-full left-0 w-full bg-navy-900 shadow-pop border-t border-white/10"
           >
-            <div className="flex flex-col items-center space-y-4 py-8">
+            <div className="flex flex-col px-5 sm:px-8 py-6">
               <h2 id="mobile-menu-title" className="sr-only">
                 Main navigation
               </h2>
-              <img
-                src={headerLogo}
-                alt="CleanPro Demo"
-                className="h-16 sm:h-18 w-auto mb-2"
-                width={224}
-                height={56}
-                loading="eager"
-              />
 
-              <NavLink
-                to="/"
-                className={mobileNavLinkClass}
-                onClick={closeMenu}
-              >
+              <NavLink to="/" className={mobileNavLinkClass} onClick={closeMenu} end>
                 Home
               </NavLink>
               <NavLink
@@ -249,15 +252,22 @@ const Header = () => {
                 </NavLink>
               )}
 
-              <div className="pt-2 flex flex-col items-center gap-4 w-full px-8">
+              <div className="pt-6 flex flex-col gap-3">
                 <Button
                   asChild
-                  className="w-full bg-gold hover:bg-gold/90 text-white rounded-full text-lg py-3 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-gold/60"
+                  className="w-full bg-primary hover:bg-primary/90 text-primary-foreground rounded-md text-base py-5 font-semibold focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-navy-900 focus-visible:ring-primary"
                 >
                   <Link to="/portal" onClick={closeMenu}>
                     My Account
                   </Link>
                 </Button>
+                <a
+                  href="tel:9045550100"
+                  className="flex items-center justify-center gap-2 text-sm font-medium text-white/75 hover:text-white transition-colors py-2"
+                >
+                  <Phone className="h-4 w-4 text-primary" />
+                  (904) 555-0100
+                </a>
               </div>
             </div>
           </motion.div>

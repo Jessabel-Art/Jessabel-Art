@@ -63,14 +63,14 @@ export default function ConfirmationPage() {
 
   if (!appointment) {
     return (
-      <div className="min-h-[70vh] bg-[#F7F7F7] flex items-center justify-center px-4">
-        <Card className="max-w-lg w-full bg-white border-plum/10">
+      <div className="min-h-[70vh] bg-secondary flex items-center justify-center px-4">
+        <Card className="max-w-lg w-full bg-card border-border">
           <CardHeader>
-            <CardTitle className="text-plum">Demo booking not found</CardTitle>
+            <CardTitle className="text-foreground">Demo booking not found</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4 text-plum/80">
+          <CardContent className="space-y-4 text-muted-foreground">
             <p>This confirmation link does not match the local demo data.</p>
-            <Button asChild className="bg-gold hover:bg-gold/90 text-white rounded-full">
+            <Button asChild className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-md">
               <Link to="/book">Create a demo booking</Link>
             </Button>
           </CardContent>
@@ -80,31 +80,31 @@ export default function ConfirmationPage() {
   }
 
   return (
-    <div className="min-h-[90vh] bg-[#F7F7F7] px-3 sm:px-4 py-12 md:py-16">
+    <div className="min-h-[90vh] bg-secondary px-3 sm:px-4 py-12 md:py-16">
       <motion.div
         className="max-w-4xl mx-auto space-y-6"
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
       >
         <div className="text-center">
-          <CheckCircle className="w-14 h-14 text-emerald-600 mx-auto mb-3" />
-          <h1 className="text-3xl md:text-4xl font-bold text-plum">
+          <CheckCircle className="w-14 h-14 text-success mx-auto mb-3" />
+          <h1 className="font-display text-3xl md:text-4xl font-bold text-foreground">
             Demo Booking Confirmed
           </h1>
-          <p className="text-plum/75 mt-2">
+          <p className="text-muted-foreground mt-2">
             This is a local frontend demo. No real booking, account, or payment was created.
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <Card className="bg-white border-plum/10 md:col-span-2">
+          <Card className="bg-card border-border md:col-span-2">
             <CardHeader>
-              <CardTitle className="text-plum flex items-center gap-2">
-                <Sparkles className="w-5 h-5 text-gold" />
+              <CardTitle className="text-foreground flex items-center gap-2">
+                <Sparkles className="w-5 h-5 text-primary" />
                 Appointment details
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4 text-sm text-plum/85">
+            <CardContent className="space-y-4 text-sm text-foreground/85">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <Detail label="Service" value={appointment.serviceName || appointment.service} />
                 <Detail label="Status" value={appointment.friendly || appointment.status} />
@@ -114,17 +114,17 @@ export default function ConfirmationPage() {
                 <Detail label="Booking ID" value={appointment.id} />
               </div>
 
-              <div className="rounded-xl border border-plum/10 bg-plum/5 p-3 flex gap-2">
-                <Home className="w-4 h-4 text-plum mt-0.5" />
+              <div className="rounded-xl border border-border bg-secondary p-3 flex gap-2">
+                <Home className="w-4 h-4 text-foreground mt-0.5" />
                 <div>
-                  <p className="font-semibold text-plum">Service address</p>
+                  <p className="font-semibold text-foreground">Service address</p>
                   <p>{address || "Address on file"}</p>
                 </div>
               </div>
 
               {appointment.notes && (
-                <div className="rounded-xl border border-plum/10 bg-white p-3">
-                  <p className="font-semibold text-plum">Notes</p>
+                <div className="rounded-xl border border-border bg-card p-3">
+                  <p className="font-semibold text-foreground">Notes</p>
                   <p>{appointment.notes}</p>
                 </div>
               )}
@@ -142,10 +142,10 @@ export default function ConfirmationPage() {
             </CardContent>
           </Card>
 
-          <Card className="bg-white border-plum/10">
+          <Card className="bg-card border-border">
             <CardHeader>
-              <CardTitle className="text-plum flex items-center gap-2">
-                <DollarSign className="w-5 h-5 text-gold" />
+              <CardTitle className="text-foreground flex items-center gap-2">
+                <DollarSign className="w-5 h-5 text-primary" />
                 Demo invoice
               </CardTitle>
             </CardHeader>
@@ -157,15 +157,15 @@ export default function ConfirmationPage() {
               <Detail label="Paid" value={money(invoice?.paidAmount ?? appointment.paidAmount)} />
               <Detail label="Amount due" value={money(invoice?.amountDue ?? appointment.total)} />
 
-              <div className="rounded-xl bg-[#EEF5FB] border border-[#3A9FDF]/20 p-3 text-xs text-[#0B283D] flex gap-2">
+              <div className="rounded-xl bg-accent border border-border p-3 text-xs text-accent-foreground flex gap-2">
                 <Info className="w-4 h-4 mt-0.5" />
                 <p>No payment is processed in this demo environment.</p>
               </div>
 
-              <Button asChild className="w-full bg-gold hover:bg-gold/90 text-white rounded-full">
+              <Button asChild className="w-full bg-primary hover:bg-primary/90 text-primary-foreground rounded-md">
                 <Link to="/portal">Open Client Dashboard</Link>
               </Button>
-              <Button asChild variant="outline" className="w-full border-plum text-plum rounded-full">
+              <Button asChild variant="outline" className="w-full border-border text-foreground rounded-md">
                 <Link to="/book">Book another demo</Link>
               </Button>
             </CardContent>
@@ -179,8 +179,8 @@ export default function ConfirmationPage() {
 function Detail({ label, value }) {
   return (
     <div>
-      <p className="text-xs uppercase tracking-wide text-plum/55">{label}</p>
-      <p className="font-medium text-plum">{value || "TBD"}</p>
+      <p className="text-xs uppercase tracking-wide text-muted-foreground">{label}</p>
+      <p className="font-medium text-foreground">{value || "TBD"}</p>
     </div>
   );
 }

@@ -47,17 +47,18 @@ const Gallery = () => {
   }).filter(s => s.beforeSrc && s.afterSrc); // guard against missing files
 
   return (
-    <section className="py-12 sm:py-16 md:py-20 px-3 sm:px-4">
+    <section className="py-14 sm:py-18 md:py-24 px-3 sm:px-4 bg-muted">
       <div className="max-w-6xl mx-auto">
         <motion.div
-          className="text-center mb-8 sm:mb-12 md:mb-16"
+          className="text-center mb-8 sm:mb-12 md:mb-14"
           initial={reduceMotion ? false : { opacity: 0, y: 30 }}
           whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
           transition={{ duration: reduceMotion ? 0 : 0.6 }}
           viewport={reduceMotion ? undefined : { once: true }}
         >
-          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-plum mb-3 sm:mb-4">Before &amp; After</h2>
-          <p className="text-sm sm:text-base md:text-lg text-plum/80 max-w-3xl mx-auto">
+          <p className="text-xs font-semibold uppercase tracking-wide text-primary mb-2">Real Results</p>
+          <h2 className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-3 sm:mb-4">Before &amp; After</h2>
+          <p className="text-sm sm:text-base md:text-lg text-muted-foreground max-w-3xl mx-auto">
             See the difference a professional clean can make. Our results speak for themselves.
           </p>
         </motion.div>
@@ -73,17 +74,17 @@ const Gallery = () => {
               {slides.map((item, index) => (
                 <CarouselItem key={index}>
                   <div className="p-1">
-                    <Card className="bg-white rounded-lg shadow-lg overflow-hidden">
+                    <Card className="bg-card rounded-xl shadow-card overflow-hidden border-border">
                       <CardContent className="p-3 sm:p-4 md:p-6">
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 md:gap-6">
                           <div className="relative">
                             <img
                               src={item.beforeSrc}
                               alt={item.beforeAlt}
-                              className="w-full h-40 sm:h-56 md:h-64 lg:h-96 object-cover rounded-md"
+                              className="w-full h-40 sm:h-56 md:h-64 lg:h-96 object-cover rounded-lg"
                               loading="lazy"
                             />
-                            <div className="absolute top-2 left-2 bg-red-500 text-white px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-semibold shadow-md">
+                            <div className="absolute top-2 left-2 bg-navy-900/85 text-white px-2.5 sm:px-3 py-1 rounded-md text-xs sm:text-sm font-semibold shadow-card">
                               Before
                             </div>
                           </div>
@@ -91,17 +92,17 @@ const Gallery = () => {
                             <img
                               src={item.afterSrc}
                               alt={item.afterAlt}
-                              className="w-full h-40 sm:h-56 md:h-64 lg:h-96 object-cover rounded-md"
+                              className="w-full h-40 sm:h-56 md:h-64 lg:h-96 object-cover rounded-lg"
                               loading="lazy"
                             />
-                            <div className="absolute top-2 left-2 bg-green-500 text-white px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-semibold shadow-md">
+                            <div className="absolute top-2 left-2 bg-primary text-primary-foreground px-2.5 sm:px-3 py-1 rounded-md text-xs sm:text-sm font-semibold shadow-card">
                               After
                             </div>
                           </div>
                         </div>
 
                         <div className="mt-3 sm:mt-4 md:mt-6 text-center">
-                          <h3 className="text-base sm:text-lg md:text-xl font-semibold text-plum">{item.title}</h3>
+                          <h3 className="text-base sm:text-lg md:text-xl font-semibold text-foreground">{item.title}</h3>
                         </div>
                       </CardContent>
                     </Card>

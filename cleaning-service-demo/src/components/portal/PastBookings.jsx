@@ -2,7 +2,16 @@
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Star, Clock, FileDown } from "lucide-react";
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableRow,
+  TableHead,
+  TableCell,
+} from "@/components/ui/table";
+import StatusPill from "@/components/StatusPill";
+import { Star, Clock, FileDown, MapPin } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -45,18 +54,14 @@ function formatMoney(n) {
   });
 }
 
-function statusToken(label) {
-  const map = {
-    Pending: "bg-amber-100 text-amber-800 border-amber-200",
-    Scheduled: "bg-sky-100 text-sky-800 border-sky-200",
-    Confirmed: "bg-emerald-100 text-emerald-800 border-emerald-200",
-    Completed: "bg-neutral-200 text-neutral-800 border-neutral-300",
-    Declined: "bg-[#EEF5FB] text-plum border-gold/20",
-    cancelled: "bg-[#EEF5FB] text-plum border-gold/20",
-    Refunded: "bg-[#EEF5FB] text-plum border-gold/20",
-    Expired: "bg-neutral-100 text-neutral-700 border-neutral-200",
-  };
-  return map[label] || "bg-plum/10 text-plum border-plum/20";
+function formatServiceAddress(booking) {
+  if (booking?.address?.full) return booking.address.full;
+  return (
+    booking?.address ||
+    booking?.fullAddress ||
+    (booking?.street && `${booking.street}${booking.city ? `, ${booking.city}` : ""}`) ||
+    "On file"
+  );
 }
 
 // Simple static star renderer for saved review rating (1–5)
@@ -68,7 +73,7 @@ function RatingStars({ rating = 0 }) {
         <Star
           key={i}
           className={`w-3 h-3 ${
-            i < r ? "text-gold fill-gold" : "text-plum/25"
+            i < r ? "text-warning fill-warning" : "text-muted-foreground/30"
           }`}
         />
       ))}
@@ -103,26 +108,6 @@ export default function PastBookings({
   const now = new Date();
   const [activeBooking, setActiveBooking] = useState(null);
 
-  const renderSkeletonRow = (key) => (
-    <tr key={key} className="border-b last:border-0 animate-pulse">
-      <td className="py-3 pr-4">
-        <div className="h-4 w-24 bg-plum/10 rounded" />
-      </td>
-      <td className="py-3 pr-4">
-        <div className="h-4 w-32 bg-plum/10 rounded" />
-      </td>
-      <td className="py-3 pr-4">
-        <div className="h-5 w-20 bg-plum/10 rounded-full" />
-      </td>
-      <td className="py-3 pr-4">
-        <div className="h-4 w-16 bg-plum/10 rounded" />
-      </td>
-      <td className="py-3 pr-4">
-        <div className="h-4 w-24 bg-plum/10 rounded" />
-      </td>
-    </tr>
-  );
-
   const completedCount = bookings.length;
   const ratings = bookings
     .map((b) => Number(b.reviewRating))
@@ -141,6 +126,19 @@ export default function PastBookings({
     onAction({ type: "download-pdf", booking: activeBooking });
   };
 
+  const resolveStatus = (b) => {
+    const end = toDate(b.endAt);
+    let status = b.rawStatus || b.status || "pending";
+    if (
+      end &&
+      end < now &&
+      ["confirmed", "pending"].includes(String(status).toLowerCase())
+    ) {
+      status = "completed";
+    }
+    return status;
+  };
+
   const renderDetailsModal = () => {
     if (!activeBooking) return null;
 
@@ -150,24 +148,11 @@ export default function PastBookings({
     const startDate = toDate(b.startAt || b.date);
     const endDate = toDate(b.endAt);
 
-    let displayStatus = b.friendly || b.rawStatus || "Pending";
-    if (
-      endDate &&
-      endDate < now &&
-      (displayStatus === "Confirmed" || displayStatus === "Scheduled")
-    ) {
-      displayStatus = "Completed";
-    }
-
     const total = formatMoney(b.total);
     const depositDue =
       b.depositDue != null ? formatMoney(b.depositDue) : null;
 
-    const address =
-      b.address ||
-      b.fullAddress ||
-      (b.street && `${b.street}${b.city ? `, ${b.city}` : ""}`) ||
-      "On file";
+    const address = formatServiceAddress(b);
 
     const frequency = getBookingField(
       b,
@@ -219,8 +204,7 @@ export default function PastBookings({
           className="
             max-w-xl sm:max-w-2xl
             max-h-[85vh] overflow-y-auto
-            rounded-3xl p-5 sm:p-6
-            bg-white shadow-xl border border-plum/10
+            rounded-lg p-5 sm:p-6
           "
         >
           <DialogHeader className="mb-4 space-y-4">
@@ -231,14 +215,14 @@ export default function PastBookings({
                   alt="CleanPro Demo"
                   className="h-10 w-auto"
                 />
-                <div className="leading-tight text-xs text-plum/70">
-                  <p className="font-semibold text-plum text-sm">
+                <div className="leading-tight text-xs text-muted-foreground">
+                  <p className="font-semibold text-foreground text-sm">
                     CleanPro Demo
                   </p>
                   <p>Completed appointment summary</p>
                 </div>
               </div>
-              <div className="text-right text-xs text-plum/60 space-y-1">
+              <div className="text-right text-xs text-muted-foreground space-y-1">
                 <p className="font-mono text-[11px]">
                   Order: <span className="font-semibold">{orderCode}</span>
                 </p>
@@ -251,12 +235,12 @@ export default function PastBookings({
               </div>
             </div>
 
-            <DialogTitle className="text-lg sm:text-xl text-plum">
+            <DialogTitle className="text-lg sm:text-xl text-foreground">
               Appointment details
             </DialogTitle>
           </DialogHeader>
 
-          <div className="space-y-4 text-sm text-plum">
+          <div className="space-y-4 text-sm text-foreground">
             <div className="grid gap-3 sm:grid-cols-2">
               <div className="space-y-1">
                 <p className="font-semibold">Service</p>
@@ -265,7 +249,7 @@ export default function PastBookings({
 
               <div className="space-y-1">
                 <p className="font-semibold">Status</p>
-                <p>{displayStatus}</p>
+                <StatusPill status={resolveStatus(b)} />
               </div>
 
               <div className="space-y-1">
@@ -293,13 +277,13 @@ export default function PastBookings({
 
               <div className="space-y-1">
                 <p className="font-semibold">Total</p>
-                <p>{total}</p>
+                <p className="tabular-nums">{total}</p>
               </div>
 
               {depositDue && (
                 <div className="space-y-1">
                   <p className="font-semibold">Deposit due</p>
-                  <p>{depositDue}</p>
+                  <p className="tabular-nums">{depositDue}</p>
                 </div>
               )}
 
@@ -309,17 +293,17 @@ export default function PastBookings({
               </div>
             </div>
 
-            <div className="mt-2 border-t border-plum/10 pt-3 space-y-2">
+            <div className="mt-2 border-t border-border pt-3 space-y-2">
               <p className="font-semibold text-sm">Home &amp; cleaning details</p>
               <div className="grid gap-2 sm:grid-cols-2 text-sm">
                 <div>
-                  <span className="text-plum/60 text-xs block">
+                  <span className="text-muted-foreground text-xs block">
                     Property type
                   </span>
                   <span>{propertyType}</span>
                 </div>
                 <div>
-                  <span className="text-plum/60 text-xs block">
+                  <span className="text-muted-foreground text-xs block">
                     Bedrooms / Bathrooms
                   </span>
                   <span>
@@ -327,35 +311,35 @@ export default function PastBookings({
                   </span>
                 </div>
                 <div>
-                  <span className="text-plum/60 text-xs block">
+                  <span className="text-muted-foreground text-xs block">
                     Condition level
                   </span>
                   <span>{conditionLevel}</span>
                 </div>
                 <div>
-                  <span className="text-plum/60 text-xs block">
+                  <span className="text-muted-foreground text-xs block">
                     Pets on site
                   </span>
                   <span>{pets}</span>
                 </div>
                 <div>
-                  <span className="text-plum/60 text-xs block">
+                  <span className="text-muted-foreground text-xs block">
                     Fragrance preference
                   </span>
                   <span>{fragrancePreference}</span>
                 </div>
                 <div className="sm:col-span-2">
-                  <span className="text-plum/60 text-xs block">Add-ons</span>
+                  <span className="text-muted-foreground text-xs block">Add-ons</span>
                   <span>{addOns}</span>
                 </div>
               </div>
             </div>
 
-            <div className="mt-2 border-t border-plum/10 pt-3 space-y-1">
-              <p className="text-xs font-semibold text-plum">
+            <div className="mt-2 border-t border-border pt-3 space-y-1">
+              <p className="text-xs font-semibold text-foreground">
                 Notes on this appointment
               </p>
-              <div className="text-sm text-plum bg-plum/5 border border-plum/10 rounded-lg px-3 py-2 whitespace-pre-wrap">
+              <div className="text-sm text-foreground bg-secondary border border-border rounded-md px-3 py-2 whitespace-pre-wrap">
                 {notes && notes.trim().length > 0
                   ? notes
                   : "No additional notes were recorded for this appointment."}
@@ -367,7 +351,7 @@ export default function PastBookings({
             <Button
               type="button"
               variant="outline"
-              className="order-1 sm:order-none border-plum/40 text-plum hover:bg-plum/5"
+              className="order-1 sm:order-none"
               onClick={closeDetails}
             >
               Close
@@ -378,7 +362,6 @@ export default function PastBookings({
                 <Button
                   type="button"
                   variant="outline"
-                  className="border-gold/60 text-gold hover:bg-gold/10 flex items-center gap-2"
                   onClick={() => onViewPayments(activeBooking)}
                 >
                   Invoice
@@ -387,7 +370,7 @@ export default function PastBookings({
               <Button
                 type="button"
                 variant="outline"
-                className="border-plum/40 text-plum hover:bg-plum/5 flex items-center gap-2"
+                className="flex items-center gap-2"
                 onClick={handleDownloadPdf}
               >
                 <FileDown className="w-4 h-4" />
@@ -402,22 +385,22 @@ export default function PastBookings({
 
   return (
     <>
-      <Card className="shadow-sm border-plum/10">
+      <Card>
         <CardHeader className="flex flex-col gap-1 md:flex-row md:items-center md:justify-between">
           <div className="flex items-center gap-2">
-            <Clock className="h-5 w-5 text-plum/70" />
+            <Clock className="h-5 w-5 text-muted-foreground" />
             <div>
-              <CardTitle className="text-plum text-lg md:text-xl">
+              <CardTitle className="text-foreground text-lg md:text-xl">
                 Completed Appointments
               </CardTitle>
-              <p className="text-xs text-plum/60 mt-0.5">
+              <p className="text-xs text-muted-foreground mt-0.5">
                 View your past cleanings and leave feedback for our team.
               </p>
             </div>
           </div>
 
           {!loading && completedCount > 0 && (
-            <span className="inline-flex items-center rounded-full bg-plum/5 px-3 py-1 text-xs text-plum/75 border border-plum/10">
+            <span className="inline-flex items-center rounded-md bg-secondary px-3 py-1 text-xs text-muted-foreground border border-border">
               {completedCount} completed&nbsp;
               {completedCount === 1 ? "appointment" : "appointments"}
             </span>
@@ -426,20 +409,20 @@ export default function PastBookings({
 
         <CardContent className="space-y-4">
           {!loading && completedCount > 0 && (
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 text-xs text-plum/70">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 text-xs text-muted-foreground">
               <span>
                 You have{" "}
-                <span className="font-semibold text-plum">
+                <span className="font-semibold text-foreground">
                   {completedCount}
                 </span>{" "}
                 completed {completedCount === 1 ? "appointment" : "appointments"}.
               </span>
               {avgRating != null && (
                 <span className="flex items-center gap-1">
-                  <Star className="w-3 h-3 text-gold fill-gold" />
+                  <Star className="w-3 h-3 text-warning fill-warning" />
                   <span>
                     Average rating:{" "}
-                    <span className="font-semibold text-plum">
+                    <span className="font-semibold text-foreground">
                       {avgRating}
                     </span>{" "}
                     / 5
@@ -450,36 +433,30 @@ export default function PastBookings({
           )}
 
           {/* Desktop table */}
-          <div className="hidden md:block overflow-x-auto">
-            <table className="w-full text-sm min-w-[720px]">
-              <thead>
-                <tr className="text-left text-plum/70 border-b bg-plum/5/40">
-                  <th className="py-2 pr-4">Order</th>
-                  <th className="py-2 pr-4">Date</th>
-                  <th className="py-2 pr-4">Status</th>
-                  <th className="py-2 pr-4">Total</th>
-                  <th className="py-2 pr-4">Feedback</th>
-                </tr>
-              </thead>
-              <tbody>
+          <div className="hidden md:block">
+            <Table className="min-w-[760px]">
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Order</TableHead>
+                  <TableHead>Date</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead className="text-right">Total</TableHead>
+                  <TableHead>Feedback</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
                 {loading
-                  ? Array.from({ length: 4 }).map((_, i) => renderSkeletonRow(i))
+                  ? Array.from({ length: 4 }).map((_, i) => (
+                      <TableRow key={i}>
+                        <TableCell colSpan={5}>
+                          <div className="h-4 w-full max-w-sm bg-muted rounded animate-pulse" />
+                        </TableCell>
+                      </TableRow>
+                    ))
                   : bookings.length
-                  ? bookings.map((b, idx) => {
-                      const end = toDate(b.endAt);
+                  ? bookings.map((b) => {
                       const canReview = typeof onReview === "function";
-
-                      let displayStatus =
-                        b.friendly || b.rawStatus || "Pending";
-                      if (
-                        end &&
-                        end < now &&
-                        (displayStatus === "Confirmed" ||
-                          displayStatus === "Scheduled")
-                      ) {
-                        displayStatus = "Completed";
-                      }
-
+                      const displayStatus = resolveStatus(b);
                       const orderCode = `CI-${b.id.slice(0, 5).toUpperCase()}`;
                       const hasRating =
                         b.reviewRating !== undefined &&
@@ -487,52 +464,36 @@ export default function PastBookings({
                         b.reviewRating !== "";
 
                       return (
-                        <tr
-                          key={b.id}
-                          className={`border-b last:border-0 transition-colors ${
-                            idx % 2 === 0 ? "bg-white" : "bg-plum/5/40"
-                          } hover:bg-plum/5`}
-                        >
-                          {/* Order: single-line, clickable pill */}
-                          <td className="py-3 pr-4 align-top">
+                        <TableRow key={b.id}>
+                          <TableCell>
                             <button
                               type="button"
-                              className="px-2 py-1 rounded bg-plum/5 text-plum font-mono text-xs md:text-sm border border-plum/10 hover:bg-plum/10 hover:border-plum/30"
+                              className="px-2 py-1 rounded-md bg-secondary text-foreground font-mono text-xs border border-border hover:border-primary/40"
                               onClick={() => openDetails(b)}
                             >
                               {orderCode}
                             </button>
-                          </td>
+                          </TableCell>
 
-                          {/* Date */}
-                          <td className="py-3 pr-4 text-plum/90 align-top">
+                          <TableCell className="text-foreground">
                             {formatDate(b.date)}
-                          </td>
+                          </TableCell>
 
-                          {/* Status pill */}
-                          <td className="py-3 pr-4 align-top">
-                            <span
-                              className={`inline-flex items-center gap-1 px-2 py-1 rounded-full border text-xs ${statusToken(
-                                displayStatus
-                              )}`}
-                            >
-                              {displayStatus}
-                            </span>
-                          </td>
+                          <TableCell>
+                            <StatusPill status={displayStatus} />
+                          </TableCell>
 
-                          {/* Total */}
-                          <td className="py-3 pr-4 text-plum align-top">
-                            <span className="font-medium">
+                          <TableCell className="text-right">
+                            <span className="font-medium tabular-nums text-foreground">
                               {formatMoney(b.total)}
                             </span>
-                          </td>
+                          </TableCell>
 
-                          {/* Feedback */}
-                          <td className="py-3 pr-4 align-top">
+                          <TableCell>
                             {hasRating ? (
                               <button
                                 type="button"
-                                className="inline-flex flex-col items-start gap-0.5 text-xs text-plum/80 hover:text-plum"
+                                className="inline-flex flex-col items-start gap-0.5 text-xs text-muted-foreground hover:text-foreground"
                                 onClick={() => canReview && onReview(b)}
                               >
                                 <span className="flex items-center gap-1">
@@ -541,7 +502,7 @@ export default function PastBookings({
                                     {Number(b.reviewRating)}/5
                                   </span>
                                 </span>
-                                <span className="text-[10px] text-plum/50">
+                                <span className="text-[10px] text-muted-foreground/70">
                                   Your feedback
                                   {canReview ? " (tap to edit)" : ""}
                                 </span>
@@ -549,31 +510,31 @@ export default function PastBookings({
                             ) : canReview ? (
                               <button
                                 type="button"
-                                className="text-gold inline-flex items-center gap-1 text-xs md:text-sm hover:underline"
+                                className="text-primary inline-flex items-center gap-1 text-xs md:text-sm hover:underline"
                                 onClick={() => onReview(b)}
                               >
                                 <Star className="w-4 h-4" />
                                 Leave review
                               </button>
                             ) : (
-                              <span className="text-plum/50 text-xs">—</span>
+                              <span className="text-muted-foreground text-xs">—</span>
                             )}
-                          </td>
-                        </tr>
+                          </TableCell>
+                        </TableRow>
                       );
                     })
                   : (
-                    <tr>
-                      <td
+                    <TableRow>
+                      <TableCell
                         colSpan={5}
-                        className="py-6 text-center text-plum/70"
+                        className="py-6 text-center text-muted-foreground"
                       >
                         No completed appointments yet.
-                      </td>
-                    </tr>
+                      </TableCell>
+                    </TableRow>
                   )}
-              </tbody>
-            </table>
+              </TableBody>
+            </Table>
           </div>
 
           {/* Mobile cards */}
@@ -582,29 +543,17 @@ export default function PastBookings({
               Array.from({ length: 3 }).map((_, i) => (
                 <div
                   key={i}
-                  className="rounded-xl border border-plum/10 bg-plum/5 p-3 animate-pulse space-y-2"
+                  className="rounded-lg border border-border bg-secondary p-3 animate-pulse space-y-2"
                 >
-                  <div className="h-4 w-32 bg-plum/10 rounded" />
-                  <div className="h-4 w-40 bg-plum/10 rounded" />
-                  <div className="h-4 w-20 bg-plum/10 rounded" />
+                  <div className="h-4 w-32 bg-muted rounded" />
+                  <div className="h-4 w-40 bg-muted rounded" />
+                  <div className="h-4 w-20 bg-muted rounded" />
                 </div>
               ))
             ) : bookings.length ? (
               bookings.map((b) => {
-                const end = toDate(b.endAt);
                 const canReview = typeof onReview === "function";
-
-                let displayStatus =
-                  b.friendly || b.rawStatus || "Pending";
-                if (
-                  end &&
-                  end < now &&
-                  (displayStatus === "Confirmed" ||
-                    displayStatus === "Scheduled")
-                ) {
-                  displayStatus = "Completed";
-                }
-
+                const displayStatus = resolveStatus(b);
                 const orderCode = `CI-${b.id.slice(0, 5).toUpperCase()}`;
                 const hasRating =
                   b.reviewRating !== undefined &&
@@ -614,33 +563,32 @@ export default function PastBookings({
                 return (
                   <div
                     key={b.id}
-                    className="rounded-xl border border-plum/10 bg-white p-3 shadow-xs flex flex-col gap-2"
+                    className="rounded-lg border border-border bg-card p-3 flex flex-col gap-2"
                   >
-                    <div className="flex items-center justify-between gap-2">
+                    <div className="flex items-start justify-between gap-2">
                       <button
                         type="button"
                         className="text-left"
                         onClick={() => openDetails(b)}
                       >
-                        <p className="text-xs text-plum/60 uppercase tracking-wide font-mono">
+                        <p className="text-xs text-muted-foreground uppercase tracking-wide font-mono">
                           {orderCode}
                         </p>
-                        <p className="text-sm font-semibold text-plum">
+                        <p className="text-sm font-semibold text-foreground">
                           {b.service || "Cleaning service"}
                         </p>
                       </button>
-                      <span
-                        className={`inline-flex items-center gap-1 px-2 py-1 rounded-full border text-[11px] ${statusToken(
-                          displayStatus
-                        )}`}
-                      >
-                        {displayStatus}
-                      </span>
+                      <StatusPill status={displayStatus} />
                     </div>
 
-                    <p className="text-xs text-plum/70">
+                    <p className="text-xs text-muted-foreground flex items-start gap-1.5">
+                      <MapPin className="w-3.5 h-3.5 mt-0.5 shrink-0" />
+                      <span>{formatServiceAddress(b)}</span>
+                    </p>
+
+                    <p className="text-xs text-muted-foreground">
                       {formatDate(b.date)} ·{" "}
-                      <span className="font-medium">
+                      <span className="font-medium tabular-nums text-foreground">
                         {formatMoney(b.total)}
                       </span>
                     </p>
@@ -649,7 +597,7 @@ export default function PastBookings({
                       {hasRating ? (
                         <button
                           type="button"
-                          className="inline-flex flex-col items-start gap-0.5 text-[11px] text-plum/80 hover:text-plum"
+                          className="inline-flex flex-col items-start gap-0.5 text-[11px] text-muted-foreground hover:text-foreground"
                           onClick={() => canReview && onReview(b)}
                         >
                           <span className="flex items-center gap-1">
@@ -658,7 +606,7 @@ export default function PastBookings({
                               {Number(b.reviewRating)}/5
                             </span>
                           </span>
-                          <span className="text-[10px] text-plum/50">
+                          <span className="text-[10px] text-muted-foreground/70">
                             Your feedback
                             {canReview ? " (tap to edit)" : ""}
                           </span>
@@ -668,29 +616,23 @@ export default function PastBookings({
                           type="button"
                           size="sm"
                           variant="outline"
-                          className="border-gold/60 text-gold hover:bg-gold/5 h-7 px-2 text-xs"
+                          className="h-7 px-2 text-xs"
                           onClick={() => onReview(b)}
                         >
                           <Star className="w-3 h-3 mr-1" />
                           Review
                         </Button>
                       ) : (
-                        <span className="text-[11px] text-plum/50">
+                        <span className="text-[11px] text-muted-foreground">
                           Feedback not available
                         </span>
                       )}
-
-                      <span className="text-[11px] text-plum/50">
-                        {displayStatus === "Completed"
-                          ? "Completed cleaning"
-                          : `Status: ${displayStatus}`}
-                      </span>
                     </div>
                   </div>
                 );
               })
             ) : (
-              <div className="rounded-xl border border-dashed border-plum/20 bg-plum/5 p-4 text-center text-sm text-plum/70">
+              <div className="rounded-lg border border-dashed border-border bg-secondary p-4 text-center text-sm text-muted-foreground">
                 Once you&apos;ve had your first cleaning, your history will
                 appear here.
               </div>

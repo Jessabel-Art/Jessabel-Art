@@ -2,16 +2,17 @@ import React, { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { Dialog, DialogContent, DialogFooter, DialogHeader } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Calendar, Mail, MapPin, Phone, Sparkles, User } from "lucide-react";
+import { Calendar, Mail, MapPin, Phone, Sparkles } from "lucide-react";
 import { formatPhoneForDisplay } from "@/lib/contactModel";
 import { getDemoAppointmentsByClientId } from "@/data/demoAppointments";
 import { getDemoInvoicesByClientId } from "@/data/demoInvoices";
+import StatusPill from "@/components/StatusPill";
+
+// Static demo "now" — pinned to 2026-09-18, matches every other admin view.
+const TODAY = new Date("2026-09-18T08:00:00");
 
 const money = (n) =>
-  Number(n || 0).toLocaleString("en-US", {
-    style: "currency",
-    currency: "USD",
-  });
+  Number(n || 0).toLocaleString("en-US", { style: "currency", currency: "USD" });
 
 function initials(name) {
   const parts = String(name || "").trim().split(/\s+/).filter(Boolean);
@@ -24,11 +25,7 @@ function initials(name) {
 function formatDate(value) {
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return "--";
-  return date.toLocaleDateString(undefined, {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  });
+  return date.toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
 }
 
 export default function ClientDetailsModal({ client, onClose }) {
@@ -38,29 +35,27 @@ export default function ClientDetailsModal({ client, onClose }) {
     () => (client ? getDemoAppointmentsByClientId(client.id) : []),
     [client]
   );
-  const invoices = useMemo(
-    () => (client ? getDemoInvoicesByClientId(client.id) : []),
-    [client]
-  );
+  const invoices = useMemo(() => (client ? getDemoInvoicesByClientId(client.id) : []), [client]);
 
   if (!client) return null;
 
   const totalRevenue = invoices.reduce((sum, invoice) => sum + Number(invoice.total || 0), 0);
+  const outstandingBalance = invoices.reduce((sum, invoice) => sum + Number(invoice.amountDue || 0), 0);
   const nextAppointment = appointments
-    .filter((appointment) => new Date(appointment.startAt) >= new Date())
+    .filter((appointment) => new Date(appointment.startAt) >= TODAY && appointment.status !== "cancelled")
     .sort((a, b) => new Date(a.startAt) - new Date(b.startAt))[0];
 
   return (
     <Dialog open={!!client} onOpenChange={onClose}>
-      <DialogContent className="max-w-3xl bg-white rounded-2xl p-0 shadow-xl overflow-hidden">
-        <DialogHeader className="px-6 py-5 border-b border-plum/10 bg-[#F7F7F7]">
+      <DialogContent className="max-w-3xl bg-card p-0 shadow-pop overflow-hidden">
+        <DialogHeader className="px-6 py-5 border-b border-border bg-muted/40">
           <div className="flex items-center gap-4">
-            <div className="h-14 w-14 rounded-full bg-plum text-white flex items-center justify-center text-lg font-semibold">
+            <div className="h-14 w-14 rounded-full bg-navy-900 text-white flex items-center justify-center text-lg font-semibold shrink-0">
               {initials(client.name)}
             </div>
-            <div>
-              <h2 className="text-xl font-semibold text-plum">{client.name}</h2>
-              <p className="text-sm text-plum/70">Demo client profile</p>
+            <div className="min-w-0">
+              <h2 className="text-xl font-semibold text-foreground truncate">{client.name}</h2>
+              <p className="text-sm text-muted-foreground">Client profile</p>
             </div>
           </div>
         </DialogHeader>
@@ -71,43 +66,50 @@ export default function ClientDetailsModal({ client, onClose }) {
             <InfoRow icon={Phone} label="Phone" value={formatPhoneForDisplay(client.phone)} />
             <InfoRow icon={MapPin} label="Address" value={client.addressSummary} />
             <InfoRow icon={Sparkles} label="Preference" value={client.servicePreference} />
-            <div className="rounded-xl border border-plum/10 bg-plum/5 p-3">
-              <p className="text-xs uppercase tracking-wide text-plum/50 mb-1">Notes</p>
-              <p className="text-sm text-plum/80">{client.notes}</p>
+            <div className="rounded-lg border border-border bg-muted/40 p-3">
+              <p className="text-xs uppercase tracking-wide text-muted-foreground mb-1">Notes</p>
+              <p className="text-sm text-foreground">{client.notes}</p>
             </div>
           </section>
 
           <section className="space-y-4">
             <div className="grid grid-cols-3 gap-3">
               <Metric label="Appointments" value={appointments.length} />
-              <Metric label="Invoices" value={invoices.length} />
               <Metric label="Revenue" value={money(totalRevenue)} />
+              <Metric
+                label="Balance"
+                value={money(outstandingBalance)}
+                tone={outstandingBalance > 0 ? "warning" : "default"}
+              />
             </div>
 
-            <div className="rounded-xl border border-plum/10 overflow-hidden">
-              <div className="px-3 py-2 bg-[#EEF5FB] text-sm font-semibold text-[#0B283D]">
+            <div className="rounded-lg border border-border overflow-hidden">
+              <div className="px-3 py-2 bg-muted/60 text-sm font-semibold text-foreground">
                 Recent appointments
               </div>
-              <div className="divide-y divide-plum/10">
+              <div className="divide-y divide-border">
                 {appointments.slice(0, 5).map((appointment) => (
                   <div key={appointment.id} className="px-3 py-2 text-sm flex justify-between gap-3">
                     <div>
-                      <p className="font-medium text-plum">{appointment.serviceName}</p>
-                      <p className="text-xs text-plum/60">{formatDate(appointment.startAt)}</p>
+                      <p className="font-medium text-foreground">{appointment.serviceName}</p>
+                      <p className="text-xs text-muted-foreground">{formatDate(appointment.startAt)}</p>
                     </div>
-                    <div className="text-right">
-                      <p className="text-plum">{money(appointment.total)}</p>
-                      <p className="text-xs capitalize text-plum/60">{appointment.status}</p>
+                    <div className="text-right flex flex-col items-end gap-1">
+                      <p className="text-foreground tabular-nums">{money(appointment.total)}</p>
+                      <StatusPill status={appointment.status} />
                     </div>
                   </div>
                 ))}
+                {appointments.length === 0 && (
+                  <p className="px-3 py-4 text-sm text-muted-foreground text-center">No appointments yet.</p>
+                )}
               </div>
             </div>
 
             {nextAppointment && (
-              <div className="rounded-xl border border-gold/30 bg-gold/10 p-3 text-sm text-plum">
+              <div className="rounded-lg border border-primary/20 bg-accent p-3 text-sm text-foreground">
                 <div className="flex items-center gap-2 font-semibold">
-                  <Calendar className="w-4 h-4" />
+                  <Calendar className="w-4 h-4 text-primary" />
                   Next appointment
                 </div>
                 <p className="mt-1">
@@ -118,18 +120,11 @@ export default function ClientDetailsModal({ client, onClose }) {
           </section>
         </div>
 
-        <DialogFooter className="px-6 py-4 border-t border-plum/10 bg-[#F7F7F7]">
-          <Button variant="outline" onClick={onClose} className="border-plum text-plum">
+        <DialogFooter className="px-6 py-4 border-t border-border bg-muted/40">
+          <Button variant="outline" onClick={onClose}>
             Close
           </Button>
-          <Button
-            className="bg-gold hover:bg-gold/90 text-white"
-            onClick={() =>
-              navigate(
-                `/admin/client-bookings?clientId=${encodeURIComponent(client.id)}`
-              )
-            }
-          >
+          <Button onClick={() => navigate(`/admin/client-bookings?clientId=${encodeURIComponent(client.id)}`)}>
             View bookings
           </Button>
         </DialogFooter>
@@ -141,20 +136,20 @@ export default function ClientDetailsModal({ client, onClose }) {
 function InfoRow({ icon: Icon, label, value }) {
   return (
     <div className="flex gap-3 text-sm">
-      <Icon className="w-4 h-4 mt-0.5 text-plum/60" />
+      <Icon className="w-4 h-4 mt-0.5 text-muted-foreground shrink-0" />
       <div>
-        <p className="text-xs uppercase tracking-wide text-plum/50">{label}</p>
-        <p className="text-plum">{value || "--"}</p>
+        <p className="text-xs uppercase tracking-wide text-muted-foreground">{label}</p>
+        <p className="text-foreground">{value || "--"}</p>
       </div>
     </div>
   );
 }
 
-function Metric({ label, value }) {
+function Metric({ label, value, tone = "default" }) {
   return (
-    <div className="rounded-xl bg-plum/5 border border-plum/10 p-3">
-      <p className="text-xs text-plum/60">{label}</p>
-      <p className="font-semibold text-plum">{value}</p>
+    <div className={`rounded-lg border p-3 ${tone === "warning" ? "bg-warning-bg border-warning/20" : "bg-muted/40 border-border"}`}>
+      <p className={`text-xs ${tone === "warning" ? "text-warning" : "text-muted-foreground"}`}>{label}</p>
+      <p className={`font-semibold ${tone === "warning" ? "text-warning" : "text-foreground"}`}>{value}</p>
     </div>
   );
 }

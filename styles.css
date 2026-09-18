@@ -1730,6 +1730,12 @@ img {
   color: var(--text-dark);
 }
 
+.route-path {
+  font-family: 'SF Mono', 'Menlo', 'Consolas', ui-monospace, monospace;
+  font-size: 0.78rem !important;
+  color: var(--forest, var(--text-dark));
+}
+
 .admin-module-card p {
   margin: 0;
   font-size: 0.7rem;

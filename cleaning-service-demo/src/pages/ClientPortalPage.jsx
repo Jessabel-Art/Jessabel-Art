@@ -1,8 +1,8 @@
 import React, { useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { CalendarDays, CreditCard, LogOut, UserRound } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { useNavigate, Link } from "react-router-dom";
+import { CalendarDays, CreditCard, LogOut, UserRound, LayoutGrid, ArrowLeft } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
+import logo from "@/assets/logo/logo-primary.png";
 import ClientDashboardHome from "@/components/portal/ClientDashboardHome";
 import AppointmentsView from "@/components/portal/AppointmentsView";
 import ProfileSettingsPanel from "@/components/portal/ProfileSettingsPanel";
@@ -15,7 +15,7 @@ const PAYMENT_INFO = {
   depositAmount: 50,
   cash: true,
   cashApp: "$cleanprodemo",
-  zelle: "(000) 000-0000 (recipient: CleanPro Demo)",
+  zelle: "(904) 555-0100 (recipient: CleanPro Demo)",
   notes: "Please include your full name in the payment note. (Demo only.)",
 };
 
@@ -29,11 +29,19 @@ function friendlyStatus(raw) {
   return status.charAt(0).toUpperCase() + status.slice(1);
 }
 
+const NAV_ITEMS = [
+  { id: "dashboard", label: "Dashboard", icon: LayoutGrid },
+  { id: "appointments", label: "Appointments", icon: CalendarDays },
+  { id: "payments", label: "Payments", icon: CreditCard },
+  { id: "profile", label: "Profile", icon: UserRound },
+];
+
 export default function ClientPortalPage() {
   const navigate = useNavigate();
   const { user, signOut } = useAuth();
   const [section, setSection] = useState("dashboard");
   const [selectedInvoiceId, setSelectedInvoiceId] = useState("");
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const demoClient = demoClients[0];
 
   const appointments = useMemo(
@@ -53,7 +61,7 @@ export default function ClientPortalPage() {
     [user?.demoRole, demoClient.id]
   );
 
-  const now = new Date();
+  const now = new Date("2026-09-18T08:00:00");
   const upcomingBookings = appointments.filter((appointment) => {
     const date = toDate(appointment.startAt);
     return date && date >= now && !["completed", "cancelled", "declined"].includes(appointment.status);
@@ -79,66 +87,107 @@ export default function ClientPortalPage() {
     },
   ];
 
-  const navItems = [
-    { id: "dashboard", label: "Dashboard", icon: CalendarDays },
-    { id: "appointments", label: "Appointments", icon: CalendarDays },
-    { id: "profile", label: "Profile", icon: UserRound },
-    { id: "payments", label: "Payments", icon: CreditCard },
-  ];
-
   const handleLogout = async () => {
     await signOut();
     navigate("/auth", { replace: true });
   };
 
-  return (
-    <div className="min-h-screen bg-[#F7F7F7]">
-      <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 py-6">
-        <div className="mb-5 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
-          <div>
-            <h1 className="text-2xl md:text-3xl font-semibold text-plum">
-              Client Dashboard
-            </h1>
-            <p className="text-sm text-plum/70">
-              Welcome {contactProfile.name}. This portal uses local demo data only.
-            </p>
-          </div>
-          <Button
-            variant="outline"
-            className="border-plum text-plum"
-            onClick={handleLogout}
-          >
-            <LogOut className="w-4 h-4 mr-2" />
-            Log out
-          </Button>
-        </div>
+  const initial = (contactProfile.name || "C").trim().charAt(0).toUpperCase();
 
-        <div className="grid gap-5 lg:grid-cols-[220px_minmax(0,1fr)]">
-          <aside className="bg-white border border-plum/10 rounded-2xl p-3 h-fit">
-            <nav className="space-y-2">
-              {navItems.map((item) => {
-                const Icon = item.icon;
-                const active = section === item.id;
-                return (
-                  <button
-                    key={item.id}
-                    type="button"
-                    onClick={() => setSection(item.id)}
-                    className={`w-full flex items-center gap-2 rounded-xl px-3 py-2 text-sm transition ${
-                      active
-                        ? "bg-plum text-white"
-                        : "text-plum hover:bg-plum/5"
-                    }`}
-                  >
-                    <Icon className="w-4 h-4" />
-                    {item.label}
-                  </button>
-                );
-              })}
-            </nav>
+  const NavList = ({ onSelect }) => (
+    <nav className="space-y-0.5">
+      {NAV_ITEMS.map((item) => {
+        const Icon = item.icon;
+        const active = section === item.id;
+        return (
+          <button
+            key={item.id}
+            type="button"
+            onClick={() => {
+              setSection(item.id);
+              onSelect?.();
+            }}
+            aria-current={active ? "page" : undefined}
+            className={`relative w-full flex items-center gap-2.5 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
+              active ? "bg-accent text-primary" : "text-muted-foreground hover:bg-secondary hover:text-foreground"
+            }`}
+          >
+            <span
+              className={`absolute left-0 top-1.5 bottom-1.5 w-[3px] rounded-full bg-primary transition-opacity ${
+                active ? "opacity-100" : "opacity-0"
+              }`}
+              aria-hidden="true"
+            />
+            <Icon className="w-4 h-4 shrink-0" />
+            {item.label}
+          </button>
+        );
+      })}
+    </nav>
+  );
+
+  return (
+    <div className="min-h-screen bg-muted/40">
+      {/* Portal header */}
+      <header className="sticky top-0 z-30 bg-card border-b border-border">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-3">
+          <div className="flex items-center gap-3 min-w-0">
+            <button
+              type="button"
+              onClick={() => setMobileNavOpen((v) => !v)}
+              className="lg:hidden inline-flex h-9 w-9 items-center justify-center rounded-lg hover:bg-secondary text-foreground shrink-0"
+              aria-label="Toggle navigation"
+              aria-expanded={mobileNavOpen}
+            >
+              <LayoutGrid className="w-5 h-5" />
+            </button>
+            <img src={logo} alt="CleanPro Demo" className="h-9 w-auto hidden sm:block" />
+            <div className="min-w-0">
+              <p className="text-[11px] font-semibold uppercase tracking-wide text-primary">Client Portal</p>
+              <p className="text-sm font-semibold text-foreground truncate">Welcome back, {contactProfile.name.split(" ")[0]}</p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2 shrink-0">
+            <Link
+              to="/"
+              className="hidden sm:inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground hover:text-foreground px-2 py-2"
+            >
+              <ArrowLeft className="w-3.5 h-3.5" />
+              Public site
+            </Link>
+            <div className="hidden sm:grid h-9 w-9 place-items-center rounded-full bg-primary text-primary-foreground text-sm font-semibold">
+              {initial}
+            </div>
+            <button
+              type="button"
+              onClick={handleLogout}
+              className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-background px-3 py-2 text-xs font-semibold text-foreground hover:bg-secondary transition-colors"
+            >
+              <LogOut className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Sign out</span>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+        <div className="grid gap-6 lg:grid-cols-[220px_minmax(0,1fr)]">
+          {/* Desktop sidebar */}
+          <aside className="hidden lg:block h-fit sticky top-24">
+            <div className="rounded-xl border border-border bg-card p-3 shadow-card">
+              <NavList />
+            </div>
           </aside>
 
-          <main>
+          {/* Mobile nav drawer */}
+          {mobileNavOpen && (
+            <div className="lg:hidden -mt-2 mb-2 rounded-xl border border-border bg-card p-3 shadow-card">
+              <NavList onSelect={() => setMobileNavOpen(false)} />
+            </div>
+          )}
+
+          <main className="min-w-0">
             {section === "dashboard" && (
               <ClientDashboardHome
                 upcomingBookings={upcomingBookings}

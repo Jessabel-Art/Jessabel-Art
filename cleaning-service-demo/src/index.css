@@ -1,34 +1,86 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 /* ============================================================
    CleanPro Demo — Design Tokens
-   Primary blue: #3A9FDF  |  Deep navy: #0B283D
-   Off-white: #F7F7F7     |  Light gray: #E9EEF2
-   Muted text: #5F6B73
+   Deep navy (structural) + professional blue (action) + blue-gray
+   surfaces + warm neutral white. Restrained semantic states.
+   These are the HSL custom properties the shadcn/ui primitives in
+   src/components/ui and tailwind.config.js resolve against — they
+   were previously undefined, which is why buttons/cards/dialogs
+   rendered without real color. Every token below is load-bearing.
    ============================================================ */
 :root {
-  /* Legacy variable names kept so all existing class references
-     automatically adopt the new palette without a full rename. */
-  --light-bg: #F7F7F7;   /* was warm tint — now clean off-white */
-  --plum: #0B283D;         /* was deep navy — now deep navy       */
-  --gold: #3A9FDF;         /* was gold — now primary blue         */
-  --white: #FFFFFF;
+  --radius: 0.625rem;
 
-  /* New explicit tokens */
-  --navy: #0B283D;
-  --blue: #3A9FDF;
-  --off-white: #F7F7F7;
-  --light-gray: #E9EEF2;
-  --muted-text: #5F6B73;
+  --background: 36 22% 97%;          /* warm neutral page background, not stark white */
+  --foreground: 205 42% 14%;         /* deep navy text */
+
+  --card: 0 0% 100%;
+  --card-foreground: 205 42% 14%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 205 42% 14%;
+
+  --primary: 203 64% 43%;            /* professional action blue */
+  --primary-foreground: 0 0% 100%;
+
+  --secondary: 208 26% 94%;          /* soft blue-gray surface */
+  --secondary-foreground: 205 38% 18%;
+
+  --muted: 208 22% 95%;
+  --muted-foreground: 207 13% 40%;
+
+  --accent: 204 62% 94%;             /* light blue tint for hover/active */
+  --accent-foreground: 205 45% 20%;
+
+  --destructive: 5 58% 46%;
+  --destructive-foreground: 0 0% 100%;
+  --destructive-bg: 5 68% 96%;
+
+  --success: 152 42% 30%;
+  --success-foreground: 0 0% 100%;
+  --success-bg: 150 45% 95%;
+
+  --warning: 36 78% 38%;
+  --warning-foreground: 0 0% 100%;
+  --warning-bg: 42 85% 94%;
+
+  --border: 208 20% 88%;
+  --input: 208 20% 86%;
+  --ring: 203 64% 43%;
+
+  /* Legacy variable names kept so any remaining .text-plum / .bg-gold
+     references still resolve to on-brand colors during the redesign. */
+  --light-bg: #F8F6F2;
+  --plum: #0B1F30;
+  --gold: #2680C2;
+  --white: #FFFFFF;
+  --navy: #0B1F30;
+  --blue: #2680C2;
+  --off-white: #F8F6F2;
+  --light-gray: #EEF2F6;
+  --muted-text: #5B6B79;
+}
+
+* {
+  border-color: hsl(var(--border));
 }
 
 body {
-  font-family: Arial, Helvetica, sans-serif;
-  background-color: var(--off-white);
-  color: var(--navy);
-  line-height: 1.6;
+  font-family: 'Inter', system-ui, sans-serif;
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  line-height: 1.55;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: '"Plus Jakarta Sans"', 'Plus Jakarta Sans', system-ui, sans-serif;
+}
+
+.font-display {
+  font-family: '"Plus Jakarta Sans"', 'Plus Jakarta Sans', system-ui, sans-serif;
 }
 
 .text-plum {
@@ -40,7 +92,7 @@ body {
 }
 
 .bg-clean-bg {
-  background-color: var(--off-white);
+  background-color: hsl(var(--background));
 }
 
 .bg-plum {
@@ -60,40 +112,37 @@ body {
 }
 
 .hover\:shadow-gold:hover {
-  box-shadow: 0 0 20px rgba(58, 159, 223, 0.4);
+  box-shadow: 0 0 20px rgba(38, 128, 194, 0.35);
 }
 
 .gradient-overlay {
-  background: linear-gradient(135deg, rgba(247, 247, 247, 0.9) 0%, rgba(11, 40, 61, 0.1) 100%);
+  background: linear-gradient(135deg, rgba(11, 31, 48, 0.82) 0%, rgba(11, 31, 48, 0.42) 55%, rgba(11, 31, 48, 0.18) 100%);
 }
 
 .service-card {
-  transition: all 0.3s ease;
-  backdrop-filter: blur(10px);
+  transition: all 0.25s ease;
 }
 
 .service-card:hover {
-  transform: translateY(-5px);
+  transform: translateY(-4px);
 }
 
 .testimonial-card {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(58, 159, 223, 0.2);
+  background: rgba(255, 255, 255, 0.98);
+  border: 1px solid rgba(11, 31, 48, 0.08);
 }
 
 .contact-form {
-  background: rgba(255, 255, 255, 0.98);
-  backdrop-filter: blur(15px);
+  background: rgba(255, 255, 255, 0.99);
 }
 
 .star-rating {
-  color: var(--blue);
+  color: #E3A008;
 }
 
 /* Demo banner */
 .demo-banner {
-  background: var(--navy);
+  background: hsl(var(--foreground));
   color: #fff;
   font-size: 0.75rem;
   text-align: center;
@@ -101,11 +150,16 @@ body {
   letter-spacing: 0.02em;
 }
 
+/* Financial/tabular figures: align numerals for scannable columns */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
 @media (max-width: 768px) {
   .hero-title {
     font-size: 2.5rem;
   }
-  
+
   .hero-subtitle {
     font-size: 1.1rem;
   }

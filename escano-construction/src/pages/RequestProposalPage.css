@@ -1,0 +1,9 @@
+/* The intake form is kept to a comfortable reading measure. */
+.request-page {
+  max-width: 58rem;
+  min-width: 0;
+}
+
+.request-page > * + * {
+  margin-top: var(--space-8);
+}

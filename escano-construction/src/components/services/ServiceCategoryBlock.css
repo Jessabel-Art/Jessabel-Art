@@ -1,0 +1,113 @@
+.svc-block {
+  display: grid;
+  gap: var(--space-8);
+  padding-block: var(--section-y-tight);
+}
+
+.svc-block--tinted {
+  margin-inline: calc(var(--gutter) * -1);
+  padding-inline: var(--gutter);
+  background-color: var(--bg-subtle);
+}
+
+.svc-block__media {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: var(--radius-sm);
+  background-color: var(--stone-100);
+}
+.svc-block__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.svc-block__content {
+  display: grid;
+  gap: var(--space-4);
+  justify-items: start;
+  align-content: start;
+}
+
+.svc-block__title {
+  margin: 0;
+}
+
+.svc-block__desc {
+  margin: 0;
+  color: var(--text-muted);
+  line-height: var(--leading-relaxed);
+  max-width: 58ch;
+}
+
+.svc-block__subheading {
+  margin: var(--space-3) 0 0;
+  font-size: var(--text-sm);
+  font-weight: 700;
+  letter-spacing: var(--tracking-normal);
+  color: var(--navy-900);
+}
+
+.svc-block__list {
+  display: grid;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  width: 100%;
+}
+.svc-block__list li {
+  display: grid;
+  gap: 0.15rem;
+  margin: 0;
+  padding-block: var(--space-3);
+  border-top: var(--hairline) solid var(--border);
+}
+.svc-block__list li:last-child {
+  border-bottom: var(--hairline) solid var(--border);
+}
+.svc-block--tinted .svc-block__list li {
+  border-color: var(--border-strong);
+}
+
+.svc-block__service-name {
+  font-weight: 700;
+  font-size: var(--text-sm);
+  color: var(--navy-900);
+}
+
+.svc-block__service-desc {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+
+@media (min-width: 60rem) {
+  .svc-block {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+    gap: var(--space-12);
+    align-items: start;
+  }
+  .svc-block__media {
+    position: sticky;
+    top: calc(var(--header-h) + var(--space-6));
+    aspect-ratio: 3 / 4;
+    max-height: 32rem;
+  }
+  .svc-block--flipped .svc-block__media {
+    order: 2;
+  }
+  .svc-block--flipped .svc-block__content {
+    order: 1;
+  }
+  .svc-block__list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: var(--space-6);
+  }
+  .svc-block__list li:nth-child(2) {
+    border-top: var(--hairline) solid var(--border);
+  }
+  .svc-block__list li:nth-last-child(2):nth-child(even) {
+    border-bottom: var(--hairline) solid var(--border);
+  }
+}

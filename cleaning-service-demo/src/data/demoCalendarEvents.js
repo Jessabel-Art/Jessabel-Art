@@ -17,8 +17,8 @@ export const demoCalendarEvents = [
   {
     id: "event-block-001",
     title: "Supply restock and vehicle prep",
-    start: "2026-06-20T15:00:00",
-    end: "2026-06-20T16:30:00",
+    start: "2026-09-21T15:00:00",
+    end: "2026-09-21T16:30:00",
     status: "blocked",
     type: "internal",
     location: "Operations office",
@@ -27,8 +27,8 @@ export const demoCalendarEvents = [
   {
     id: "event-block-002",
     title: "Team training",
-    start: "2026-06-24T15:00:00",
-    end: "2026-06-24T17:00:00",
+    start: "2026-09-25T15:30:00",
+    end: "2026-09-25T17:00:00",
     status: "blocked",
     type: "internal",
     location: "CleanPro Demo office",
@@ -37,8 +37,8 @@ export const demoCalendarEvents = [
   {
     id: "event-block-003",
     title: "Estimate follow-up calls",
-    start: "2026-06-25T13:00:00",
-    end: "2026-06-25T14:00:00",
+    start: "2026-09-26T13:00:00",
+    end: "2026-09-26T14:00:00",
     status: "blocked",
     type: "internal",
     location: "Remote",

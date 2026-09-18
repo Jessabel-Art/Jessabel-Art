@@ -2,157 +2,134 @@
 import React from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { Star } from 'lucide-react';
 import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from '@/components/ui/carousel';
+  reviews,
+  getReviewerInitial,
+  formatRelativeDate,
+  getReviewSummary,
+} from '@/lib/reviews';
 
-// Helper to resolve screenshot URLs from /src
-const img = (file) =>
-  new URL(`@/assets/reviews/screenshots/${file}`, import.meta.url).href;
-
-// Fictional demo reviews — clearly not real clients
-const REVIEWS = [
-  {
-    id: 'r1',
-    name: 'Alex M. — Demo Client',
-    rating: 5,
-    source: 'Demo review',
-    body:
-      "I can't believe how spotless the kitchen looks! The team was professional, on time, and went above and beyond. I'll definitely be booking again next month.",
-    screenshot: null,
-  },
-  {
-    id: 'r2',
-    name: 'Jordan T. — Demo Client',
-    rating: 5,
-    source: 'Demo review',
-    body:
-      'Absolutely outstanding service. My apartment has never been this clean. They even organized the pantry without being asked. So impressed!',
-    screenshot: null,
-  },
-  {
-    id: 'r3',
-    name: 'Morgan L. — Demo Client',
-    rating: 5,
-    source: 'Demo review',
-    body:
-      "Used CleanPro for a move-out clean and got my full deposit back. They were thorough, fast, and very reasonably priced. Highly recommend!",
-    screenshot: null,
-  },
-  {
-    id: 'r4',
-    name: 'Riley K. — Demo Client',
-    rating: 5,
-    source: 'Demo review',
-    body:
-      "The house looks and smells amazing. Booking was simple, communication was great, and the results speak for themselves. 10/10.",
-    screenshot: null,
-  },
-  {
-    id: 'r5',
-    name: 'Casey P. — Demo Client',
-    rating: 5,
-    source: 'Demo review',
-    body:
-      'Our office has never been so clean. The team is reliable, friendly, and always exceeds expectations. We switched from our old provider and wish we had done it sooner.',
-    screenshot: null,
-  },
-  {
-    id: 'r6',
-    name: 'Taylor W. — Demo Client',
-    rating: 5,
-    source: 'Demo review',
-    body:
-      'Great attention to detail! They got every corner of the bathroom, cleaned the baseboards, and even wiped down the light switches. A truly deep clean.',
-    screenshot: null,
-  },
-];
+function Stars({ rating, size = 'h-3.5 w-3.5' }) {
+  return (
+    <div className="flex items-center gap-0.5" aria-hidden="true">
+      {Array.from({ length: 5 }).map((_, i) => (
+        <Star
+          key={i}
+          className={`${size} ${i < rating ? 'text-primary fill-primary' : 'text-border'}`}
+        />
+      ))}
+    </div>
+  );
+}
 
 export default function Testimonials() {
   const reduceMotion = useReducedMotion();
+  const summary = getReviewSummary(reviews);
+  const featured = reviews.slice(0, 6);
 
   return (
-    <section className="py-12 sm:py-16 md:py-20 px-3 sm:px-4 bg-white">
+    <section className="py-14 sm:py-18 md:py-24 px-3 sm:px-4 bg-background">
       <div className="max-w-6xl mx-auto">
-        {/* Heading */}
         <motion.div
-          className="text-center mb-8 sm:mb-10 md:mb-12"
+          className="text-center mb-8 sm:mb-12 md:mb-14"
           initial={reduceMotion ? false : { opacity: 0, y: 30 }}
           whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
           transition={{ duration: reduceMotion ? 0 : 0.6 }}
           viewport={reduceMotion ? undefined : { once: true }}
         >
-          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-plum mb-2 sm:mb-3">
+          <p className="text-xs font-semibold uppercase tracking-wide text-primary mb-2">Reputation</p>
+          <h2 className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-3 sm:mb-4">
             What Our Clients Say
           </h2>
-          <p className="text-sm sm:text-base md:text-lg text-plum/80 max-w-2xl mx-auto">
-            Sample reviews from demo clients. These are fictional for illustration purposes.
+          <p className="text-sm sm:text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
+            Review data modeled after Google, Facebook, and Yelp for this portfolio demo.
           </p>
         </motion.div>
 
-        {/* Carousel */}
-        <motion.div
-          initial={reduceMotion ? false : { opacity: 0, y: 30 }}
-          whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
-          transition={{ duration: reduceMotion ? 0 : 0.6, delay: reduceMotion ? 0 : 0.1 }}
-          viewport={reduceMotion ? undefined : { once: true }}
-        >
-          <Carousel className="w-full max-w-3xl mx-auto" opts={{ loop: true }}>
-            <CarouselContent>
-              {REVIEWS.map((r) => (
-                <CarouselItem key={r.id}>
-                  {/* group + relative lets us reveal a hover preview */}
-                  <Card className="bg-white border-gold/20 shadow-md overflow-visible">
-                    <CardContent className="p-4 sm:p-5 md:p-6 relative group">
-                      <div className="flex items-center justify-between mb-2 sm:mb-3">
-                        <div>
-                          <p className="font-semibold text-sm sm:text-base text-plum">{r.name}</p>
-                          <p className="text-xs text-plum/60">{r.source}</p>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10">
+          {/* Aggregate rating card */}
+          <motion.div
+            className="lg:col-span-4"
+            initial={reduceMotion ? false : { opacity: 0, x: -24 }}
+            whileInView={reduceMotion ? undefined : { opacity: 1, x: 0 }}
+            transition={{ duration: reduceMotion ? 0 : 0.6 }}
+            viewport={reduceMotion ? undefined : { once: true }}
+          >
+            <Card className="lg:sticky lg:top-28 bg-card border-border shadow-card">
+              <CardContent className="p-5 sm:p-6 md:p-7">
+                <div className="text-center lg:text-left mb-5">
+                  <div className="flex items-baseline gap-2 justify-center lg:justify-start">
+                    <span className="font-display text-5xl font-bold text-foreground">{summary.average.toFixed(1)}</span>
+                    <span className="text-muted-foreground text-sm">/ 5</span>
+                  </div>
+                  <div className="flex justify-center lg:justify-start mt-1.5 mb-1.5">
+                    <Stars rating={Math.round(summary.average)} size="h-5 w-5" />
+                  </div>
+                  <p className="text-sm text-muted-foreground">Based on {summary.count} client reviews</p>
+                </div>
+
+                <div className="space-y-2">
+                  {summary.distribution.map((row) => (
+                    <div key={row.stars} className="flex items-center gap-2.5 text-xs sm:text-sm">
+                      <span className="w-3 text-muted-foreground font-medium">{row.stars}</span>
+                      <Star className="h-3 w-3 text-primary fill-primary shrink-0" />
+                      <div className="flex-1 h-2 rounded-full bg-secondary overflow-hidden">
+                        <div
+                          className="h-full rounded-full bg-primary"
+                          style={{ width: `${row.percent}%` }}
+                        />
+                      </div>
+                      <span className="w-8 text-right text-muted-foreground tabular-nums">{row.count}</span>
+                    </div>
+                  ))}
+                </div>
+
+                <p className="text-xs text-muted-foreground mt-5 pt-5 border-t border-border">
+                  Ratings aggregate demo reviews sourced across Google, Facebook, and Yelp.
+                </p>
+              </CardContent>
+            </Card>
+          </motion.div>
+
+          {/* Review cards */}
+          <div className="lg:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
+            {featured.map((review, i) => (
+              <motion.div
+                key={review.id}
+                initial={reduceMotion ? false : { opacity: 0, y: 20 }}
+                whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+                transition={{ duration: reduceMotion ? 0 : 0.5, delay: reduceMotion ? 0 : i * 0.05 }}
+                viewport={reduceMotion ? undefined : { once: true }}
+              >
+                <Card className="h-full bg-card border-border shadow-card">
+                  <CardContent className="p-4 sm:p-5">
+                    <div className="flex items-start justify-between gap-3 mb-3">
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <div className="flex-shrink-0 w-9 h-9 rounded-full bg-accent text-accent-foreground flex items-center justify-center font-display font-semibold text-sm">
+                          {getReviewerInitial(review.name)}
                         </div>
-                        <div className="flex items-center gap-1">
-                          {Array.from({ length: 5 }).map((_, i) => (
-                            <Star
-                              key={i}
-                              className={`w-3 h-3 sm:w-4 sm:h-4 ${i < r.rating ? 'text-gold fill-current' : 'text-plum/20'}`}
-                            />
-                          ))}
+                        <div className="min-w-0">
+                          <p className="font-semibold text-sm text-foreground truncate">{review.name}</p>
+                          <p className="text-xs text-muted-foreground">{formatRelativeDate(review.date)}</p>
                         </div>
                       </div>
+                      <Badge variant="outline" className="shrink-0 text-[10px] text-muted-foreground">{review.source}</Badge>
+                    </div>
 
-                      <blockquote className="italic text-xs sm:text-sm md:text-base text-plum/90 leading-relaxed">
-                        "{r.body}"
-                      </blockquote>
+                    <Stars rating={review.rating} />
 
-                      <p className="mt-3 text-[11px] text-plum/50 italic">— Demo review, fictional client</p>
-                    </CardContent>
-                  </Card>
-                </CarouselItem>
-              ))}
-            </CarouselContent>
+                    <p className="text-sm text-foreground/85 leading-relaxed mt-3 line-clamp-5">
+                      {review.body}
+                    </p>
 
-            {/* Arrows (show on md+) */}
-            <CarouselPrevious className="hidden md:flex" />
-            <CarouselNext className="hidden md:flex" />
-          </Carousel>
-        </motion.div>
-
-        {/* CTA row */}
-        <div className="text-center mt-8 sm:mt-10 md:mt-12 flex flex-col sm:flex-row justify-center items-center gap-3 sm:gap-4">
-          <Button
-            asChild
-            variant="outline"
-            className="border-gold text-gold hover:bg-gold/10 hover:text-gold rounded-full px-4 sm:px-6 py-2 sm:py-3 text-xs sm:text-base"
-          >
-            <a href="#" onClick={(e) => e.preventDefault()}>
-              Submit Your Review (Demo Only)
-            </a>
-          </Button>
+                    <p className="text-xs text-primary font-medium mt-3">{review.service}</p>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </div>
     </section>

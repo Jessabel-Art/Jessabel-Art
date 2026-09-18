@@ -1,0 +1,18 @@
+.request-form {
+  display: grid;
+  gap: var(--space-8);
+  min-width: 0;
+}
+
+.request-form__progress {
+  padding-bottom: var(--space-6);
+  border-bottom: var(--hairline) solid var(--border);
+}
+
+.request-form__body {
+  min-width: 0;
+}
+
+.request-form__body .form-grid {
+  min-width: 0;
+}
