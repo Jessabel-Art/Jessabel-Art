@@ -704,22 +704,79 @@ const PROJECTS = [
     cardClassification: "Landscape Brand Demo",
     classification: "Landscape Services Website Demo",
     template: "landscape",
+    ownership:
+      "A fictional brand built to demonstrate service-led web design and a guided quote journey — not a real landscaping business.",
     overview: [
       "A fictional landscaping portfolio demo exploring how a lawn-care and outdoor-services brand can present services, materials, and a quote-guided customer journey without relying on a real business or production data pipeline.",
       "The project organizes services, product categories, pricing context, and local quote intent into a simple static experience that still feels complete and polished on both mobile and desktop screens.",
     ],
-    role: "Concept design · Information architecture · Frontend development · Demo interaction design",
+    roleTitle:
+      "Concept Design · Information Architecture · Frontend Development · Demo Interaction Design",
+    role: "Designed the service and material catalog structure, the guided quote-request flow, and the local, browser-only state that powers the shortlist and multi-step form — then built it as a subdirectory-safe static site.",
+    lifecycle: [
+      "Browse",
+      "Shortlist",
+      "Configure Quote",
+      "Attach Photos",
+      "Submit Request",
+    ],
     problem:
       "A landscape brand can become difficult to evaluate when the customer has to piece together service categories, material options, and quote intent from disconnected pages or generic brochure content. This demo addresses that by building a coherent, service-led experience around the way a client would browse offerings and request a quote.",
-    approach:
-      "The demo uses a lightweight static build with semantic HTML, CSS, and JavaScript to create a complete multi-page experience: home, services, products, about, and contact. Page content, navigation, and structured metadata are declared in a small source of truth so the whole experience is intentionally coherent and easy to host under a subdirectory.",
-    features: [
-      "Multi-page static site",
-      "Responsive service and product exploration",
-      "Quote request flow",
-      "Material shortlist and local state",
-      "Structured metadata and sitemap",
-      "Subdirectory-safe static hosting",
+    compareBefore: [
+      "Service List",
+      "Photo Gallery",
+      "Contact Form",
+      "Price Sheet PDF",
+    ],
+    compareAfter: [
+      "Service Catalog",
+      "Material Shortlist",
+      "Guided Quote Form",
+      "Local Estimate Context",
+    ],
+    journey: [
+      {
+        title: "Tell Us Your Vision",
+        body: "Share a few details, inspiration, or photos — a small refresh is a good place to start.",
+      },
+      {
+        title: "Make a Considered Plan",
+        body: "Review the property, choose materials, and agree on a clear scope and estimate.",
+      },
+      {
+        title: "Enjoy Your Outdoors",
+        body: "Bring the plan to life, then consider the seasonal care that keeps it looking its best.",
+      },
+    ],
+    serviceCatalogNote:
+      "Six service categories organize 56 individual services, each scoped with a “good fit for” guide so a visitor can self-select the right level of care before requesting an estimate.",
+    serviceCategories: [
+      "Lawn Care & Maintenance (12)",
+      "Landscape Design & Installation (14)",
+      "Property Cleanup (10)",
+      "Tree, Shrub & Plant Care (6)",
+      "Outdoor Improvements (8)",
+      "Commercial Property Care (6)",
+    ],
+    materialCatalogNote:
+      "31 materials across 6 categories are searchable and filterable, and each can be added to a persistent shortlist that carries straight into the quote form, so a visitor can shape a project without waiting on a sales call.",
+    materialCategories: [
+      "Mulch (5)",
+      "Stone & Rock (6)",
+      "Soil & Ground (5)",
+      "Plants (6)",
+      "Lawn Products (4)",
+      "Landscape Materials (5)",
+    ],
+    quoteArchitectureNote:
+      "The quote request form pulls the shortlist forward from the materials catalog and layers in property, service, and project details before a visitor ever talks to a person — entirely client-side, with no backend to simulate.",
+    quoteFlow: [
+      "Contact & Property Details",
+      "Service Selection",
+      "Material Shortlist",
+      "Project Scope, Timeframe & Budget",
+      "Optional Photos (Browser-Only)",
+      "Local Demo Submission",
     ],
     techGroups: [
       {
@@ -731,6 +788,14 @@ const PROJECTS = [
         ],
       },
       {
+        label: "State & Persistence",
+        items: [
+          "Client-side quote shortlist",
+          "LocalStorage-backed favorites",
+          "No backend or data pipeline",
+        ],
+      },
+      {
         label: "Build & Hosting",
         items: [
           "Node.js static build",
@@ -738,16 +803,37 @@ const PROJECTS = [
           "Subpath-safe asset rewriting",
         ],
       },
+    ],
+    designDecisions: [
       {
-        label: "Content",
-        items: ["Service catalog", "Product catalog", "Local demo quote state"],
+        title: "One Source of Truth for Content",
+        body: "Services, materials, and navigation are declared once in a small config layer and rendered into every page, so a 6-category service list and a 31-item material catalog never drift out of sync across the site.",
       },
+      {
+        title: "Shortlist Before Sales Call",
+        body: "Materials can be added to a quote shortlist while browsing the catalog, and that shortlist carries into the quote form automatically — turning passive browsing into a shaped project brief.",
+      },
+      {
+        title: "Privacy-First Demo Form",
+        body: "The quote request form processes contact details and photo uploads entirely in the browser and states plainly that nothing is sent anywhere — a deliberate boundary for a public portfolio demo.",
+      },
+      {
+        title: "Subdirectory-Safe by Design",
+        body: "Every internal link and asset path is resolved through a shared base-path helper rather than hardcoded absolute paths, so the whole multi-page site can be hosted from a subdirectory without broken links or routing.",
+      },
+    ],
+    outcomeStatement:
+      "A cohesive, service-led landscaping experience where browsing services, shortlisting materials, and requesting a quote feel like one guided conversation rather than three disconnected pages.",
+    outcomeRelation: [
+      "Service Catalog",
+      "Material Shortlist",
+      "Guided Quote Form",
+      "Local Estimate Context",
     ],
     status: "Demo",
     statusLabel: "Demo Build",
     url: "https://jessabel.art/landscape-website-demo/",
-    logo: "mockup.png",
-    logoWide: true,
+    logo: "succulent-plant.png",
   },
   {
     id: "cleaning-service-demo",
@@ -3334,18 +3420,64 @@ function renderFMBDetail(project, displayBadge) {
   `;
 }
 
-// Santos FormWorks — extended case-study template for an early-stage,
-// actively-developed project. Deliberately lighter-weight than the completed
-// case studies: it documents current build state rather than a finished
-// system, and closes without claiming a resolved outcome.
+// Landscape Website Demo — extended case-study template. Signature visual is
+// the service/material catalog pair feeding a guided, client-only quote
+// request flow — distinct from the booking/payment pipelines used by the
+// service-business case studies, since this demo has no backend to simulate.
 function renderLandscapeDetail(project, displayBadge, primaryButtonLabel) {
   const overviewMarkup = project.overview
     .map((paragraph) => `<p>${paragraph}</p>`)
     .join("");
-  const approachMarkup = `<p>${project.approach}</p>`;
-  const featuresMarkup = project.features
+
+  const lifecycleMarkup = project.lifecycle
+    .map(
+      (node, index, arr) => `
+    <span class="flow-chain-node">${node}</span>
+    ${index < arr.length - 1 ? '<span class="flow-chain-arrow" aria-hidden="true">&rarr;</span>' : ""}
+  `,
+    )
+    .join("");
+
+  const beforePillsMarkup = project.compareBefore
     .map((item) => `<span class="chip">${item}</span>`)
     .join("");
+  const afterChainMarkup = project.compareAfter
+    .map(
+      (item, index, arr) => `
+    <span class="chip">${item}</span>
+    ${index < arr.length - 1 ? '<span class="compare-chain-arrow" aria-hidden="true">&rarr;</span>' : ""}
+  `,
+    )
+    .join("");
+
+  const journeyMarkup = project.journey
+    .map(
+      (step, index) => `
+    <div class="journey-card">
+      <span class="journey-step-number">${index + 1}</span>
+      <strong class="journey-step-title">${step.title}</strong>
+      <p>${step.body}</p>
+    </div>
+  `,
+    )
+    .join("");
+
+  const serviceCategoryMarkup = project.serviceCategories
+    .map((item) => `<span class="chip">${item}</span>`)
+    .join("");
+  const materialCategoryMarkup = project.materialCategories
+    .map((item) => `<span class="chip">${item}</span>`)
+    .join("");
+
+  const quoteFlowMarkup = project.quoteFlow
+    .map(
+      (step, index, arr) => `
+    <div class="pipeline-node ${index === arr.length - 1 ? "is-final" : ""}">${step}</div>
+    ${index < arr.length - 1 ? '<div class="arch-arrow" aria-hidden="true">&darr;</div>' : ""}
+  `,
+    )
+    .join("");
+
   const techMarkup = project.techGroups
     .map(
       (group) => `
@@ -3356,42 +3488,118 @@ function renderLandscapeDetail(project, displayBadge, primaryButtonLabel) {
   `,
     )
     .join("");
+
+  const decisionsMarkup = project.designDecisions
+    .map(
+      (decision, index) => `
+    <div class="decision-card">
+      <span class="decision-number">${String(index + 1).padStart(2, "0")}</span>
+      <strong class="decision-title">${decision.title}</strong>
+      <p>${decision.body}</p>
+    </div>
+  `,
+    )
+    .join("");
+
+  const outcomeRelationMarkup = project.outcomeRelation
+    .map(
+      (node, index, arr) => `
+    <span class="flow-chain-node">${node}</span>
+    ${index < arr.length - 1 ? '<span class="flow-chain-arrow" aria-hidden="true">&rarr;</span>' : ""}
+  `,
+    )
+    .join("");
+
   const launchLink = project.url
     ? `<a class="primary-button" href="${project.url}" target="_blank" rel="noopener noreferrer">${primaryButtonLabel}</a>`
     : "";
 
   return `
-    <div class="case-study-wrap">
-      <div class="project-detail-grid">
-        <div class="project-detail-left has-identity-group">
-          <div class="project-identity-group">
-            ${displayBadge}
-            <h3>${project.name}</h3>
-            <span class="project-classification">${project.classification}</span>
-          </div>
-          <div class="project-overview">${overviewMarkup}</div>
-          <div class="project-card-actions">${launchLink}</div>
+    <div class="case-study-wrap landscape-case-study">
+    <div class="project-detail-grid">
+      <div class="project-detail-left has-identity-group">
+        <div class="project-identity-group">
+          ${displayBadge}
+          <h3>${project.name}</h3>
+          <span class="project-classification">${project.classification}</span>
         </div>
-        <div class="project-detail-right">
-          <div class="detail-section editorial-block">
-            <span class="section-kicker">Context</span>
-            <p class="detail-role-text">${project.problem}</p>
+        <div class="project-overview">${overviewMarkup}</div>
+        ${project.ownership ? `<p class="project-ownership-note">${project.ownership}</p>` : ""}
+        <div class="project-card-actions">${launchLink}</div>
+      </div>
+      <div class="project-detail-right">
+        <div class="detail-section editorial-block">
+          <span class="section-kicker">The System</span>
+          <div class="flow-chain lifecycle-strip">${lifecycleMarkup}</div>
+        </div>
+        <div class="detail-section editorial-block">
+          <span class="section-kicker">My Role</span>
+          <p class="detail-role-text detail-role-title">${project.roleTitle}</p>
+          <p class="detail-role-text">${project.role}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="detail-full-section section-tone-warm">
+      <span class="section-kicker">The Business Problem</span>
+      <div class="problem-compare-grid">
+        <p class="detail-role-text">${project.problem}</p>
+        <div class="compare-block">
+          <div class="compare-column is-before">
+            <span class="compare-label">Disconnected Brochure Site</span>
+            <div class="compare-pills">${beforePillsMarkup}</div>
           </div>
-          <div class="detail-section editorial-block">
-            <span class="section-kicker">Approach</span>
-            <p class="detail-role-text">${project.approach}</p>
+          <div class="compare-column is-after">
+            <span class="compare-label">Service-Led Experience</span>
+            <div class="compare-chain">${afterChainMarkup}</div>
           </div>
         </div>
       </div>
+    </div>
 
-      <div class="detail-full-section section-tone-warm">
-        <span class="section-kicker">Key Features</span>
-        <div class="chip-row">${featuresMarkup}</div>
+    <div class="detail-full-section">
+      <span class="section-kicker">Customer Journey</span>
+      <div class="journey-grid">${journeyMarkup}</div>
+    </div>
+
+    <div class="detail-full-section section-tone-panel">
+      <div class="dual-module-grid">
+        <div class="module-card">
+          <span class="section-kicker">Service Catalog</span>
+          <p class="detail-role-text">${project.serviceCatalogNote}</p>
+          <div class="chip-row">${serviceCategoryMarkup}</div>
+        </div>
+        <div class="module-card">
+          <span class="section-kicker">Materials Catalog &amp; Shortlist Logic</span>
+          <p class="detail-role-text">${project.materialCatalogNote}</p>
+          <div class="chip-row">${materialCategoryMarkup}</div>
+        </div>
       </div>
+    </div>
 
-      <div class="detail-full-section">
-        <span class="section-kicker">Technical Implementation</span>
-        <div class="tech-groups-grid">${techMarkup}</div>
+    <div class="detail-full-section">
+      <span class="section-kicker">Quote Request Architecture</span>
+      <p class="detail-role-text">${project.quoteArchitectureNote}</p>
+      <div class="pipeline-flow">${quoteFlowMarkup}</div>
+    </div>
+
+    <div class="detail-full-section section-tone-warm">
+      <span class="section-kicker">Technical Implementation</span>
+      <div class="tech-groups-grid">${techMarkup}</div>
+    </div>
+
+    <div class="detail-full-section">
+      <span class="section-kicker">Design Decisions</span>
+      <div class="decision-list">${decisionsMarkup}</div>
+    </div>
+    </div>
+
+    <div class="outcome-panel">
+      <div class="outcome-panel-inner">
+        <span class="section-kicker">System Outcome</span>
+        <p class="outcome-statement">${project.outcomeStatement}</p>
+        <div class="flow-chain">${outcomeRelationMarkup}</div>
+        ${launchLink}
       </div>
     </div>
   `;
